@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="el" data-lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Κατερίνα Τσίγα - Λογοθεραπεύτρια | Γλυφάδα</title>
+  <meta name="description" content="Κατερίνα Τσίγα - Λογοθεραπεύτρια σε παιδιά και ενήλικες. Υπηρεσίες λογοθεραπείας στη Γλυφάδα, Αττική.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23DF6C73'>🎤</text></svg>">
+</head>
+<body>
+
+  <!-- Language Toggle -->
+  <div class="lang-toggle">
+    <button class="active" onclick="switchLang('el')" id="lang-el">EL</button>
+    <button onclick="switchLang('en')" id="lang-en">EN</button>
+  </div>
+
+  <!-- ============ TOP BAR ============ -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="contact-info">
+        <a href="tel:+306937524966"><i class="fas fa-phone-alt"></i> 693 752 4966</a>
+        <a href="mailto:tsiga.kat@gmail.com"><i class="fas fa-envelope"></i> tsiga.kat@gmail.com</a>
+        <a href="https://maps.google.com/?q=Κριμαίας+64+Γλυφάδα+16562" target="_blank"><i class="fas fa-map-marker-alt"></i> <span class="lang-el">Κριμαίας 64, Γλυφάδα</span><span class="lang-en">Krimaias 64, Glyfada</span></a>
+      </div>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/tsigalogo" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header id="header">
+    <div class="container">
+      <div class="logo">
+        <a href="#">
+          <div class="logo-icon">ΚΤ</div>
+          <div class="logo-text">
+            <span class="name lang-el">Κατερίνα Τσίγα</span>
+            <span class="name lang-en">Katerina Tsiga</span>
+            <span class="subtitle lang-el">Λογοθεραπεύτρια</span>
+            <span class="subtitle lang-en">Speech Therapist</span>
+          </div>
+        </a>
+      </div>
+      <nav>
+        <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#hero" class="active" onclick="closeMenu()"><span class="lang-el">Αρχική</span><span class="lang-en">Home</span></a></li>
+          <li><a href="#about" onclick="closeMenu()"><span class="lang-el">Σχετικά</span><span class="lang-en">About</span></a></li>
+          <li><a href="#services" onclick="closeMenu()"><span class="lang-el">Υπηρεσίες</span><span class="lang-en">Services</span></a></li>
+          <li><a href="#contact" onclick="closeMenu()"><span class="lang-el">Επικοινωνία</span><span class="lang-en">Contact</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="badge lang-el">Κέντρο Λογοθεραπείας</div>
+      <div class="badge lang-en">Speech Therapy Center</div>
+
+      <h1 class="lang-el">
+        Κατερίνα Τσίγα<br>
+        <span class="highlight">Λογοθεραπεύτρια</span>
+      </h1>
+      <h1 class="lang-en">
+        Katerina Tsiga<br>
+        <span class="highlight">Speech Therapist</span>
+      </h1>
+
+      <p class="lang-el">
+        Εξειδικευμένες υπηρεσίες λογοθεραπείας για παιδιά και ενήλικες.<br>
+        Με αγάπη, υπομονή και επιστημονική γνώση, στηρίζουμε κάθε βήμα της επικοινωνίας σας.
+      </p>
+      <p class="lang-en">
+        Specialized speech therapy services for children and adults.<br>
+        With care, patience, and scientific knowledge, we support every step of your communication journey.
+      </p>
+
+      <div class="btn-group">
+        <a href="#contact" class="btn btn-primary lang-el"><i class="fas fa-calendar-alt"></i> Κλείστε Ραντεβού</a>
+        <a href="#contact" class="btn btn-primary lang-en"><i class="fas fa-calendar-alt"></i> Book an Appointment</a>
+        <a href="#services" class="btn btn-outline lang-el"><i class="fas fa-arrow-down"></i> Οι Υπηρεσίες μου</a>
+        <a href="#services" class="btn btn-outline lang-en"><i class="fas fa-arrow-down"></i> My Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section section-dark-alt" id="about">
+    <div class="container">
+      <div class="section-title fade-in">
+        <div class="label lang-el">Σχετικά με Εμένα</div>
+        <div class="label lang-en">About Me</div>
+        <h2 class="lang-el">Κατερίνα Τσίγα<br><span style="color: var(--primary);">Λογοθεραπεύτρια</span></h2>
+        <h2 class="lang-en">Katerina Tsiga<br><span style="color: var(--primary);">Speech Therapist</span></h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-image fade-in">
+          <div class="placeholder-icon">
+            <i class="fas fa-user-md"></i>
+          </div>
+        </div>
+        <div class="about-text fade-in">
+          <p class="lang-el">
+            Η Κατερίνα Τσίγα είναι λογοθεραπεύτρια με έδρα τη Γλυφάδα, Αττική. Με εξειδίκευση στην 
+            αξιολόγηση και αποκατάσταση διαταραχών λόγου, ομιλίας και επικοινωνίας, προσφέρει 
+            υψηλού επιπέδου υπηρεσίες τόσο σε παιδιά όσο και σε ενήλικες.
+          </p>
+          <p class="lang-el">
+            Με γνώμονα την εξατομικευμένη προσέγγιση και τη συνεχή επιστημονική ενημέρωση, 
+            δημιουργεί ένα ζεστό και υποστηρικτικό περιβάλλον για κάθε θεραπευόμενο, 
+            συνεργαζόμενη στενά με την οικογένεια και άλλους ειδικούς.
+          </p>
+          <p class="lang-en">
+            Katerina Tsiga is a speech therapist based in Glyfada, Attica. Specializing in the 
+            assessment and rehabilitation of speech, language, and communication disorders, she provides 
+            high-quality services for both children and adults.
+          </p>
+          <p class="lang-en">
+            Guided by a personalized approach and continuous scientific training, she creates 
+            a warm and supportive environment for each client, working closely with families 
+            and other specialists.
+          </p>
+
+          <div class="about-highlights">
+            <div class="highlight-item">
+              <div class="icon"><i class="fas fa-baby"></i></div>
+              <span class="lang-el">Παιδιά</span><span class="lang-en">Children</span>
+            </div>
+            <div class="highlight-item">
+              <div class="icon"><i class="fas fa-user"></i></div>
+              <span class="lang-el">Ενήλικες</span><span class="lang-en">Adults</span>
+            </div>
+            <div class="highlight-item">
+              <div class="icon"><i class="fas fa-home"></i></div>
+              <span class="lang-el">Παρεμβάσεις στο Σπίτι</span><span class="lang-en">Home Visits</span>
+            </div>
+            <div class="highlight-item">
+              <div class="icon"><i class="fas fa-globe"></i></div>
+              <span class="lang-el">Ελληνικά & Αγγλικά</span><span class="lang-en">Greek & English</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-title fade-in">
+        <div class="label lang-el">Υπηρεσίες</div>
+        <div class="label lang-en">Services</div>
+        <h2 class="lang-el">Οι Υπηρεσίες μου</h2>
+        <h2 class="lang-en">My Services</h2>
+        <p class="lang-el">Ολοκληρωμένες υπηρεσίες λογοθεραπείας για παιδιά και ενήλικες, προσαρμοσμένες στις ανάγκες σας.</p>
+        <p class="lang-en">Comprehensive speech therapy services for children and adults, tailored to your needs.</p>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- Service 1 -->
+        <div class="service-card fade-in">
+          <div class="icon-wrap">
+            <i class="fas fa-child"></i>
+          </div>
+          <h3 class="lang-el">Παιδιά & Έφηβοι</h3>
+          <h3 class="lang-en">Children & Adolescents</h3>
+          <p class="lang-el">
+            Αξιολόγηση και θεραπεία διαταραχών άρθρωσης, φωνολογικών διαταραχών, 
+            αναπτυξιακών γλωσσικών διαταραχών, τραυλισμού και μαθησιακών δυσκολιών.
+          </p>
+          <p class="lang-en">
+            Assessment and treatment of articulation disorders, phonological disorders, 
+            developmental language disorders, stuttering, and learning difficulties.
+          </p>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="service-card fade-in">
+          <div class="icon-wrap">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <h3 class="lang-el">Ενήλικες</h3>
+          <h3 class="lang-en">Adults</h3>
+          <p class="lang-el">
+            Αποκατάσταση λόγου και ομιλίας μετά από εγκεφαλικό επεισόδιο, τραύμα ή 
+            νευρολογικές παθήσεις. Διαχείριση τραυλισμού και διαταραχών φωνής.
+          </p>
+          <p class="lang-en">
+            Speech and language rehabilitation after stroke, injury, or neurological 
+            conditions. Stuttering management and voice disorders.
+          </p>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="service-card fade-in">
+          <div class="icon-wrap">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3 class="lang-el">Τραυλισμός</h3>
+          <h3 class="lang-en">Stuttering</h3>
+          <p class="lang-el">
+            Εξατομικευμένη θεραπευτική προσέγγιση για παιδιά και ενήλικες με τραυλισμό, 
+            με στόχο την ευχέρεια λόγου και τη βελτίωση της επικοινωνίας.
+          </p>
+          <p class="lang-en">
+            Personalized therapeutic approach for children and adults who stutter, 
+            aiming for speech fluency and improved communication.
+          </p>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="service-card fade-in">
+          <div class="icon-wrap">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <h3 class="lang-el">Δυσλεξία & Μαθησιακές Δυσκολίες</h3>
+          <h3 class="lang-en">Dyslexia & Learning Difficulties</h3>
+          <p class="lang-el">
+            Υποστήριξη παιδιών με δυσλεξία, δυσγραφία, δυσαριθμησία και άλλες 
+            μαθησιακές δυσκολίες μέσω εξειδικευμένων εκπαιδευτικών παρεμβάσεων.
+          </p>
+          <p class="lang-en">
+            Support for children with dyslexia, dysgraphia, dyscalculia, and other 
+            learning difficulties through specialized educational interventions.
+          </p>
+        </div>
+
+        <!-- Service 5 -->
+        <div class="service-card fade-in">
+          <div class="icon-wrap">
+            <i class="fas fa-microphone"></i>
+          </div>
+          <h3 class="lang-el">Διαταραχές Φωνής</h3>
+          <h3 class="lang-en">Voice Disorders</h3>
+          <p class="lang-el">
+            Αξιολόγηση και θεραπεία διαταραχών φωνής, βραχνάδας, αφωνίας και 
+            φωνητικής κόπωσης σε παιδιά και ενήλικες.
+          </p>
+          <p class="lang-en">
+            Assessment and treatment of voice disorders, hoarseness, aphonia, and 
+            vocal fatigue in children and adults.
+          </p>
+        </div>
+
+        <!-- Service 6 -->
+        <div class="service-card fade-in">
+          <div class="icon-wrap">
+            <i class="fas fa-home"></i>
+          </div>
+          <h3 class="lang-el">Παρέμβαση στο Σπίτι</h3>
+          <h3 class="lang-en">Home Visits</h3>
+          <p class="lang-el">
+            Δυνατότητα επίσκεψης στο σπίτι για παιδιά και άτομα που δυσκολεύονται 
+            να μετακινηθούν, με το ίδιο υψηλό επίπεδο υπηρεσιών.
+          </p>
+          <p class="lang-en">
+            Home visit option for children and individuals with mobility difficulties, 
+            providing the same high level of services.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section section-dark-alt" id="contact">
+    <div class="container">
+      <div class="section-title fade-in">
+        <div class="label lang-el">Επικοινωνία</div>
+        <div class="label lang-en">Contact</div>
+        <h2 class="lang-el">Ελάτε σε Επαφή</h2>
+        <h2 class="lang-en">Get in Touch</h2>
+        <p class="lang-el">Κλείστε το ραντεβού σας σήμερα. Με μεγάλη χαρά θα σας εξυπηρετήσουμε.</p>
+        <p class="lang-en">Book your appointment today. We will be happy to assist you.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info-list fade-in">
+          <div class="contact-item">
+            <div class="icon"><i class="fas fa-map-pin"></i></div>
+            <div>
+              <h4 class="lang-el">Διεύθυνση</h4>
+              <h4 class="lang-en">Address</h4>
+              <p class="lang-el">Κριμαίας 64, Γλυφάδα, Αττική 16562</p>
+              <p class="lang-en">64 Krimaias St, Glyfada, Attica 16562, Greece</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="icon"><i class="fas fa-phone-alt"></i></div>
+            <div>
+              <h4 class="lang-el">Τηλέφωνο</h4>
+              <h4 class="lang-en">Phone</h4>
+              <a href="tel:+306937524966">693 752 4966</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <h4 class="lang-el">Email</h4>
+              <h4 class="lang-en">Email</h4>
+              <a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="icon"><i class="fab fa-facebook"></i></div>
+            <div>
+              <h4>Facebook</h4>
+              <a href="https://www.facebook.com/tsigalogo" target="_blank">facebook.com/tsigalogo</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="icon"><i class="fas fa-clock"></i></div>
+            <div>
+              <h4 class="lang-el">Ώρες Λειτουργίας</h4>
+              <h4 class="lang-en">Hours</h4>
+              <p class="lang-el">Κατόπιν ραντεβού</p>
+              <p class="lang-en">By appointment</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form fade-in">
+          <form id="contactForm" onsubmit="handleForm(event)">
+            <div class="form-group">
+              <label for="name" class="lang-el">Ονοματεπώνυμο *</label>
+              <label for="name" class="lang-en">Full Name *</label>
+              <input type="text" id="name" name="name" required placeholder="Γράψτε το όνομά σας">
+            </div>
+            <div class="form-group">
+              <label for="email" class="lang-el">Email *</label>
+              <label for="email" class="lang-en">Email *</label>
+              <input type="email" id="email" name="email" required placeholder="Γράψτε το email σας">
+            </div>
+            <div class="form-group">
+              <label for="phone" class="lang-el">Τηλέφωνο</label>
+              <label for="phone" class="lang-en">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="Γράψτε το τηλέφωνό σας">
+            </div>
+            <div class="form-group">
+              <label for="service" class="lang-el">Υπηρεσία που σας ενδιαφέρει</label>
+              <label for="service" class="lang-en">Service of Interest</label>
+              <select id="service" name="service">
+                <option value="" class="lang-el">-- Επιλέξτε --</option>
+                <option value="" class="lang-en">-- Select --</option>
+                <option value="children" class="lang-el">Παιδιά & Έφηβοι</option>
+                <option value="children" class="lang-en">Children & Adolescents</option>
+                <option value="adults" class="lang-el">Ενήλικες</option>
+                <option value="adults" class="lang-en">Adults</option>
+                <option value="stuttering" class="lang-el">Τραυλισμός</option>
+                <option value="stuttering" class="lang-en">Stuttering</option>
+                <option value="learning" class="lang-el">Δυσλεξία / Μαθησιακές Δυσκολίες</option>
+                <option value="learning" class="lang-en">Dyslexia / Learning Difficulties</option>
+                <option value="voice" class="lang-el">Διαταραχές Φωνής</option>
+                <option value="voice" class="lang-en">Voice Disorders</option>
+                <option value="other" class="lang-el">Άλλο</option>
+                <option value="other" class="lang-en">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message" class="lang-el">Μήνυμα *</label>
+              <label for="message" class="lang-en">Message *</label>
+              <textarea id="message" name="message" required class="lang-el" placeholder="Γράψτε το μήνυμά σας..."></textarea>
+              <textarea id="message" name="message" required class="lang-en" placeholder="Write your message..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn lang-el">
+              <i class="fas fa-paper-plane"></i> Αποστολή
+            </button>
+            <button type="submit" class="submit-btn lang-en">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+          <div id="formSuccess" style="display:none; text-align:center; padding:30px;">
+            <i class="fas fa-check-circle" style="font-size:48px; color:var(--primary); margin-bottom:16px;"></i>
+            <p class="lang-el">Το μήνυμά σας στάλθηκε επιτυχώς! Θα επικοινωνήσουμε σύντομα.</p>
+            <p class="lang-en">Your message was sent successfully! We'll get back to you soon.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MAP ============ -->
+  <section class="map-section">
+    <div class="map-container">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6295.405136277414!2d23.7632!3d37.8601!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a194d3f5e1b293%3A0x8e5f5e5b5e5b5e5b!2sKrimaias%2064%2C%20Glyfada%2016562!5e0!3m2!1sel!2sgr!4v1"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Χάρτης - Κριμαίας 64, Γλυφάδα">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="footer-logo">
+            <span class="lang-el">Κατερίνα Τσίγα - Λογοθεραπεύτρια</span>
+            <span class="lang-en">Katerina Tsiga - Speech Therapist</span>
+          </div>
+          <p class="lang-el">
+            Εξειδικευμένες υπηρεσίες λογοθεραπείας για παιδιά και ενήλικες στη Γλυφάδα, Αττική.
+            Με αγάπη, υπομονή και επιστημονική κατάρτιση.
+          </p>
+          <p class="lang-en">
+            Specialized speech therapy services for children and adults in Glyfada, Attica.
+            With care, patience, and scientific expertise.
+          </p>
+        </div>
+        <div class="footer-links">
+          <h4 class="lang-el">Σύνδεσμοι</h4>
+          <h4 class="lang-en">Links</h4>
+          <ul>
+            <li><a href="#hero" class="lang-el">Αρχική</a><a href="#hero" class="lang-en">Home</a></li>
+            <li><a href="#about" class="lang-el">Σχετικά</a><a href="#about" class="lang-en">About</a></li>
+            <li><a href="#services" class="lang-el">Υπηρεσίες</a><a href="#services" class="lang-en">Services</a></li>
+            <li><a href="#contact" class="lang-el">Επικοινωνία</a><a href="#contact" class="lang-en">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4 class="lang-el">Επικοινωνία</h4>
+          <h4 class="lang-en">Contact</h4>
+          <ul>
+            <li><a href="tel:+306937524966"><i class="fas fa-phone-alt"></i> 693 752 4966</a></li>
+            <li><a href="mailto:tsiga.kat@gmail.com"><i class="fas fa-envelope"></i> tsiga.kat@gmail.com</a></li>
+            <li><a href="https://www.facebook.com/tsigalogo" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Κατερίνα Τσίγα - Λογοθεραπεύτρια</span>
+        <span class="lang-el">Με εκτίμηση</span>
+        <span class="lang-en">With appreciation</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ JAVASCRIPT ============ -->
+  <script>
+    // ---- Language Switch ----
+    function switchLang(lang) {
+      document.documentElement.setAttribute('data-lang', lang);
+      document.querySelectorAll('.lang-toggle button').forEach(btn => {
+        btn.classList.toggle('active', btn.id === 'lang-' + lang);
+      });
+      localStorage.setItem('tsiga-lang', lang);
+    }
+
+    // Restore saved language
+    const savedLang = localStorage.getItem('tsiga-lang');
+    if (savedLang) switchLang(savedLang);
+
+    // ---- Mobile Menu ----
+    function toggleMenu() {
+      document.getElementById('navMenu').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('navMenu').classList.remove('open');
+    }
+
+    // ---- Header scroll effect ----
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // ---- Scroll animations (Intersection Observer) ----
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ---- Contact form ----
+    function handleForm(e) {
+      e.preventDefault();
+      const form = document.getElementById('contactForm');
+      const success = document.getElementById('formSuccess');
+      const data = new FormData(form);
+
+      // Build mailto link as fallback (since no backend)
+      const name = data.get('name');
+      const email = data.get('email');
+      const phone = data.get('phone') || '';
+      const service = data.get('service') || '';
+      const message = data.get('message');
+      const lang = document.documentElement.getAttribute('data-lang');
+
+      const subject = lang === 'el'
+        ? 'Νέο μήνυμα από το site - Κατερίνα Τσίγα'
+        : 'New message from website - Katerina Tsiga';
+
+      const body = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nService: ${service}\n\nMessage:\n${message}`;
+
+      // Show success (in production, send via email service)
+      form.style.display = 'none';
+      success.style.display = 'block';
+
+      // Open email client as fallback
+      window.location.href = `mailto:tsiga.kat@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+  </script>
+
+</body>
+</html>
