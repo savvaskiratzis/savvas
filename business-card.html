@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Κατερίνα Τσίγα — Επαγγελματική Κάρτα (Εκτύπωση)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --primary: #DF6C73;
+    --primary-dark: #c25a60;
+    --dark: #1a1a2e;
+    --dark-soft: #16213e;
+    --accent: #e94560;
+    --text-muted: rgba(255,255,255,0.72);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: #2b2b3d;
+    color: #222;
+  }
+
+  /* ====== Toolbar (screen only) ====== */
+  .toolbar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 20px;
+    background: var(--dark); color: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,.35);
+    font-size: 13px;
+  }
+  .toolbar .brand { font-family: 'Mulish', sans-serif; font-weight: 700; }
+  .toolbar .brand span { color: var(--primary); }
+  .toolbar button {
+    font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 13px;
+    background: var(--primary); color: #fff; border: none; cursor: pointer;
+    padding: 9px 18px; border-radius: 8px;
+  }
+  .toolbar button:hover { background: var(--primary-dark); }
+  .toolbar .hint { color: rgba(255,255,255,.75); }
+
+  /* ====== Print sheets ====== */
+  @page { size: A4; margin: 8mm; }
+
+  .sheet {
+    width: 210mm; min-height: 297mm;
+    background: #fff;
+    margin: 24px auto;
+    padding: 8mm;
+    display: grid;
+    grid-template-columns: repeat(2, 90mm);
+    grid-template-rows: repeat(5, 50mm);
+    gap: 5mm 8mm;
+    align-content: start;
+    justify-content: center;
+    box-shadow: 0 6px 30px rgba(0,0,0,.4);
+  }
+  .sheet + .sheet { page-break-before: always; }
+
+  .sheet-label {
+    grid-column: 1 / -1;
+    font-family: 'Mulish', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #999; padding-bottom: 2mm;
+  }
+
+  /* ====== The card ====== */
+  .card {
+    position: relative;
+    width: 90mm; height: 50mm;
+    overflow: hidden;
+    border: 0.3mm dashed #bbb;   /* cut guide */
+  }
+
+  /* ---------- FRONT ---------- */
+  .card.front {
+    background:
+      radial-gradient(120% 160% at 100% 0%, rgba(233,69,96,.22) 0%, transparent 55%),
+      radial-gradient(120% 150% at 0% 100%, rgba(15,52,96,.55) 0%, transparent 60%),
+      linear-gradient(135deg, #1a1a2e 0%, #16213e 70%, #0f3460 100%);
+    color: #fff;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 4mm 6mm;
+  }
+  .card.front::after {  /* rose underline sweep */
+    content: "";
+    position: absolute; left: 50%; bottom: 7mm; transform: translateX(-50%);
+    width: 34mm; height: 1.1mm; border-radius: 2mm;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  }
+
+  .monogram {
+    width: 12mm; height: 12mm;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--primary);
+    border-radius: 50%;
+    font-family: 'Mulish', sans-serif; font-weight: 800;
+    font-size: 6mm; color: #fff;
+    box-shadow: 0 0 0 0.8mm rgba(223,108,115,.25);
+    margin-bottom: 2.6mm;
+  }
+  .name {
+    font-family: 'Mulish', sans-serif; font-weight: 800;
+    font-size: 6.4mm; line-height: 1.1; color: #fff;
+    letter-spacing: .2mm;
+  }
+  .title {
+    font-family: 'Mulish', sans-serif; font-weight: 700;
+    font-size: 3mm; letter-spacing: 1.6mm;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-top: 1.4mm;
+  }
+  .tagline {
+    font-size: 2.8mm; font-weight: 500;
+    color: var(--text-muted);
+    margin-top: 2.4mm;
+  }
+  .site {
+    position: absolute; bottom: 3.2mm; left: 0; right: 0;
+    font-size: 2.4mm; font-weight: 600;
+    color: rgba(255,255,255,.5);
+    letter-spacing: .3mm;
+  }
+
+  /* ---------- BACK ---------- */
+  .card.back {
+    background: #fdf9f7;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 5.5mm 6mm 5.5mm 13mm;
+    gap: 1.5mm;
+  }
+  .card.back::before {  /* rose side band */
+    content: "";
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4.5mm;
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+  }
+  .card.back::after {  /* soft corner glow */
+    content: "";
+    position: absolute; right: -12mm; top: -12mm;
+    width: 30mm; height: 30mm; border-radius: 50%;
+    background: radial-gradient(circle, rgba(223,108,115,.14) 0%, transparent 70%);
+  }
+
+  .back-head {
+    font-family: 'Mulish', sans-serif; font-weight: 800;
+    font-size: 4.2mm; color: var(--dark);
+    margin-bottom: 1.6mm;
+  }
+  .back-head small {
+    display: block;
+    font-family: 'Open Sans', sans-serif; font-weight: 600;
+    font-size: 2.5mm; letter-spacing: 1.1mm; text-transform: uppercase;
+    color: var(--primary-dark); margin-top: .6mm;
+  }
+  .row {
+    display: flex; align-items: center; gap: 2.2mm;
+    font-size: 3mm; font-weight: 600; color: #444;
+    line-height: 1.45;
+  }
+  .row i {
+    width: 4mm; text-align: center;
+    color: var(--primary); font-size: 3.2mm;
+  }
+  .row a { color: inherit; text-decoration: none; }
+  .back-site {
+    margin-top: 1.6mm;
+    font-size: 2.5mm; font-weight: 600; color: #999;
+    letter-spacing: .2mm;
+  }
+
+  /* ====== Screen preview niceties ====== */
+  @media screen {
+    .sheet { border-radius: 4px; }
+  }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .sheet { margin: 0; box-shadow: none; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="brand">Κατερίνα Τσίγα <span>· Επαγγελματική Κάρτα</span></div>
+  <div class="hint">Κάρτα 90×50mm — 10 μπροστά / 10 πίσω ανά σελίδα A4</div>
+  <button onclick="window.print()"><i class="fas fa-print"></i> Εκτύπωση / PDF</button>
+</div>
+
+<!-- ============ PAGE 1 : FRONTS ============ -->
+<div class="sheet">
+  <div class="sheet-label">Εμπρός όψη — Κατερίνα Τσίγα · Λογοθεραπεύτρια (σελίδα 1/2)</div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card front">
+    <div class="monogram">ΚΤ</div>
+    <div class="name">Κατερίνα Τσίγα</div>
+    <div class="title">Λογοθεραπεύτρια</div>
+    <div class="tagline">Λογοθεραπεία για παιδιά &amp; ενήλικες</div>
+    <div class="site">savvaskiratzis.github.io/savvas</div>
+  </div>
+</div>
+
+<!-- ============ PAGE 2 : BACKS ============ -->
+<div class="sheet">
+  <div class="sheet-label">Πίσω όψη — Στοιχεία επικοινωνίας (σελίδα 2/2)</div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+  <div class="card back">
+    <div class="back-head">Κατερίνα Τσίγα<small>Λογοθεραπεύτρια</small></div>
+    <div class="row"><i class="fas fa-phone-alt"></i><a href="tel:+306937524966">693 752 4966</a></div>
+    <div class="row"><i class="fas fa-envelope"></i><a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></div>
+    <div class="row"><i class="fas fa-map-marker-alt"></i><span>Κριμαίας 64, Γλυφάδα 16562</span></div>
+    <div class="row"><i class="fab fa-facebook-f"></i><a href="https://www.facebook.com/tsigalogo">facebook.com/tsigalogo</a></div>
+    <div class="back-site">savvaskiratzis.github.io/savvas</div>
+  </div>
+</div>
+
+</body>
+</html>

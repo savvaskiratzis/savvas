@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Τσίγα;Κατερίνα;;;
+FN:Κατερίνα Τσίγα
+ORG:Κατερίνα Τσίγα - Λογοθεραπεύτρια
+TITLE:Λογοθεραπεύτρια
+TEL;TYPE=CELL;TYPE=VOICE:+306937524966
+EMAIL;TYPE=INTERNET;TYPE=WORK:tsiga.kat@gmail.com
+URL;TYPE=WORK:https://savvaskiratzis.github.io/savvas/
+ADR;TYPE=WORK:;;Κριμαίας 64;Γλυφάδα;Αττική;16562;Ελλάδα
+NOTE:Λογοθεραπεία για παιδιά και ενήλικες. Κριμαίας 64, Γλυφάδα.
+END:VCARD
