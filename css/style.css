@@ -546,6 +546,112 @@ nav {
   line-height: 1.8;
 }
 
+/* ---------- Testimonials ---------- */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+}
+
+.testimonial-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: left;
+  transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(223,108,115,0.3);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.05);
+}
+
+.testimonial-card .stars {
+  color: #f7c04a;
+  font-size: 14px;
+  letter-spacing: 4px;
+  margin-bottom: 18px;
+  line-height: 1;
+}
+
+.testimonial-card .stars i {
+  margin-right: 2px;
+}
+
+.testimonial-card .quote {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.8;
+  font-style: italic;
+  flex-grow: 1;
+  margin-bottom: 24px;
+}
+
+.testimonial-card .quote .fa-quote-left {
+  color: var(--primary);
+  opacity: 0.65;
+  margin-right: 8px;
+  font-size: 12px;
+  vertical-align: 3px;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 20px;
+}
+
+.testimonial-author .avatar {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 50%;
+  background: rgba(223,108,115,0.15);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.testimonial-author .name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.testimonial-author .meta {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.testimonial-author .meta a {
+  font-size: 12.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 1;
+}
+
+.testimonial-author .meta a i.fa-google {
+  color: #4285F4;
+  font-size: 13px;
+}
+
+.testimonial-author .meta a:hover {
+  color: var(--primary);
+}
+
 /* ---------- Contact ---------- */
 .contact-grid {
   display: grid;
