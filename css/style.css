@@ -606,6 +606,7 @@ nav {
   gap: 14px;
   border-top: 1px solid rgba(255,255,255,0.06);
   padding-top: 20px;
+  margin-top: auto;
 }
 
 .testimonial-author .avatar {
@@ -641,6 +642,12 @@ nav {
   align-items: center;
   gap: 6px;
   opacity: 1;
+}
+
+.testimonial-author .meta i.fa-facebook-f {
+  color: #1877F2;
+  font-size: 13px;
+  margin-right: 5px;
 }
 
 .testimonial-author .meta a i.fa-google {
