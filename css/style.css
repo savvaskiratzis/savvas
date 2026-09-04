@@ -750,6 +750,42 @@ nav {
   line-height: 1.8;
 }
 
+/* ---------- License block (About) ---------- */
+.about-license {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 26px;
+  padding: 16px 18px;
+  background: rgba(223,108,115,0.07);
+  border: 1px solid rgba(223,108,115,0.25);
+  border-left: 3px solid var(--primary);
+  border-radius: 10px;
+}
+
+.about-license .license-icon {
+  color: var(--primary);
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.about-license p {
+  color: var(--text-light);
+  font-size: 14.5px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.about-license p strong {
+  color: var(--text-light);
+}
+
+.about-license .license-meta {
+  color: var(--text-muted);
+  font-size: 13.5px;
+  margin-top: 3px;
+}
+
 /* ---------- Contact ---------- */
 .contact-grid {
   display: grid;
