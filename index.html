@@ -1070,5 +1070,15 @@
     }
   </script>
 
+  <script>
+    // Google Ads conversion: click-to-call (any tel: link) → «Δυνητικός πελάτης μέσω τηλεφωνικών κλήσεων»
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+      if (link && window.gtag) {
+        gtag('event', 'conversion', { 'send_to': 'AW-872409204/8NTJCIjWhvcCEPTQ_58D' });
+      }
+    });
+  </script>
+
 </body>
 </html>
