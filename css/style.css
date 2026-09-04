@@ -800,6 +800,85 @@ nav {
   color: rgba(255,255,255,0.3);
 }
 
+/* Native dropdown must stay readable on the dark theme */
+.form-group select {
+  color-scheme: dark;
+}
+
+.form-group select option {
+  color: var(--text-light);
+  background: var(--dark-soft);
+}
+
+/* Inline validation */
+.form-group .field-error {
+  display: none;
+  color: #ff97a0;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.form-group.invalid input,
+.form-group.invalid textarea,
+.form-group.invalid select {
+  border-color: rgba(255, 110, 120, 0.75);
+  background: rgba(255, 110, 120, 0.06);
+}
+
+.form-group.invalid .field-error {
+  display: block;
+}
+
+/* General alert (rate limit / network errors) */
+.form-alert {
+  background: rgba(255, 110, 120, 0.08);
+  border: 1px solid rgba(255, 110, 120, 0.35);
+  color: #ffd9dc;
+  border-radius: 10px;
+  padding: 13px 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.form-alert p {
+  margin: 0;
+}
+
+/* Honeypot is invisible to humans */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submit-btn:disabled:hover {
+  background: var(--primary);
+  transform: none;
+}
+
+.direct-email {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+
+.direct-email a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .submit-btn {
   width: 100%;
   padding: 16px;
