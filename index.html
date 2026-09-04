@@ -507,23 +507,40 @@
 
         <!-- Contact Form -->
         <div class="contact-form fade-in">
-          <form id="contactForm" onsubmit="handleForm(event)">
-            <div class="form-group">
+          <form id="contactForm" action="https://formsubmit.co/ajax/tsiga.kat@gmail.com" method="POST" accept-charset="UTF-8" novalidate onsubmit="handleForm(event)">
+            <!-- Honeypot anti-spam (invisible to humans, bots fill it) -->
+            <input type="text" name="_honey" id="hpField" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp-field">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" id="fSubject">
+
+            <div id="formAlert" class="form-alert" role="alert" style="display:none;">
+              <p class="lang-el" id="alertEl"></p>
+              <p class="lang-en" id="alertEn"></p>
+            </div>
+
+            <div class="form-group" data-field="name">
               <label for="name" class="lang-el">Ονοματεπώνυμο *</label>
               <label for="name" class="lang-en">Full Name *</label>
-              <input type="text" id="name" name="name" required placeholder="Γράψτε το όνομά σας">
+              <input type="text" id="name" name="name" required autocomplete="name" maxlength="80" placeholder="Γράψτε το όνομά σας" data-placeholder-el="Γράψτε το όνομά σας" data-placeholder-en="Enter your full name">
+              <p class="field-error"><span class="lang-el">Παρακαλώ συμπληρώστε το ονοματεπώνυμό σας (τουλάχιστον 2 χαρακτήρες).</span><span class="lang-en">Please enter your full name (at least 2 characters).</span></p>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" data-field="email">
               <label for="email" class="lang-el">Email *</label>
               <label for="email" class="lang-en">Email *</label>
-              <input type="email" id="email" name="email" required placeholder="Γράψτε το email σας">
+              <input type="email" id="email" name="email" required autocomplete="email" maxlength="120" placeholder="Γράψτε το email σας" data-placeholder-el="Γράψτε το email σας" data-placeholder-en="Enter your email">
+              <p class="field-error"><span class="lang-el">Παρακαλώ συμπληρώστε ένα έγκυρο email.</span><span class="lang-en">Please enter a valid email address.</span></p>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" data-field="phone">
               <label for="phone" class="lang-el">Τηλέφωνο</label>
               <label for="phone" class="lang-en">Phone</label>
-              <input type="tel" id="phone" name="phone" placeholder="Γράψτε το τηλέφωνό σας">
+              <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" maxlength="20" placeholder="π.χ. 69X XXX XXXX" data-placeholder-el="π.χ. 69X XXX XXXX" data-placeholder-en="e.g. 69X XXX XXXX">
+              <p class="field-error"><span class="lang-el">Παρακαλώ συμπληρώστε ένα έγκυρο τηλέφωνο (π.χ. 69X XXX XXXX ή 210 XXX XXXX).</span><span class="lang-en">Please enter a valid phone number (e.g. 69X XXX XXXX or 210 XXX XXXX).</span></p>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" data-field="service">
               <label for="service" class="lang-el">Υπηρεσία που σας ενδιαφέρει</label>
               <label for="service" class="lang-en">Service of Interest</label>
               <select id="service" name="service">
@@ -543,19 +560,24 @@
                 <option value="other" class="lang-en">Other</option>
               </select>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" data-field="message">
               <label for="message" class="lang-el">Μήνυμα *</label>
               <label for="message" class="lang-en">Message *</label>
-              <textarea id="message" name="message" required class="lang-el" placeholder="Γράψτε το μήνυμά σας..."></textarea>
-              <textarea id="message" name="message" required class="lang-en" placeholder="Write your message..."></textarea>
+              <textarea id="message" name="message" required maxlength="2000" class="lang-el" placeholder="Γράψτε το μήνυμά σας..."></textarea>
+              <textarea id="message" name="message" required maxlength="2000" class="lang-en" placeholder="Write your message..."></textarea>
+              <p class="field-error"><span class="lang-el">Παρακαλώ γράψτε ένα μήνυμα τουλάχιστον 10 χαρακτήρων.</span><span class="lang-en">Please write a message of at least 10 characters.</span></p>
             </div>
-            <button type="submit" class="submit-btn lang-el">
-              <i class="fas fa-paper-plane"></i> Αποστολή
+
+            <button type="submit" class="submit-btn lang-el" id="submitEl">
+              <i class="fas fa-paper-plane"></i> <span>Αποστολή</span>
             </button>
-            <button type="submit" class="submit-btn lang-en">
-              <i class="fas fa-paper-plane"></i> Send Message
+            <button type="submit" class="submit-btn lang-en" id="submitEn">
+              <i class="fas fa-paper-plane"></i> <span>Send Message</span>
             </button>
           </form>
+          <p class="direct-email lang-el">ή στείλτε μας email απευθείας στο <a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></p>
+          <p class="direct-email lang-en">or email us directly at <a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></p>
           <div id="formSuccess" style="display:none; text-align:center; padding:30px;">
             <i class="fas fa-check-circle" style="font-size:48px; color:var(--primary); margin-bottom:16px;"></i>
             <p class="lang-el">Το μήνυμά σας στάλθηκε επιτυχώς! Θα επικοινωνήσουμε σύντομα.</p>
@@ -637,6 +659,9 @@
       document.querySelectorAll('.lang-toggle button').forEach(btn => {
         btn.classList.toggle('active', btn.id === 'lang-' + lang);
       });
+      document.querySelectorAll('[data-placeholder-el]').forEach(el => {
+        el.placeholder = el.getAttribute(lang === 'el' ? 'data-placeholder-el' : 'data-placeholder-en');
+      });
       localStorage.setItem('tsiga-lang', lang);
     }
 
@@ -670,32 +695,215 @@
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
     // ---- Contact form ----
-    function handleForm(e) {
+    const FORM_EMAIL = 'tsiga.kat@gmail.com';
+    const FS_ENDPOINT = 'https://formsubmit.co/ajax/' + FORM_EMAIL;
+    const SUBMIT_GAP_MS = 90000;              // cooldown between sends
+    const LIMIT_WINDOW_MS = 10 * 60 * 1000;   // 10 minutes
+    const LIMIT_MAX = 5;                      // max sends per window
+    const MIN_FILL_MS = 4000;                 // bots "submit" instantly after load
+    const tPageLoad = Date.now();
+
+    const SERVICES = {
+      children: { el: 'Παιδιά & Έφηβοι', en: 'Children & Adolescents' },
+      adults: { el: 'Ενήλικες', en: 'Adults' },
+      stuttering: { el: 'Τραυλισμός', en: 'Stuttering' },
+      learning: { el: 'Δυσλεξία / Μαθησιακές Δυσκολίες', en: 'Dyslexia / Learning Difficulties' },
+      voice: { el: 'Διαταραχές Φωνής', en: 'Voice Disorders' },
+      other: { el: 'Άλλο', en: 'Other' }
+    };
+
+    const $ = id => document.getElementById(id);
+    const visibleLang = () => document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'el';
+
+    // Read a field's value, always from the VISIBLE input when duplicates exist
+    function fieldValue(id) {
+      const els = document.querySelectorAll('#' + id);
+      for (const el of els) {
+        if (getComputedStyle(el).display !== 'none') return el.value;
+      }
+      return els.length ? els[0].value : '';
+    }
+
+    function formHistory() {
+      try { return JSON.parse(localStorage.getItem('tsiga-form-log') || '[]'); }
+      catch (err) { return []; }
+    }
+    function recordAttempt() {
+      const now = Date.now();
+      const h = formHistory().filter(t => now - t < LIMIT_WINDOW_MS);
+      h.push(now);
+      try { localStorage.setItem('tsiga-form-log', JSON.stringify(h)); } catch (err) {}
+    }
+    function rateLimited() {
+      const now = Date.now();
+      const h = formHistory().filter(t => now - t < LIMIT_WINDOW_MS);
+      if (h.length >= LIMIT_MAX) return { ok: false, waitMs: h[0] + LIMIT_WINDOW_MS - now };
+      return { ok: true };
+    }
+    function setBlockUntil(ms) {
+      try { localStorage.setItem('tsiga-form-block', String(Date.now() + ms)); } catch (err) {}
+    }
+    function blockedRemaining() {
+      const until = parseInt(localStorage.getItem('tsiga-form-block') || '0', 10);
+      return Math.max(0, until - Date.now());
+    }
+
+    function setAlert(msgs) {
+      $('alertEl').textContent = msgs.el;
+      $('alertEn').textContent = msgs.en;
+      $('formAlert').style.display = 'block';
+    }
+    function hideAlert() { $('formAlert').style.display = 'none'; }
+
+    function setInvalid(fieldName, invalid) {
+      const group = document.querySelector('.form-group[data-field="' + fieldName + '"]');
+      if (group) group.classList.toggle('invalid', invalid);
+    }
+    function setSubmitting(on) {
+      document.querySelectorAll('.submit-btn').forEach(btn => {
+        btn.disabled = on;
+        const label = btn.querySelector('span');
+        const base = btn.classList.contains('lang-en') ? 'Send Message' : 'Αποστολή';
+        const busy = btn.classList.contains('lang-en') ? 'Sending…' : 'Αποστολή…';
+        if (label) label.textContent = on ? busy : base;
+      });
+    }
+    function waitMessage(sec) {
+      return visibleLang() === 'el'
+        ? 'Παρακαλώ περιμένετε ' + sec + ' δευτερόλεπτα πριν στείλετε ξανά.'
+        : 'Please wait ' + sec + ' seconds before sending again.';
+    }
+
+    // Clear a field's error as soon as the user edits it
+    document.querySelectorAll('#contactForm input, #contactForm textarea, #contactForm select').forEach(el => {
+      el.addEventListener('input', () => {
+        const g = el.closest('.form-group');
+        if (g) g.classList.remove('invalid');
+      });
+    });
+
+    // Greek-friendly phone validation (optional field)
+    function validPhone(v) {
+      if (!v.trim()) return true;
+      if (!/^[0-9+\s().-]+$/.test(v)) return false;
+      const digits = v.replace(/[\s().-]/g, '');
+      return /^(\+?30|0030)?(69\d{8}|2\d{9})$/.test(digits);
+    }
+
+    async function handleForm(e) {
       e.preventDefault();
-      const form = document.getElementById('contactForm');
-      const success = document.getElementById('formSuccess');
-      const data = new FormData(form);
+      hideAlert();
 
-      // Build mailto link as fallback (since no backend)
-      const name = data.get('name');
-      const email = data.get('email');
-      const phone = data.get('phone') || '';
-      const service = data.get('service') || '';
-      const message = data.get('message');
-      const lang = document.documentElement.getAttribute('data-lang');
+      // ---- anti-spam 1: honeypot (bots fill it; humans never see it) ----
+      if (fieldValue('hpField').trim() !== '') return; // stay silent
 
+      // ---- anti-spam 2: global cooldown between sends ----
+      const remain = blockedRemaining();
+      if (remain > 0) {
+        setAlert({ el: waitMessage(Math.ceil(remain / 1000)), en: waitMessage(Math.ceil(remain / 1000)) });
+        return;
+      }
+      // ---- anti-spam 3: submission quota per device ----
+      const limit = rateLimited();
+      if (!limit.ok) {
+        const mins = Math.max(1, Math.ceil(limit.waitMs / 60000));
+        const msg = visibleLang() === 'el'
+          ? 'Έχουν σταλεί πολλά μηνύματα από αυτή τη συσκευή. Δοκιμάστε ξανά σε ' + mins + ' λεπτά ή στείλτε email απευθείας.'
+          : 'Too many messages sent from this device. Try again in ' + mins + ' minutes or email us directly.';
+        setAlert({ el: msg, en: msg });
+        return;
+      }
+      // ---- anti-spam 4: filled & submitted too fast after page load ----
+      if (Date.now() - tPageLoad < MIN_FILL_MS) {
+        setBlockUntil(30000);
+        return; // silent
+      }
+
+      // ---- read values ----
+      const lang = visibleLang();
+      const name = fieldValue('name').trim();
+      const email = fieldValue('email').trim();
+      const phoneRaw = fieldValue('phone').trim();
+      const serviceCode = $('service').value;
+      const message = fieldValue('message').trim();
       const subject = lang === 'el'
         ? 'Νέο μήνυμα από το site - Κατερίνα Τσίγα'
         : 'New message from website - Katerina Tsiga';
 
-      const body = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nService: ${service}\n\nMessage:\n${message}`;
+      // ---- validation ----
+      const NAME_RE = /^[\p{L}\p{M}][\p{L}\p{M}\s.'-]{1,79}$/u;
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      let firstInvalid = null;
+      const mark = (field, ok) => { setInvalid(field, !ok); if (!ok && !firstInvalid) firstInvalid = field; };
 
-      // Show success (in production, send via email service)
-      form.style.display = 'none';
-      success.style.display = 'block';
+      mark('name', NAME_RE.test(name));
+      mark('email', EMAIL_RE.test(email));
+      mark('phone', validPhone(phoneRaw));
+      mark('message', message.length >= 10);
 
-      // Open email client as fallback
-      window.location.href = `mailto:tsiga.kat@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      if (firstInvalid) {
+        const field = document.querySelector(
+          '.form-group[data-field="' + firstInvalid + '"] input, ' +
+          '.form-group[data-field="' + firstInvalid + '"] textarea, ' +
+          '.form-group[data-field="' + firstInvalid + '"] select'
+        );
+        if (field) field.focus();
+        return;
+      }
+
+      // ---- build payload ----
+      const serviceLabel = SERVICES[serviceCode]
+        ? SERVICES[serviceCode][lang]
+        : (serviceCode || (lang === 'el' ? 'Δεν επιλέχθηκε' : 'Not specified'));
+      const label = n => (lang === 'el' ? n.el : n.en);
+      const body = label({ el: 'Ονοματεπώνυμο', en: 'Name' }) + ': ' + name + '\n'
+        + label({ el: 'Email', en: 'Email' }) + ': ' + email + '\n'
+        + label({ el: 'Τηλέφωνο', en: 'Phone' }) + ': ' + (phoneRaw || '—') + '\n'
+        + label({ el: 'Υπηρεσία', en: 'Service' }) + ': ' + serviceLabel + '\n\n'
+        + label({ el: 'Μήνυμα', en: 'Message' }) + ':\n' + message;
+      $('fSubject').value = subject;
+
+      // ---- send via FormSubmit (JSON AJAX) ----
+      setSubmitting(true);
+      try {
+        const res = await fetch(FS_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            name: name, email: email, phone: phoneRaw, service: serviceLabel,
+            message: body, _subject: subject, _template: 'table', _captcha: 'false', _honey: ''
+          })
+        });
+        recordAttempt();
+        let ok = res.ok;
+        if (ok) {
+          try {
+            const j = await res.json();
+            if (j && j.success === 'false') ok = false;
+          } catch (err) {}
+        }
+        if (ok) {
+          setBlockUntil(SUBMIT_GAP_MS);
+          $('contactForm').style.display = 'none';
+          $('formSuccess').style.display = 'block';
+          return;
+        }
+        // server rejected
+        setBlockUntil(60000);
+        setSubmitting(false);
+        setAlert({
+          el: 'Δεν ήταν δυνατή η αποστολή του μηνύματος. Δοκιμάστε ξανά σε λίγο ή στείλτε email απευθείας στο ' + FORM_EMAIL + '.',
+          en: 'The message could not be sent. Please try again shortly or email us directly at ' + FORM_EMAIL + '.'
+        });
+      } catch (err) {
+        recordAttempt();
+        setBlockUntil(60000);
+        setSubmitting(false);
+        setAlert({
+          el: 'Σφάλμα σύνδεσης. Δοκιμάστε ξανά ή στείλτε email απευθείας στο ' + FORM_EMAIL + '.',
+          en: 'Connection error. Please try again or email us directly at ' + FORM_EMAIL + '.'
+        });
+      }
     }
   </script>
 
