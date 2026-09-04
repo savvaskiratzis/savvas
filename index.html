@@ -666,6 +666,17 @@
       document.querySelectorAll('[data-placeholder-el]').forEach(el => {
         el.placeholder = el.getAttribute(lang === 'el' ? 'data-placeholder-el' : 'data-placeholder-en');
       });
+      // Keep the service dropdown's closed label in the active language:
+      // select the VISIBLE <option> that matches the current value.
+      const svcSel = document.getElementById('service');
+      if (svcSel) {
+        const svcVal = svcSel.value;
+        const visibleOption = Array.prototype.find.call(
+          svcSel.options,
+          o => o.value === svcVal && getComputedStyle(o).display !== 'none'
+        );
+        if (visibleOption) visibleOption.selected = true;
+      }
       localStorage.setItem('tsiga-lang', lang);
     }
 
