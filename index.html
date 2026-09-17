@@ -1180,6 +1180,11 @@
       $('alertEl').textContent = msgs.el;
       $('alertEn').textContent = msgs.en;
       $('formAlert').style.display = 'block';
+      // The form is taller than a phone screen: the button is at the bottom, this message at the
+      // top. Without scrolling, the visitor presses "Send", sees nothing move, and concludes the
+      // form is broken -- which is exactly how the owner reported it (17/9/2026). A cooldown or
+      // quota message must bring itself into view.
+      $('formAlert').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     function hideAlert() { $('formAlert').style.display = 'none'; }
 
@@ -1223,7 +1228,16 @@
       hideAlert();
 
       // ---- anti-spam 1: honeypot (bots fill it; humans never see it) ----
-      if (fieldValue('hpField').trim() !== '') return; // stay silent
+      // NOT silent any more: if a password manager or autofill fills this hidden field, a real
+      // visitor gets no feedback at all and assumes the button is dead. The server drops
+      // honeypot submissions regardless, so an honest message costs nothing.
+      if (fieldValue('hpField').trim() !== '') {
+        setAlert({
+          el: 'Δεν ήταν δυνατή η αποστολή. Δοκιμάστε ξανά, ή στείλτε email στο ' + FORM_EMAIL + ' ή καλέστε στο 693 752 4966.',
+          en: 'The message could not be sent. Please try again, or email me at ' + FORM_EMAIL + ' or call +30 693 752 4966.'
+        });
+        return;
+      }
 
       // ---- anti-spam 2: global cooldown between sends ----
       const remain = blockedRemaining();
@@ -1315,6 +1329,8 @@
           setBlockUntil(SUBMIT_GAP_MS);
           $('contactForm').style.display = 'none';
           $('formSuccess').style.display = 'block';
+          // Same reason as setAlert(): the panel replaces a tall form, so pull it into view.
+          $('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
           return;
         }
         // server rejected
