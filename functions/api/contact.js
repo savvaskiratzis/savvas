@@ -14,14 +14,17 @@
  *      this free on the Workers Free plan).
  *   2. an Email Service binding named SEND_EMAIL (that name is what `env.SEND_EMAIL` reads).
  *
- * If either is missing the endpoint answers 503 with `success: "false"`, which the site's
- * JavaScript already turns into "call or email instead" -- a degraded form must never
- * pretend to have delivered a message.
+ * If either is missing the endpoint fails loudly instead of pretending to save the enquiry:
+ * the site's JavaScript turns that into "call or email instead".
+ *
+ * Every reply respects the caller: JSON for the site's fetch(), a 303 back to the contact
+ * section for the no-JS fallback -- nobody ever sees raw JSON in a browser.
  */
 
 const TO = { email: "tsiga.kat@gmail.com", name: "Κατερίνα Τσίγα" };
 const FROM = { email: "forms@tsigalogo.gr", name: "Ιστοσελίδα tsigalogo.gr" };
 const SITE = "https://tsigalogo.gr";
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MAX = { name: 120, email: 160, phone: 40, service: 120, message: 2000 };
 
 const json = (body, status = 200) =>
@@ -34,24 +37,30 @@ const clip = (v, n) => (v == null ? "" : String(v)).trim().slice(0, n);
 
 export async function onRequestPost(context) {
   const { request, env } = context;
+  const wantsJson = (request.headers.get("content-type") || "").includes("application/json");
+
+  const fail = (message, status) =>
+    wantsJson ? json({ success: "false", message }, status)
+              : Response.redirect(SITE + "/?formerror=1", 303);
+  const done = () =>
+    wantsJson ? json({ success: "true" })
+              : Response.redirect(SITE + "/?sent=1", 303);
 
   // Only our own pages may use this endpoint. Trivially spoofable, but it stops drive-by
   // abuse from random scripts that find the URL. (The honeypot below catches the rest.)
   const origin = request.headers.get("origin") || request.headers.get("referer") || "";
-  if (!origin.startsWith(SITE)) return json({ success: "false", message: "forbidden" }, 403);
+  if (!origin.startsWith(SITE)) return fail("forbidden", 403);
 
-  // JSON from the site's fetch(), or form-encoded from the no-JS fallback.
-  const ct = request.headers.get("content-type") || "";
-  const wantsJson = ct.includes("application/json");
   let data;
   try {
-    data = wantsJson ? await request.json() : Object.fromEntries(await request.formData());
+    data = wantsJson ? await request.json()
+                     : Object.fromEntries(await request.formData());
   } catch (e) {
-    return json({ success: "false", message: "bad payload" }, 400);
+    return fail("bad payload", 400);
   }
 
-  // Honeypot: humans never see the field, bots fill it. Answer 200 so the bot sees "success".
-  if (clip(data._honey, 200) !== "") return json({ success: "true" });
+  // Honeypot: humans never see the field, bots fill it. Look successful and drop it.
+  if (clip(data._honey, 200) !== "") return done();
 
   const name = clip(data.name, MAX.name);
   const email = clip(data.email, MAX.email);
@@ -59,13 +68,11 @@ export async function onRequestPost(context) {
   const service = clip(data.service, MAX.service);
   const message = clip(data.message, MAX.message);
 
-  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || message.length < 10) {
-    return json({ success: "false", message: "invalid fields" }, 400);
-  }
+  if (!name || !EMAIL_RE.test(email) || message.length < 10) return fail("invalid fields", 400);
 
   if (!env.SEND_EMAIL || typeof env.SEND_EMAIL.send !== "function") {
     console.error("contact: SEND_EMAIL binding missing (see the note at the top of this file)");
-    return json({ success: "false", message: "email binding not configured" }, 503);
+    return fail("email binding not configured", 503);
   }
 
   const text = [
@@ -94,12 +101,10 @@ export async function onRequestPost(context) {
   } catch (error) {
     // .code is set by the Email Service: E_SENDER_NOT_VERIFIED, E_RATE_LIMIT_EXCEEDED, ...
     console.error("contact: send failed", error && error.code, error && error.message);
-    if (!wantsJson) return Response.redirect(SITE + "/?formerror=1", 303);
-    return json({ success: "false", message: "send failed" }, 502);
+    return fail("send failed", 502);
   }
 
-  if (!wantsJson) return Response.redirect(SITE + "/?sent=1", 303);
-  return json({ success: "true" });
+  return done();
 }
 
 // Anything that is not a POST (a GET from a curious visitor, a crawler, ...) is not a form.
