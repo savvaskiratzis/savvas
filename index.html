@@ -924,9 +924,12 @@
     // Hide the banner before paint if a choice is already stored (no flash).
     try {
       if (localStorage.getItem('tsiga-consent')) document.getElementById('cookieBar').hidden = true;
-      // Older visits stored the language under this key; the site no longer reads it.
-      // Drop it so a stale "en" cannot come back if persistence is ever restored.
-      localStorage.removeItem('tsiga-lang');
+      // Owner's rule (Sep 2026): a fresh visitor gets GREEK; an explicit choice is kept.
+      // Apply it here, before the content paints, so an English reader never sees a flash
+      // of Greek. Only "tsiga-lang-choice" is read -- the legacy "tsiga-lang" is NEVER read,
+      // so values written before this rule was fixed cannot drag the site into English.
+      const _lg = localStorage.getItem('tsiga-lang-choice');
+      if (_lg === 'el' || _lg === 'en') document.documentElement.setAttribute('data-lang', _lg);
     } catch (e) {}
   </script>
 
@@ -965,12 +968,16 @@
         );
         if (visibleOption) visibleOption.selected = true;
       }
-      // OWNER'S DECISION (Sep 2026): the chosen language is deliberately NOT stored.
-      // Every load starts in Greek and the toggle only affects what is on screen now.
-      // He reported "it opens in English by default" after having clicked the flag once;
-      // Greek is the primary audience here, so the default must win over a remembered
-      // choice. Do not reintroduce persistence without asking.
+      // Persist ONLY an explicit choice, so it survives reloads and carries over to
+      // /privacy. The key is new on purpose (see the note in the early script above).
+      try { localStorage.setItem('tsiga-lang-choice', lang); } catch (e) {}
     }
+
+    // Sync the toggle UI with the language already applied before paint.
+    try {
+      const chosenLang = localStorage.getItem('tsiga-lang-choice');
+      if (chosenLang) switchLang(chosenLang);
+    } catch (e) {}
 
     // ---- Mobile Menu ----
     let menuOpenY = null;

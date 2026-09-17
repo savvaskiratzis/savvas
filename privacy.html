@@ -24,6 +24,15 @@
     .policy .back { display: inline-block; margin-bottom: 1.5rem; }
     @media (max-width: 768px) { .policy { padding-top: 96px; } }
   </style>
+  <script>
+    // Owner's rule (Sep 2026): a fresh visitor gets Greek, an explicit choice is kept.
+    // Applied before first paint so /privacy opens in English for a reader who chose it,
+    // with no flash. Only "tsiga-lang-choice" is read; the legacy key is never read.
+    try {
+      var l = localStorage.getItem('tsiga-lang-choice');
+      if (l === 'el' || l === 'en') document.documentElement.setAttribute('data-lang', l);
+    } catch (e) {}
+  </script>
 </head>
 <body>
 
@@ -169,14 +178,18 @@
   <script>
     // Same behaviour and storage key as the landing page, so the chosen language
     // carries over between the two pages.
-    // OWNER'S DECISION (Sep 2026): the language is deliberately NOT persisted, matching
-    // the landing page -- every load starts in Greek, the toggle only affects this view.
     function switchLang(lang) {
       document.documentElement.setAttribute('data-lang', lang);
-      document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      document.querySelectorAll('.lang-toggle button').forEach(btn) {
         btn.classList.toggle('active', btn.id === 'lang-' + lang);
-      });
+      }
+      try { localStorage.setItem('tsiga-lang-choice', lang); } catch (e) {}
     }
+    // Sync the toggle UI with the language already applied in <head>.
+    try {
+      const chosen = localStorage.getItem('tsiga-lang-choice');
+      if (chosen) switchLang(chosen);
+    } catch (e) {}
   </script>
 </body>
 </html>
