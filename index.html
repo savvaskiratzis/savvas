@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Google tag (gtag.js) — Google Ads conversion tracking (AW-872409204).
-       The library is NOT in the critical path: it loads after window load
-       (requestIdleCallback) or on the first interaction, whichever comes
-       first. The dataLayer queue below holds consent/js/config until then. -->
+       Nothing is requested from Google until the visitor gives consent: the
+       cookie banner calls window.loadAdsScript(). Consent Mode defaults are
+       set to denied first, so the queued config cannot run without consent. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -20,21 +20,15 @@
     gtag('config', 'AW-872409204');
     (function () {
       var started = false;
-      function loadGtag() {
+      // Called by the consent banner (and only there) once cookies are accepted.
+      window.loadAdsScript = function () {
         if (started) return;
         started = true;
         var s = document.createElement('script');
         s.async = true;
         s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-872409204';
         document.head.appendChild(s);
-      }
-      window.addEventListener('load', function () {
-        if ('requestIdleCallback' in window) { requestIdleCallback(loadGtag, { timeout: 2500 }); }
-        else { setTimeout(loadGtag, 1000); }
-      });
-      ['scroll', 'click', 'touchstart', 'keydown'].forEach(function (ev) {
-        window.addEventListener(ev, loadGtag, { once: true, passive: true });
-      });
+      };
     })();
   </script>
   <title>Κατερίνα Τσίγα - Λογοθεραπεύτρια | Λογοθεραπεία κατ' οίκον, Γλυφάδα</title>
@@ -60,7 +54,7 @@
        the still-render-blocking Font Awesome stylesheet later and makes FCP
        worse. With font-display: swap the text paints immediately anyway. -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/style.css?v=a8d07758">
+  <link rel="stylesheet" href="css/style.css?v=2329198f">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23DF6C73'>🎤</text></svg>">
   <script type="application/ld+json">
   {
@@ -765,19 +759,33 @@
           </div>
         </div>
       </div>
+      <!-- Personal sign-off: the closing line of the page, letter style.
+           Visible on mobile and desktop alike (both languages). -->
+      <p class="sign-off">
+        <span class="lang-el">Με εκτίμηση,</span>
+        <span class="lang-en">With appreciation,</span>
+        <span class="sign-off-name lang-el">Κατερίνα Τσίγα</span>
+        <span class="sign-off-name lang-en">Katerina Tsiga</span>
+      </p>
     </div>
   </section>
 
   <!-- ============ MAP ============ -->
+  <!-- The Google Maps embed is injected by loadMap() and only after consent (or
+       an explicit click): the embed sets Google cookies. The container keeps its
+       350px height so swapping the placeholder for the iframe causes no shift. -->
   <section class="map-section">
-    <div class="map-container">
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6295.405136277414!2d23.7632!3d37.8601!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a194d3f5e1b293%3A0x8e5f5e5b5e5b5e5b!2sKrimaias%2064%2C%20Glyfada%2016562!5e0!3m2!1sel!2sgr!4v1"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        title="Χάρτης - Κριμαίας 64, Γλυφάδα">
-      </iframe>
+    <div class="map-container" id="mapContainer">
+      <div class="map-placeholder" id="mapPlaceholder">
+        <i class="fas fa-map-marker-alt icon" aria-hidden="true"></i>
+        <p class="lang-el">Ο χάρτης της Google φορτώνει μόνο με τη συγκατάθεσή σας.</p>
+        <p class="lang-en">The Google map loads only with your consent.</p>
+        <button type="button" class="map-load-btn" onclick="loadMap()">
+          <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+          <span class="lang-el">Φόρτωση χάρτη</span>
+          <span class="lang-en">Load map</span>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -828,11 +836,60 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; 2026 Κατερίνα Τσίγα - Λογοθεραπεύτρια</span>
-        <span class="lang-el">Με εκτίμηση</span>
-        <span class="lang-en">With appreciation</span>
+        <button type="button" class="cookie-link" onclick="openCookieSettings()">
+          <span class="lang-el">Ρυθμίσεις cookies</span>
+          <span class="lang-en">Cookie settings</span>
+        </button>
       </div>
     </div>
   </footer>
+
+  <!-- ============ COOKIE CONSENT ============ -->
+  <!-- Shown on a first visit and whenever the choice is reopened. Nothing from
+       Google (ads tag, map) is requested before "Accept all". -->
+  <div class="cookie-bar" id="cookieBar" role="dialog" aria-labelledby="ckTitle">
+    <div class="cookie-inner">
+      <div class="cookie-copy">
+        <h3 class="cookie-title" id="ckTitle">
+          <i class="fas fa-cookie-bite" aria-hidden="true"></i>
+          <span class="lang-el">Χρήση cookies</span><span class="lang-en">Cookie use</span>
+        </h3>
+        <p class="lang-el">Η σελίδα αποθηκεύει τοπικά μόνο τη γλώσσα και την επιλογή σας. Με τη συγκατάθεσή σας φορτώνουμε επιπλέον cookies της Google για τη μέτρηση των διαφημίσεών μας και για τον χάρτη. Χωρίς συγκατάθεση, τίποτα από αυτά δεν φορτώνει.</p>
+        <p class="lang-en">This site only stores your language and this choice locally. With your consent we additionally load Google cookies for ad measurement and for the map. Without consent, none of that loads.</p>
+        <div class="cookie-details" id="ckDetails" hidden>
+          <ul>
+            <li class="lang-el"><strong>Απαραίτητα (χωρίς συγκατάθεση):</strong> γλώσσα σελίδας και η επιλογή σας για cookies, αποθηκευμένα τοπικά στον browser σας (localStorage). Δεν κοινοποιούνται.</li>
+            <li class="lang-en"><strong>Essential (no consent needed):</strong> page language and your cookie choice, stored locally in your browser (localStorage). Not shared.</li>
+            <li class="lang-el"><strong>Μέτρηση διαφημίσεων (Google Ads):</strong> cookies μετατροπών και εξατομίκευσης. Φορτώνουν μόνο με «Αποδοχή όλων».</li>
+            <li class="lang-en"><strong>Ad measurement (Google Ads):</strong> conversion and personalisation cookies. Loaded only on "Accept all".</li>
+            <li class="lang-el"><strong>Χάρτης (Google Maps):</strong> ο ενσωματωμένος χάρτης φορτώνει cookies της Google. Φορτώνει με «Αποδοχή όλων» ή αν πατήσετε «Φόρτωση χάρτη».</li>
+            <li class="lang-en"><strong>Map (Google Maps):</strong> the embedded map loads Google cookies. Loaded on "Accept all" or if you press "Load map".</li>
+            <li class="lang-el"><strong>Φόρμα επικοινωνίας:</strong> ό,τι στέλνετε αποστέλλεται μέσω της υπηρεσίας FormSubmit στο email μας.</li>
+            <li class="lang-en"><strong>Contact form:</strong> what you send is delivered through the FormSubmit service to our email.</li>
+            <li class="lang-el"><strong>Αλλαγή επιλογής:</strong> οποτεδήποτε από τον σύνδεσμο «Ρυθμίσεις cookies» στο κάτω μέρος της σελίδας.</li>
+            <li class="lang-en"><strong>Change your choice:</strong> any time via the "Cookie settings" link at the bottom of the page.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cookie-actions">
+        <button type="button" class="ck-btn ck-accept" onclick="cookieChoice(true)">
+          <span class="lang-el">Αποδοχή όλων</span><span class="lang-en">Accept all</span>
+        </button>
+        <button type="button" class="ck-btn ck-reject" onclick="cookieChoice(false)">
+          <span class="lang-el">Απόρριψη</span><span class="lang-en">Reject</span>
+        </button>
+        <button type="button" class="ck-more" id="ckMoreBtn" onclick="toggleCookieDetails()" aria-expanded="false" aria-controls="ckDetails">
+          <span class="lang-el">Λεπτομέρειες</span><span class="lang-en">Details</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Hide the banner before paint if a choice is already stored (no flash).
+    try {
+      if (localStorage.getItem('tsiga-consent')) document.getElementById('cookieBar').hidden = true;
+    } catch (e) {}
+  </script>
 
   <!-- ============ JAVASCRIPT ============ -->
   <script>
@@ -864,18 +921,126 @@
     if (savedLang) switchLang(savedLang);
 
     // ---- Mobile Menu ----
+    let menuOpenY = null;
     function toggleMenu() {
-      document.getElementById('navMenu').classList.toggle('open');
+      const menu = document.getElementById('navMenu');
+      menu.classList.toggle('open');
+      // where the visitor stood when the dropdown opened
+      menuOpenY = menu.classList.contains('open') ? window.scrollY : null;
     }
     function closeMenu() {
       document.getElementById('navMenu').classList.remove('open');
+      menuOpenY = null;
     }
+
+    // Opened the menu, didn't pick anything, kept scrolling -> close it.
+    // The 24px threshold keeps a stray elastic/tap scroll from shutting it the
+    // instant it opens, and closeMenu() is still called directly by nav links.
+    window.addEventListener('scroll', () => {
+      if (menuOpenY === null) return;
+      if (Math.abs(window.scrollY - menuOpenY) > 24) closeMenu();
+    }, { passive: true });
 
     // ---- Header scroll effect ----
     window.addEventListener('scroll', () => {
       const header = document.getElementById('header');
       header.classList.toggle('scrolled', window.scrollY > 50);
     });
+
+    // ---- Cookie consent ----
+    // Nothing is requested from Google (ads tag, map iframe) before consent.
+    const CK_KEY = 'tsiga-consent';
+    const MAP_SRC = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6295.405136277414!2d23.7632!3d37.8601!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a194d3f5e1b293%3A0x8e5f5e5b5e5b5e5b!2sKrimaias%2064%2C%20Glyfada%2016562!5e0!3m2!1sel!2sgr!4v1';
+
+    function storedConsent() {
+      try { return localStorage.getItem(CK_KEY); } catch (e) { return null; }
+    }
+
+    function loadMap() {
+      const box = document.getElementById('mapContainer');
+      if (!box || box.querySelector('iframe')) return;
+      const f = document.createElement('iframe');
+      f.src = MAP_SRC;
+      f.setAttribute('allowfullscreen', '');
+      f.setAttribute('loading', 'lazy');
+      f.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+      f.setAttribute('title', 'Χάρτης - Κριμαίας 64, Γλυφάδα');
+      const ph = document.getElementById('mapPlaceholder');
+      if (ph) ph.remove();
+      box.appendChild(f);
+    }
+
+    // Withdrawing consent must be as real as giving it: drop the map again and
+    // expire the first-party Google cookies we could have set.
+    function unloadMap() {
+      const box = document.getElementById('mapContainer');
+      const f = box && box.querySelector('iframe');
+      if (!f) return;
+      f.remove();
+      ['_ga', '_gid', '_gat', '_gcl_au', '_gcl_aw'].forEach(function (n) {
+        document.cookie = n + '=; Max-Age=0; path=/';
+        document.cookie = n + '=; Max-Age=0; path=/; domain=.' + location.hostname.replace(/^www\./, '');
+      });
+      if (!document.getElementById('mapPlaceholder')) {
+        const ph = document.createElement('div');
+        ph.className = 'map-placeholder';
+        ph.id = 'mapPlaceholder';
+        ph.innerHTML = '<i class="fas fa-map-marker-alt icon" aria-hidden="true"></i>' +
+          '<p class="lang-el">Ο χάρτης της Google φορτώνει μόνο με τη συγκατάθεσή σας.</p>' +
+          '<p class="lang-en">The Google map loads only with your consent.</p>' +
+          '<button type="button" class="map-load-btn" onclick="loadMap()">' +
+          '<i class="fas fa-map-marker-alt" aria-hidden="true"></i>' +
+          '<span class="lang-el">Φόρτωση χάρτη</span><span class="lang-en">Load map</span></button>';
+        box.appendChild(ph);
+      }
+    }
+
+    function applyConsent(granted) {
+      if (window.gtag) {
+        gtag('consent', 'update', {
+          ad_storage: granted ? 'granted' : 'denied',
+          ad_user_data: granted ? 'granted' : 'denied',
+          ad_personalization: granted ? 'granted' : 'denied',
+          analytics_storage: granted ? 'granted' : 'denied'
+        });
+      }
+      if (granted) {
+        if (window.loadAdsScript) window.loadAdsScript();
+        loadMap();
+      } else {
+        unloadMap();
+      }
+      const bar = document.getElementById('cookieBar');
+      if (bar) bar.hidden = true;
+    }
+
+    function cookieChoice(granted) {
+      try { localStorage.setItem(CK_KEY, granted ? 'granted' : 'denied'); } catch (e) {}
+      applyConsent(granted);
+    }
+
+    function openCookieSettings() {
+      const bar = document.getElementById('cookieBar');
+      if (bar) bar.hidden = false;
+    }
+
+    function toggleCookieDetails() {
+      const d = document.getElementById('ckDetails'), b = document.getElementById('ckMoreBtn');
+      if (!d) return;
+      d.hidden = !d.hidden;
+      if (b) b.setAttribute('aria-expanded', String(!d.hidden));
+    }
+
+    // Re-apply a stored choice on load; with no choice the banner stays up and
+    // nothing from Google loads.
+    (function initConsent() {
+      const s = storedConsent();
+      if (s === 'granted') { applyConsent(true); }
+      else if (s === 'denied') {
+        const bar = document.getElementById('cookieBar');
+        if (bar) bar.hidden = true;
+      }
+    })();
 
     // ---- Scroll animations (Intersection Observer) ----
     const observer = new IntersectionObserver((entries) => {

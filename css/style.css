@@ -1137,6 +1137,7 @@ nav {
 .map-placeholder {
   text-align: center;
   color: var(--text-muted);
+  padding: 24px;
 }
 
 .map-placeholder .icon {
@@ -1211,6 +1212,229 @@ footer {
 
 .footer-bottom a {
   color: var(--primary);
+}
+
+/* ---------- Personal sign-off ---------- */
+/* The page's closing line, letter style. Lives at the end of the contact
+   section so it is visible on mobile and desktop alike. */
+.sign-off {
+  margin: 48px 0 0;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-family: var(--font-heading);
+  font-size: 17px;
+  color: var(--text-muted);
+}
+
+.sign-off .sign-off-name {
+  display: block;
+  margin-top: 6px;
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+/* ---------- Cookie consent ---------- */
+.cookie-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1100;
+  background: rgba(26,26,46,0.97);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(223,108,115,0.35);
+  box-shadow: 0 -12px 34px rgba(0,0,0,0.4);
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+
+.cookie-bar[hidden] {
+  display: none;
+}
+
+.cookie-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cookie-copy {
+  flex: 1 1 460px;
+  min-width: 240px;
+}
+
+.cookie-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 7px;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.cookie-title i {
+  color: var(--primary);
+}
+
+.cookie-copy p {
+  margin: 0 0 8px;
+  line-height: 1.55;
+}
+
+.cookie-details {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.cookie-details ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.cookie-details li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.cookie-details strong {
+  color: var(--text-light);
+}
+
+.cookie-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Accept and Reject are deliberately the same size and weight - no dark
+   pattern: rejecting is exactly as easy as accepting. */
+.ck-btn,
+.map-load-btn {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 20px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+/* Dark label on the rose fill: white on --primary is only 3.2:1, which fails
+   WCAG AA for 14px text (the site's .submit-btn has the same latent issue but
+   escapes automated checks because it sits inside a .fade-in wrapper). */
+.ck-accept {
+  background: var(--primary);
+  color: var(--dark);
+}
+
+.ck-accept:hover {
+  background: #e8848a;   /* lighter rose: dark label stays at 6.6:1 */
+}
+
+.ck-reject {
+  background: transparent;
+  color: var(--text-light);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.ck-reject:hover {
+  border-color: var(--text-light);
+  background: rgba(255,255,255,0.06);
+}
+
+.ck-more {
+  background: none;
+  border: none;
+  padding: 8px 2px;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ck-more:hover {
+  color: var(--text-light);
+}
+
+.cookie-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cookie-link:hover {
+  color: var(--text-light);
+}
+
+.map-placeholder p {
+  margin: 0 0 14px;
+  font-size: 14px;
+}
+
+.map-load-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: var(--dark);
+}
+
+.map-load-btn:hover {
+  background: #e8848a;
+}
+
+@media (max-width: 767px) {
+  .cookie-inner {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .cookie-copy {
+    flex: 1 1 100%;
+  }
+
+  .cookie-copy p {
+    font-size: 13px;
+  }
+
+  .cookie-actions {
+    width: 100%;
+  }
+
+  .ck-btn {
+    flex: 1 1 0;
+    padding: 12px 10px;
+  }
+
+  .ck-more {
+    flex: 0 0 100%;
+  }
+
+  .sign-off {
+    margin-top: 36px;
+  }
+
+  .sign-off .sign-off-name {
+    font-size: 22px;
+  }
 }
 
 /* ---------- Responsive ---------- */
@@ -1316,6 +1540,13 @@ footer {
 @media (max-width: 340px) {
   .logo-text .name { font-size: 19px; }
   header .container { padding-left: 12px; padding-right: 12px; }
+
+  /* 250px min-height + aspect-ratio 4/3 computed a 333px-wide box inside a 280px
+     column, so the whole page scrolled sideways at 320px (measured width
+     333.328px). That pushed every block container to 353px, which in turn made
+     the fixed cookie banner wider than the screen and cut it off. Let the aspect
+     ratio drive the height instead. */
+  .about-image { min-height: 0; }
 }
 
 /* ---------- Language visibility ---------- */
