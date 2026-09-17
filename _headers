@@ -16,6 +16,10 @@
 #                    busted together with the CSS token above.
 #   * HTML is deliberately NOT covered here (Pages serves it max-age=0, which is
 #     correct: content updates must propagate immediately).
+#
+# /vendor/* — third-party files we serve ourselves (currently Font Awesome 6.5.1).
+# Safe to cache immutably because the VERSION is in the path: a future update
+# lands on a new directory (vendor/font-awesome/6.6.0/...), never over these.
 
 /css/*
   Cache-Control: public, max-age=31536000, immutable
@@ -24,4 +28,7 @@
   Cache-Control: public, max-age=31536000, immutable
 
 /fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/vendor/*
   Cache-Control: public, max-age=31536000, immutable

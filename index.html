@@ -53,7 +53,13 @@
        Not preloaded on purpose: measured, 60 KB of font at high priority pushes
        the still-render-blocking Font Awesome stylesheet later and makes FCP
        worse. With font-display: swap the text paints immediately anyway. -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
+  <!-- Font Awesome is self-hosted, verbatim (v6.5.1, files copied unmodified
+       from cdnjs and verified byte-identical against the SRI hash the CDN link
+       used to carry). It is still a render-blocking stylesheet, but no longer a
+       THIRD-PARTY one: the cross-origin DNS+TLS+round-trip was costing ~910ms of
+       the mobile FCP estimate and left the page depending on a CDN. Same bytes,
+       same icons, so the rendering is provably identical. -->
+  <link rel="stylesheet" href="vendor/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css?v=446ee005">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23DF6C73'>🎤</text></svg>">
   <script type="application/ld+json">
