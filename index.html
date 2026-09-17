@@ -765,8 +765,8 @@
               <!-- One textarea per language, so the ids MUST be unique (they were both
                    "message": invalid HTML, and the second label's `for` resolved to the
                    first textarea). `name` stays shared on purpose: the JS builds the
-                   payload itself, and the native formsubmit.co fallback should keep
-                   posting a field called "message" exactly as before. -->
+                   payload itself, and both our own endpoint and the no-JS fallback
+                   read a field called "message". -->
               <label for="message-el" class="lang-el">Μήνυμα *</label>
               <label for="message-en" class="lang-en">Message *</label>
               <textarea id="message-el" name="message" required maxlength="2000" class="lang-el" placeholder="Γράψτε το μήνυμά σας..."></textarea>
