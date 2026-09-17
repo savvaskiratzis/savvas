@@ -1,3 +1,22 @@
+# Cloudflare Pages redirects — tsigalogo.gr
+#
+# ⚠️ These rules exist to make removed pages UNAVAILABLE, not to beautify URLs.
+# Deleting a file from the deploy is NOT enough on Pages: unknown paths fall back
+# to index.html (SPA behaviour) and edge caches keep old HTML for 7 days
+# (s-maxage=604800) that a zone purge does not reliably clear. These 404 rules stop
+# the SPA fallback; a zone-level redirect rule (see the deployment skill) stops the
+# cached copies.
+#
+# Removed on the owner's request — the business/review card artwork must not be
+# reachable anywhere on the internet. Match both the extensionless path and the
+# .html form (Pages clean-URLs 308-redirects the latter to the former).
+/business-card* /404.html 404
+/business-card.html /404.html 404
+/Katerina-Tsiga.vcf /404.html 404
+/card-preview* /404.html 404
+/card-render* /404.html 404
+
+# Earlier removal (Sep 2026): the Google-review QR page and its assets.
 /review-card* /404.html 404
 /review-card.html /404.html 404
 /assets/qr-review.png /404.html 404
