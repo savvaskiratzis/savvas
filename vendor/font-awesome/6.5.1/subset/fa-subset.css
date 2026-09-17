@@ -1,0 +1,50 @@
+/* Font Awesome 6.5.1 — SUBSET of the vendored, byte-identical upstream file.
+   Kept: 2 @font-face, 10 machinery and 29 icon rules — the 29 icons this site uses (137 <i> elements)
+   out of 1873 icon rules / 10 faces. Regenerate with
+   tools/build-fontawesome-subset.py after adding icons, then re-run the pixel gate. */
+/*!
+ * Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ * Copyright 2023 Fonticons, Inc.
+ */
+.fa{font-family:var(--fa-style-family,"Font Awesome 6 Free");font-weight:var(--fa-style,900)}
+.fa,.fa-brands,.fa-classic,.fa-regular,.fa-sharp,.fa-solid,.fab,.far,.fas{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:var(--fa-display,inline-block);font-style:normal;font-variant:normal;line-height:1;text-rendering:auto}
+.fa-classic,.fa-regular,.fa-solid,.far,.fas{font-family:"Font Awesome 6 Free"}
+.fa-brands,.fab{font-family:"Font Awesome 6 Brands"}
+:host,:root{--fa-style-family-brands:"Font Awesome 6 Brands";--fa-font-brands:normal 400 1em/1 "Font Awesome 6 Brands"}
+.fa-brands,.fab{font-weight:400}
+:host,:root{--fa-font-regular:normal 400 1em/1 "Font Awesome 6 Free"}
+.fa-regular,.far{font-weight:400}
+:host,:root{--fa-style-family-classic:"Font Awesome 6 Free";--fa-font-solid:normal 900 1em/1 "Font Awesome 6 Free"}
+.fa-solid,.fas{font-weight:900}
+@font-face{font-family:"Font Awesome 6 Brands";font-style:normal;font-weight:400;font-display:block;src:url(fa-brands-400.woff2)}
+@font-face{font-family:"Font Awesome 6 Free";font-style:normal;font-weight:900;font-display:block;src:url(fa-solid-900.woff2)}
+.fa-calendar-alt:before,.fa-calendar-days:before{content:"\f073"}
+.fa-comments:before{content:"\f086"}
+.fa-bars:before,.fa-navicon:before{content:"\f0c9"}
+.fa-user:before{content:"\f007"}
+.fa-globe:before{content:"\f0ac"}
+.fa-star:before{content:"\f005"}
+.fa-map-location-dot:before,.fa-map-marked-alt:before{content:"\f5a0"}
+.fa-microphone:before{content:"\f130"}
+.fa-check-circle:before,.fa-circle-check:before{content:"\f058"}
+.fa-user-tie:before{content:"\f508"}
+.fa-certificate:before{content:"\f0a3"}
+.fa-shield-alt:before,.fa-shield-halved:before{content:"\f3ed"}
+.fa-phone-alt:before,.fa-phone-flip:before{content:"\f879"}
+.fa-child:before{content:"\f1ae"}
+.fa-envelope:before{content:"\f0e0"}
+.fa-clock-four:before,.fa-clock:before{content:"\f017"}
+.fa-home-alt:before,.fa-home-lg-alt:before,.fa-home:before,.fa-house:before{content:"\f015"}
+.fa-location-dot:before,.fa-map-marker-alt:before{content:"\f3c5"}
+.fa-arrow-down:before{content:"\f063"}
+.fa-baby:before{content:"\f77c"}
+.fa-quote-left-alt:before,.fa-quote-left:before{content:"\f10d"}
+.fa-cookie-bite:before{content:"\f564"}
+.fa-book-open:before{content:"\f518"}
+.fa-paper-plane:before{content:"\f1d8"}
+.fa-print:before{content:"\f02f"}
+.fa-google:before{content:"\f1a0"}
+.fa-facebook-f:before{content:"\f39e"}
+.fa-instagram:before{content:"\f16d"}
+.fa-facebook:before{content:"\f09a"}

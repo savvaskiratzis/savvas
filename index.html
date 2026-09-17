@@ -53,13 +53,14 @@
        Not preloaded on purpose: measured, 60 KB of font at high priority pushes
        the still-render-blocking Font Awesome stylesheet later and makes FCP
        worse. With font-display: swap the text paints immediately anyway. -->
-  <!-- Font Awesome is self-hosted, verbatim (v6.5.1, files copied unmodified
-       from cdnjs and verified byte-identical against the SRI hash the CDN link
-       used to carry). It is still a render-blocking stylesheet, but no longer a
-       THIRD-PARTY one: the cross-origin DNS+TLS+round-trip was costing ~910ms of
-       the mobile FCP estimate and left the page depending on a CDN. Same bytes,
-       same icons, so the rendering is provably identical. -->
-  <link rel="stylesheet" href="vendor/font-awesome/6.5.1/css/all.min.css">
+  <!-- Font Awesome: a SUBSET built from the vendored, byte-identical upstream
+       6.5.1 (see tools/build-fontawesome-subset.py + tools/fontawesome-subset.json).
+       The site uses 29 icons; upstream ships 1,873 icon rules and 273 KiB of icon
+       fonts for them. Kept: 2 @font-face, 7 machinery rules and the 29 icon rules,
+       with the fonts trimmed to the 29 glyphs — 96% less CSS and 98% less font
+       bytes, outlines untouched so rendering is identical.
+       Regenerate after adding an icon, then re-run the pixel gate. -->
+  <link rel="stylesheet" href="vendor/font-awesome/6.5.1/subset/fa-subset.css">
   <link rel="stylesheet" href="css/style.css?v=446ee005">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23DF6C73'>🎤</text></svg>">
   <script type="application/ld+json">
