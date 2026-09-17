@@ -707,7 +707,7 @@
 
         <!-- Contact Form -->
         <div class="contact-form fade-in">
-          <form id="contactForm" action="https://formsubmit.co/ajax/tsiga.kat@gmail.com" method="POST" accept-charset="UTF-8" novalidate onsubmit="handleForm(event)">
+          <form id="contactForm" action="/api/contact" method="POST" accept-charset="UTF-8" novalidate onsubmit="handleForm(event)">
             <!-- Honeypot anti-spam (invisible to humans, bots fill it) -->
             <input type="text" name="_honey" id="hpField" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp-field">
             <input type="hidden" name="_template" value="table">
@@ -1121,7 +1121,10 @@
 
     // ---- Contact form ----
     const FORM_EMAIL = 'tsiga.kat@gmail.com';
-    const FS_ENDPOINT = 'https://formsubmit.co/ajax/' + FORM_EMAIL;
+    // Own-origin endpoint, served by the Cloudflare Pages Function in functions/api/contact.js.
+    // It used to be formsubmit.co, which put itself behind a Cloudflare bot challenge in
+    // Sep 2026 (403 + cf-mitigated: challenge) and silently broke the form for every visitor.
+    const FS_ENDPOINT = '/api/contact';
     const SUBMIT_GAP_MS = 90000;              // cooldown between sends
     const LIMIT_WINDOW_MS = 10 * 60 * 1000;   // 10 minutes
     const LIMIT_MAX = 5;                      // max sends per window
@@ -1295,12 +1298,6 @@
       const serviceLabel = SERVICES[serviceCode]
         ? SERVICES[serviceCode][lang]
         : (serviceCode || (lang === 'el' ? 'Δεν επιλέχθηκε' : 'Not specified'));
-      const label = n => (lang === 'el' ? n.el : n.en);
-      const body = label({ el: 'Ονοματεπώνυμο', en: 'Name' }) + ': ' + name + '\n'
-        + label({ el: 'Email', en: 'Email' }) + ': ' + email + '\n'
-        + label({ el: 'Τηλέφωνο', en: 'Phone' }) + ': ' + (phoneRaw || '—') + '\n'
-        + label({ el: 'Υπηρεσία', en: 'Service' }) + ': ' + serviceLabel + '\n\n'
-        + label({ el: 'Μήνυμα', en: 'Message' }) + ':\n' + message;
       $('fSubject').value = subject;
 
       // ---- send via FormSubmit (JSON AJAX) ----
@@ -1311,7 +1308,7 @@
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
             name: name, email: email, phone: phoneRaw, service: serviceLabel,
-            message: body, _subject: subject, _template: 'table', _captcha: 'false', _honey: ''
+            message: message, _honey: ''
           })
         });
         recordAttempt();
