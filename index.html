@@ -60,7 +60,7 @@
        the still-render-blocking Font Awesome stylesheet later and makes FCP
        worse. With font-display: swap the text paints immediately anyway. -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/style.css?v=aa247d17">
+  <link rel="stylesheet" href="css/style.css?v=a8d07758">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23DF6C73'>🎤</text></svg>">
   <script type="application/ld+json">
   {
@@ -153,21 +153,20 @@
           <li><a href="#testimonials" onclick="closeMenu()"><span class="lang-el">Κριτικές</span><span class="lang-en">Reviews</span></a></li>
           <li><a href="#faq" onclick="closeMenu()"><span class="lang-el">Ερωτήσεις</span><span class="lang-en">FAQ</span></a></li>
           <li><a href="#contact" onclick="closeMenu()"><span class="lang-el">Επικοινωνία</span><span class="lang-en">Contact</span></a></li>
-          <!-- Language toggle lives INSIDE the nav on purpose: as a fixed overlay
-               it sat on top of the menu button once the sticky header engaged and
-               stole its tap. Here it is a row of the nav on desktop and a row of
-               the dropdown menu on mobile, so it can never cover anything. -->
-          <li class="lang-item">
-            <div class="lang-toggle">
-              <button class="active" onclick="switchLang('el')" id="lang-el" title="Ελληνικά" aria-label="Ελληνικά">
-                <img src="images/gr.svg" alt="Ελληνικά" width="27" height="18">
-              </button>
-              <button onclick="switchLang('en')" id="lang-en" title="English" aria-label="English">
-                <img src="images/gb.svg" alt="English" width="27" height="18">
-              </button>
-            </div>
-          </li>
         </ul>
+        <!-- Language toggle sits in the header, in normal flow (it used to be a
+             position:fixed overlay, which covered the menu button once the
+             sticky header engaged and stole its taps). Desktop shows both flags
+             with the active ring; on mobile it shrinks to the single flag of the
+             language you'd switch to, so it fits beside the menu button. -->
+        <div class="lang-toggle">
+          <button class="active" onclick="switchLang('el')" id="lang-el" title="Ελληνικά" aria-label="Ελληνικά">
+            <img src="images/gr.svg" alt="Ελληνικά" width="27" height="18">
+          </button>
+          <button onclick="switchLang('en')" id="lang-en" title="English" aria-label="English">
+            <img src="images/gb.svg" alt="English" width="27" height="18">
+          </button>
+        </div>
       </nav>
     </div>
   </header>

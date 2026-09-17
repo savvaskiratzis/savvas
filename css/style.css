@@ -188,18 +188,14 @@ img {
 }
 
 /* ---------- Language Toggle ---------- */
-/* In-flow inside .nav-menu (see index.html): a nav row on desktop, a dropdown
-   row on mobile. Was position:fixed/top/right/z-index:1000, which made it sit on
-   top of the sticky header's menu button and swallow its taps. */
+/* In flow inside <nav>, never a fixed overlay: as position:fixed/top/right/
+   z-index:1000 it covered the sticky header's menu button and swallowed its
+   taps. Desktop shows both flags after the nav links; on mobile it shrinks to
+   one compact flag (rules in the 991px query). */
 .lang-toggle {
   display: flex;
   gap: 6px;
   margin-left: 10px;
-}
-
-.nav-menu .lang-item {
-  display: flex;
-  align-items: center;
 }
 
 .lang-toggle button {
@@ -1249,10 +1245,32 @@ footer {
     display: block;
   }
 
-  /* the toggle is a dropdown row here, not a nav row: drop the desktop offset */
-  .nav-menu .lang-toggle {
+  /* Keep the toggle in the header but compact: one flag - the language you'd
+     switch TO - left of the menu button. Measured free space in the header row
+     is 4/44/74px at 320/360/390px, so the 94px two-flag block cannot fit but a
+     single flag can. Desktop keeps both flags and the active-state ring. */
+  .lang-toggle {
+    order: -1;
     margin-left: 0;
-    margin-top: 4px;
+    margin-right: 8px;
+  }
+
+  .lang-toggle button {
+    padding: 2px 3px;
+  }
+
+  .lang-toggle button img {
+    width: 25px;
+    height: 17px;
+  }
+
+  .logo a {
+    gap: 8px;
+  }
+
+  [data-lang="el"] .lang-toggle #lang-el,
+  [data-lang="en"] .lang-toggle #lang-en {
+    display: none;
   }
 
   .about-image {
@@ -1290,6 +1308,14 @@ footer {
   .top-bar .contact-info {
     justify-content: center;
   }
+}
+
+/* Very small phones (<=340px): the header row has only ~42px left for the
+   language flag, so reclaim it from the logo type and the side padding instead
+   of shrinking the logo icon (that would make the 84px header shorter). */
+@media (max-width: 340px) {
+  .logo-text .name { font-size: 19px; }
+  header .container { padding-left: 12px; padding-right: 12px; }
 }
 
 /* ---------- Language visibility ---------- */
