@@ -180,9 +180,9 @@
     // carries over between the two pages.
     function switchLang(lang) {
       document.documentElement.setAttribute('data-lang', lang);
-      document.querySelectorAll('.lang-toggle button').forEach(btn) {
+      document.querySelectorAll('.lang-toggle button').forEach(btn => {
         btn.classList.toggle('active', btn.id === 'lang-' + lang);
-      }
+      });
       try { localStorage.setItem('tsiga-lang-choice', lang); } catch (e) {}
     }
     // Sync the toggle UI with the language already applied in <head>.
