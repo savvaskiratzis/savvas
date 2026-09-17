@@ -231,9 +231,18 @@
       <div class="about-grid">
         <div class="about-image fade-in">
           <picture>
-            <source type="image/avif" srcset="images/katerina-tsiga.avif">
-            <source type="image/webp" srcset="images/katerina-tsiga.webp">
-            <img src="images/katerina-tsiga.jpg" alt="Κατερίνα Τσίγα — Λογοθεραπεύτρια" class="about-photo" loading="lazy" decoding="async">
+            <!-- 4:3 crops of the square master, built by tools/build-portrait.py. The box is
+                 4:3 at every breakpoint (aspect-ratio in the CSS), so cropping here makes the
+                 CSS `cover` a no-op and the visible pixels identical -- fewer bytes, same photo.
+                 sizes comes from measuring the rendered box: 96vw to 991px (86.9-95.8vw),
+                 45vw to 1279px (44.8-45.3vw), then capped at 548px. -->
+            <source type="image/avif"
+                    srcset="images/katerina-tsiga-550.avif 550w, images/katerina-tsiga-750.avif 750w, images/katerina-tsiga-1100.avif 1100w"
+                    sizes="(max-width: 991px) 96vw, (max-width: 1279px) 45vw, 548px">
+            <source type="image/webp"
+                    srcset="images/katerina-tsiga-550.webp 550w, images/katerina-tsiga-750.webp 750w, images/katerina-tsiga-1100.webp 1100w"
+                    sizes="(max-width: 991px) 96vw, (max-width: 1279px) 45vw, 548px">
+            <img src="images/katerina-tsiga-750.jpg" alt="Κατερίνα Τσίγα — Λογοθεραπεύτρια" class="about-photo" width="1100" height="825" loading="lazy" decoding="async">
           </picture>
         </div>
         <div class="about-text fade-in">
@@ -753,10 +762,15 @@
             </div>
 
             <div class="form-group" data-field="message">
-              <label for="message" class="lang-el">Μήνυμα *</label>
-              <label for="message" class="lang-en">Message *</label>
-              <textarea id="message" name="message" required maxlength="2000" class="lang-el" placeholder="Γράψτε το μήνυμά σας..."></textarea>
-              <textarea id="message" name="message" required maxlength="2000" class="lang-en" placeholder="Write your message..."></textarea>
+              <!-- One textarea per language, so the ids MUST be unique (they were both
+                   "message": invalid HTML, and the second label's `for` resolved to the
+                   first textarea). `name` stays shared on purpose: the JS builds the
+                   payload itself, and the native formsubmit.co fallback should keep
+                   posting a field called "message" exactly as before. -->
+              <label for="message-el" class="lang-el">Μήνυμα *</label>
+              <label for="message-en" class="lang-en">Message *</label>
+              <textarea id="message-el" name="message" required maxlength="2000" class="lang-el" placeholder="Γράψτε το μήνυμά σας..."></textarea>
+              <textarea id="message-en" name="message" required maxlength="2000" class="lang-en" placeholder="Write your message..."></textarea>
               <p class="field-error"><span class="lang-el">Παρακαλώ γράψτε ένα μήνυμα τουλάχιστον 10 χαρακτήρων.</span><span class="lang-en">Please write a message of at least 10 characters.</span></p>
             </div>
 
@@ -1111,9 +1125,17 @@
     const $ = id => document.getElementById(id);
     const visibleLang = () => document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'el';
 
-    // Read a field's value, always from the VISIBLE input when duplicates exist
+    // Read a field's value, always from the VISIBLE element when duplicates exist.
+    // Fields that exist once per language have unique ids (message-el/message-en) while
+    // callers still pass the field name, so resolve by data-field as well: a selector
+    // list returns unique matches in document order, so single-element fields (name,
+    // email, phone, service) and the honeypot keep working exactly as before.
     function fieldValue(id) {
-      const els = document.querySelectorAll('#' + id);
+      const els = document.querySelectorAll(
+        '#' + id +
+        ', .form-group[data-field="' + id + '"] input' +
+        ', .form-group[data-field="' + id + '"] textarea' +
+        ', .form-group[data-field="' + id + '"] select');
       for (const el of els) {
         if (getComputedStyle(el).display !== 'none') return el.value;
       }
