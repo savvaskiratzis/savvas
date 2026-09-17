@@ -172,13 +172,19 @@
       <div class="badge lang-el">Λογοθεραπεία κατ' οίκον</div>
       <div class="badge lang-en">In-Home Speech Therapy</div>
 
-      <h1 class="lang-el">
-        Κατερίνα Τσίγα<br>
-        <span class="highlight">Λογοθεραπεύτρια</span>
-      </h1>
-      <h1 class="lang-en">
-        Katerina Tsiga<br>
-        <span class="highlight">Speech Therapist</span>
+      <!-- A single <h1> for the page: the language variants live INSIDE it, so
+           crawlers and SEO auditors never see two top-level headings. The
+           language switch stays CSS-driven like everywhere else (no JS text
+           swapping), and the rendered result is unchanged. -->
+      <h1>
+        <span class="lang-el">
+          Κατερίνα Τσίγα<br>
+          <span class="highlight">Λογοθεραπεύτρια</span>
+        </span>
+        <span class="lang-en">
+          Katerina Tsiga<br>
+          <span class="highlight">Speech Therapist</span>
+        </span>
       </h1>
 
       <p class="lang-el">
@@ -207,8 +213,13 @@
       <div class="section-title fade-in">
         <div class="label lang-el">Σχετικά με Εμένα</div>
         <div class="label lang-en">About Me</div>
-        <h2 class="lang-el">Κατερίνα Τσίγα<br><span style="color: var(--primary);">Λογοθεραπεύτρια</span></h2>
-        <h2 class="lang-en">Katerina Tsiga<br><span style="color: var(--primary);">Speech Therapist</span></h2>
+        <!-- Was a word-for-word repeat of the hero <h1> (identical visible text
+             in two headings). Now carries the section's own angle - the primary
+             keyword plus the experience line - and the copy is short enough to
+             keep the original two-line rhythm on mobile (a longer phrase such as
+             "Λογοθεραπεία κατ' οίκον" wraps to a third line at 350px). -->
+        <h2 class="lang-el">Λογοθεραπεία<br><span style="color: var(--primary);">από το 2012</span></h2>
+        <h2 class="lang-en">Speech therapy<br><span style="color: var(--primary);">since 2012</span></h2>
       </div>
 
       <div class="about-grid">
