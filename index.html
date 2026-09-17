@@ -924,6 +924,9 @@
     // Hide the banner before paint if a choice is already stored (no flash).
     try {
       if (localStorage.getItem('tsiga-consent')) document.getElementById('cookieBar').hidden = true;
+      // Older visits stored the language under this key; the site no longer reads it.
+      // Drop it so a stale "en" cannot come back if persistence is ever restored.
+      localStorage.removeItem('tsiga-lang');
     } catch (e) {}
   </script>
 
@@ -962,12 +965,12 @@
         );
         if (visibleOption) visibleOption.selected = true;
       }
-      localStorage.setItem('tsiga-lang', lang);
+      // OWNER'S DECISION (Sep 2026): the chosen language is deliberately NOT stored.
+      // Every load starts in Greek and the toggle only affects what is on screen now.
+      // He reported "it opens in English by default" after having clicked the flag once;
+      // Greek is the primary audience here, so the default must win over a remembered
+      // choice. Do not reintroduce persistence without asking.
     }
-
-    // Restore saved language
-    const savedLang = localStorage.getItem('tsiga-lang');
-    if (savedLang) switchLang(savedLang);
 
     // ---- Mobile Menu ----
     let menuOpenY = null;

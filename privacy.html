@@ -169,17 +169,14 @@
   <script>
     // Same behaviour and storage key as the landing page, so the chosen language
     // carries over between the two pages.
+    // OWNER'S DECISION (Sep 2026): the language is deliberately NOT persisted, matching
+    // the landing page -- every load starts in Greek, the toggle only affects this view.
     function switchLang(lang) {
       document.documentElement.setAttribute('data-lang', lang);
       document.querySelectorAll('.lang-toggle button').forEach(btn => {
         btn.classList.toggle('active', btn.id === 'lang-' + lang);
       });
-      try { localStorage.setItem('tsiga-lang', lang); } catch (e) {}
     }
-    try {
-      const saved = localStorage.getItem('tsiga-lang');
-      if (saved) switchLang(saved);
-    } catch (e) {}
   </script>
 </body>
 </html>
