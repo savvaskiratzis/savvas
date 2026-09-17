@@ -1,0 +1,17 @@
+# Cloudflare Pages custom headers — tsigalogo.gr
+#
+# WHY: Pages' default asset TTL is only 4h (max-age=14400). Lighthouse flags it
+# as "use efficient cache lifetimes". Static folders below are now immutable/1y.
+#
+# ⚠️ MAINTENANCE (immutable = 1 year in caches):
+#   * CSS change  -> bump the ?v= token in index.html:  css/style.css?v=YYYYMMDD
+#   * Image swap  -> use a NEW filename (e.g. katerina-tsiga-2.webp) instead of
+#                    overwriting the existing file, or bump ?v= on the reference.
+#   * HTML is deliberately NOT covered here (Pages serves it max-age=0, which is
+#     correct: content updates must propagate immediately).
+
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=31536000, immutable

@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google tag (gtag.js) — Google Ads conversion tracking (AW-872409204) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-872409204"></script>
+  <!-- Google tag (gtag.js) — Google Ads conversion tracking (AW-872409204).
+       The library is NOT in the critical path: it loads after window load
+       (requestIdleCallback) or on the first interaction, whichever comes
+       first. The dataLayer queue below holds consent/js/config until then. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -16,6 +18,24 @@
     });
     gtag('js', new Date());
     gtag('config', 'AW-872409204');
+    (function () {
+      var started = false;
+      function loadGtag() {
+        if (started) return;
+        started = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-872409204';
+        document.head.appendChild(s);
+      }
+      window.addEventListener('load', function () {
+        if ('requestIdleCallback' in window) { requestIdleCallback(loadGtag, { timeout: 2500 }); }
+        else { setTimeout(loadGtag, 1000); }
+      });
+      ['scroll', 'click', 'touchstart', 'keydown'].forEach(function (ev) {
+        window.addEventListener(ev, loadGtag, { once: true, passive: true });
+      });
+    })();
   </script>
   <title>Κατερίνα Τσίγα - Λογοθεραπεύτρια | Λογοθεραπεία κατ' οίκον, Γλυφάδα</title>
   <meta name="description" content="Κατερίνα Τσίγα - Λογοθεραπεύτρια. Λογοθεραπεία κατ' οίκον σε παιδιά και ενήλικες στα Νότια Προάστια της Αττικής.">
@@ -39,7 +59,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=20260917">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23DF6C73'>🎤</text></svg>">
   <script type="application/ld+json">
   {
@@ -147,6 +167,7 @@
     </div>
   </header>
 
+  <main>
   <!-- ============ HERO ============ -->
   <section class="hero" id="hero">
     <div class="hero-content">
@@ -194,7 +215,11 @@
 
       <div class="about-grid">
         <div class="about-image fade-in">
-          <img src="images/katerina-tsiga.jpg" alt="Κατερίνα Τσίγα — Λογοθεραπεύτρια" class="about-photo">
+          <picture>
+            <source type="image/avif" srcset="images/katerina-tsiga.avif">
+            <source type="image/webp" srcset="images/katerina-tsiga.webp">
+            <img src="images/katerina-tsiga.jpg" alt="Κατερίνα Τσίγα — Λογοθεραπεύτρια" class="about-photo" loading="lazy" decoding="async">
+          </picture>
         </div>
         <div class="about-text fade-in">
           <p class="lang-el">
@@ -594,8 +619,8 @@
           <div class="contact-item">
             <div class="icon"><i class="fas fa-map-marked-alt"></i></div>
             <div>
-              <h4 class="lang-el">Περιοχή Εξυπηρέτησης</h4>
-              <h4 class="lang-en">Service Area</h4>
+              <h3 class="lang-el">Περιοχή Εξυπηρέτησης</h3>
+              <h3 class="lang-en">Service Area</h3>
               <p class="lang-el">Κατ' οίκον επισκέψεις σε: Γλυφάδα, Ελληνικό–Αργυρούπολη, Βούλα, Βάρη, Βουλιαγμένη, Άλιμο και Ηλιούπολη</p>
               <p class="lang-en">Home visits across: Glyfada, Elliniko–Argyroupoli, Voula, Vari, Vouliagmeni, Alimos and Ilioupoli</p>
             </div>
@@ -604,8 +629,8 @@
           <div class="contact-item">
             <div class="icon"><i class="fas fa-phone-alt"></i></div>
             <div>
-              <h4 class="lang-el">Τηλέφωνο</h4>
-              <h4 class="lang-en">Phone</h4>
+              <h3 class="lang-el">Τηλέφωνο</h3>
+              <h3 class="lang-en">Phone</h3>
               <a href="tel:+306937524966">693 752 4966</a>
             </div>
           </div>
@@ -613,8 +638,8 @@
           <div class="contact-item">
             <div class="icon"><i class="fas fa-envelope"></i></div>
             <div>
-              <h4 class="lang-el">Email</h4>
-              <h4 class="lang-en">Email</h4>
+              <h3 class="lang-el">Email</h3>
+              <h3 class="lang-en">Email</h3>
               <a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a>
             </div>
           </div>
@@ -622,7 +647,7 @@
           <div class="contact-item">
             <div class="icon"><i class="fab fa-facebook"></i></div>
             <div>
-              <h4>Facebook</h4>
+              <h3>Facebook</h3>
               <a href="https://www.facebook.com/tsigalogo" target="_blank" rel="noopener">facebook.com/tsigalogo</a>
             </div>
           </div>
@@ -630,7 +655,7 @@
           <div class="contact-item">
             <div class="icon"><i class="fab fa-instagram"></i></div>
             <div>
-              <h4>Instagram</h4>
+              <h3>Instagram</h3>
               <a href="https://www.instagram.com/tsiga.kat.logo/" target="_blank" rel="noopener">instagram.com/tsiga.kat.logo</a>
             </div>
           </div>
@@ -638,8 +663,8 @@
           <div class="contact-item">
             <div class="icon"><i class="fas fa-shield-halved"></i></div>
             <div>
-              <h4 class="lang-el">Ασφαλιστικά Ταμεία</h4>
-              <h4 class="lang-en">Insurance Funds</h4>
+              <h3 class="lang-el">Ασφαλιστικά Ταμεία</h3>
+              <h3 class="lang-en">Insurance Funds</h3>
               <p class="lang-el">Δεκτά όλα τα ασφαλιστικά ταμεία</p>
               <p class="lang-en">All insurance funds accepted</p>
             </div>
@@ -648,8 +673,8 @@
           <div class="contact-item">
             <div class="icon"><i class="fas fa-clock"></i></div>
             <div>
-              <h4 class="lang-el">Ώρες Λειτουργίας</h4>
-              <h4 class="lang-en">Hours</h4>
+              <h3 class="lang-el">Ώρες Λειτουργίας</h3>
+              <h3 class="lang-en">Hours</h3>
               <p class="lang-el">Κατόπιν ραντεβού</p>
               <p class="lang-en">By appointment</p>
             </div>
@@ -752,6 +777,8 @@
     </div>
   </section>
 
+  </main>
+
   <!-- ============ FOOTER ============ -->
   <footer>
     <div class="container">
@@ -773,8 +800,8 @@
           </p>
         </div>
         <div class="footer-links">
-          <h4 class="lang-el">Σύνδεσμοι</h4>
-          <h4 class="lang-en">Links</h4>
+          <h3 class="lang-el">Σύνδεσμοι</h3>
+          <h3 class="lang-en">Links</h3>
           <ul>
             <li><a href="#hero" class="lang-el">Αρχική</a><a href="#hero" class="lang-en">Home</a></li>
             <li><a href="#about" class="lang-el">Σχετικά</a><a href="#about" class="lang-en">About</a></li>
@@ -785,8 +812,8 @@
           </ul>
         </div>
         <div class="footer-links">
-          <h4 class="lang-el">Επικοινωνία</h4>
-          <h4 class="lang-en">Contact</h4>
+          <h3 class="lang-el">Επικοινωνία</h3>
+          <h3 class="lang-en">Contact</h3>
           <ul>
             <li><a href="tel:+306937524966"><i class="fas fa-phone-alt"></i> 693 752 4966</a></li>
             <li><a href="mailto:tsiga.kat@gmail.com"><i class="fas fa-envelope"></i> tsiga.kat@gmail.com</a></li>

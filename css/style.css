@@ -818,7 +818,8 @@ nav {
   color: var(--primary);
 }
 
-.contact-item h4 {
+.contact-item h4,
+.contact-item h3 {
   font-size: 16px;
   margin-bottom: 4px;
 }
@@ -1039,7 +1040,8 @@ footer {
   line-height: 1.8;
 }
 
-.footer-links h4 {
+.footer-links h4,
+.footer-links h3 {
   font-size: 16px;
   margin-bottom: 16px;
 }
