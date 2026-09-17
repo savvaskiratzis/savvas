@@ -1437,6 +1437,63 @@ footer {
   }
 }
 
+/* ---------- Sticky mobile call bar ---------- */
+/* Phone-only CTA. Fixed to the bottom edge, which is exactly where the consent
+   banner lives, so it is shown only once a choice has been made
+   (body.has-consent) and hidden again while the settings are reopened - the two
+   are never visible at the same time, so no stacking maths is needed.
+   Its click is measured by the generic tel: handler (Google Ads conversion). */
+.call-bar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  body.has-consent .call-bar {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1090;   /* below the consent banner (1100) */
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(26,26,46,0.97);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(223,108,115,0.35);
+    box-shadow: 0 -12px 34px rgba(0,0,0,0.4);
+  }
+
+  body.has-consent .call-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: var(--primary);
+    color: var(--dark);              /* 5.3:1 on --primary */
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all var(--transition);
+  }
+
+  body.has-consent .call-btn:hover,
+  body.has-consent .call-btn:active {
+    background: #e8848a;
+  }
+
+  /* The bar covers the bottom of the viewport, so give the footer room to scroll
+     clear of it - otherwise the "Ρυθμίσεις cookies" button would sit underneath
+     the bar and become untappable (the same class of bug the language toggle
+     had). Measured bar height is ~68px; verified by tapping that button. */
+  body.has-consent footer {
+    padding-bottom: 100px;
+  }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 991px) {
   .about-grid,
