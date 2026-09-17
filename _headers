@@ -4,9 +4,16 @@
 # as "use efficient cache lifetimes". Static folders below are now immutable/1y.
 #
 # ⚠️ MAINTENANCE (immutable = 1 year in caches):
-#   * CSS change  -> bump the ?v= token in index.html:  css/style.css?v=YYYYMMDD
+#   * CSS change  -> re-hash:  H=$(sha256sum css/style.css | cut -c1-8)
+#                   then set  css/style.css?v=$H  in index.html.
+#                   A content-hash token can never go stale the way a date can:
+#                   the earlier ?v=20260917 was already cached for a year when the
+#                   CSS changed again the same day, which would have served a
+#                   stylesheet with no @font-face to those visitors.
 #   * Image swap  -> use a NEW filename (e.g. katerina-tsiga-2.webp) instead of
 #                    overwriting the existing file, or bump ?v= on the reference.
+#   * Fonts       -> /fonts/*.woff2 are referenced from style.css, so they are
+#                    busted together with the CSS token above.
 #   * HTML is deliberately NOT covered here (Pages serves it max-age=0, which is
 #     correct: content updates must propagate immediately).
 
@@ -14,4 +21,7 @@
   Cache-Control: public, max-age=31536000, immutable
 
 /images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
   Cache-Control: public, max-age=31536000, immutable
