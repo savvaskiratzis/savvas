@@ -1241,8 +1241,8 @@
       if (!limit.ok) {
         const mins = Math.max(1, Math.ceil(limit.waitMs / 60000));
         const msg = visibleLang() === 'el'
-          ? 'Έχουν σταλεί πολλά μηνύματα από αυτή τη συσκευή. Δοκιμάστε ξανά σε ' + mins + ' λεπτά ή στείλτε email απευθείας.'
-          : 'Too many messages sent from this device. Try again in ' + mins + ' minutes or email us directly.';
+          ? 'Έχουν σταλεί πολλά μηνύματα από αυτή τη συσκευή. Δοκιμάστε ξανά σε ' + mins + ' λεπτά, ή στείλτε email στο ' + FORM_EMAIL + ' ή καλέστε στο 693 752 4966.'
+          : 'Too many messages sent from this device. Try again in ' + mins + ' minutes, or email me at ' + FORM_EMAIL + ' or call +30 693 752 4966.';
         setAlert({ el: msg, en: msg });
         return;
       }
