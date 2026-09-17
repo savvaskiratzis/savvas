@@ -783,8 +783,8 @@
           </form>
           <p class="direct-email lang-el" style="margin-top:1.25rem">Τα στοιχεία σας χρησιμοποιούνται μόνο για να σας απαντήσω. Για κλινικά ζητήματα τηλεφωνήστε στο <a href="tel:+306937524966">693 752 4966</a> — μη στέλνετε ιατρικές λεπτομέρειες με τη φόρμα. <a href="privacy.html">Πολιτική Απορρήτου</a>.</p>
           <p class="direct-email lang-en" style="margin-top:1.25rem">Your details are used only to reply to you. For clinical matters call <a href="tel:+306937524966">+30 693 752 4966</a> — please do not send medical details through the form. <a href="privacy.html">Privacy Policy</a>.</p>
-          <p class="direct-email lang-el">ή στείλτε μας email απευθείας στο <a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></p>
-          <p class="direct-email lang-en">or email us directly at <a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></p>
+          <p class="direct-email lang-el">ή στείλτε μου email απευθείας στο <a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></p>
+          <p class="direct-email lang-en">or email me directly at <a href="mailto:tsiga.kat@gmail.com">tsiga.kat@gmail.com</a></p>
           <div id="formSuccess" style="display:none; text-align:center; padding:30px;">
             <i class="fas fa-check-circle" style="font-size:48px; color:var(--primary); margin-bottom:16px;"></i>
             <p class="lang-el">Το μήνυμά σας στάλθηκε επιτυχώς! Θα επικοινωνήσουμε σύντομα.</p>
@@ -1249,7 +1249,14 @@
       // ---- anti-spam 4: filled & submitted too fast after page load ----
       if (Date.now() - tPageLoad < MIN_FILL_MS) {
         setBlockUntil(30000);
-        return; // silent
+        // NEVER fail silently. A fast human used to see nothing at all and conclude the
+        // form was broken -- which is exactly how the owner reported it. A message costs
+        // nothing and bots gain nothing from it.
+        setAlert({
+          el: 'Το μήνυμα στάλθηκε πολύ γρήγορα μετά τη φόρτωση της σελίδας. Περιμένετε λίγα δευτερόλεπτα και πατήστε ξανά «Αποστολή» — ή καλέστε στο 693 752 4966.',
+          en: 'This message was submitted too quickly after the page loaded. Please wait a few seconds and press "Send Message" again — or call +30 693 752 4966.'
+        });
+        return;
       }
 
       // ---- read values ----
@@ -1325,16 +1332,16 @@
         setBlockUntil(60000);
         setSubmitting(false);
         setAlert({
-          el: 'Δεν ήταν δυνατή η αποστολή του μηνύματος. Δοκιμάστε ξανά σε λίγο ή στείλτε email απευθείας στο ' + FORM_EMAIL + '.',
-          en: 'The message could not be sent. Please try again shortly or email us directly at ' + FORM_EMAIL + '.'
+          el: 'Δεν ήταν δυνατή η αποστολή του μηνύματος. Δοκιμάστε ξανά σε λίγο, ή στείλτε email στο ' + FORM_EMAIL + ' ή καλέστε στο 693 752 4966.',
+          en: 'The message could not be sent. Please try again shortly, or email me at ' + FORM_EMAIL + ' or call +30 693 752 4966.'
         });
       } catch (err) {
         recordAttempt();
         setBlockUntil(60000);
         setSubmitting(false);
         setAlert({
-          el: 'Σφάλμα σύνδεσης. Δοκιμάστε ξανά ή στείλτε email απευθείας στο ' + FORM_EMAIL + '.',
-          en: 'Connection error. Please try again or email us directly at ' + FORM_EMAIL + '.'
+          el: 'Σφάλμα σύνδεσης με τη φόρμα. Δοκιμάστε ξανά, ή στείλτε email στο ' + FORM_EMAIL + ' ή καλέστε στο 693 752 4966.',
+          en: 'Connection error with the form. Please try again, or email me at ' + FORM_EMAIL + ' or call +30 693 752 4966.'
         });
       }
     }
