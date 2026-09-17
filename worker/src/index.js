@@ -1,24 +1,21 @@
 /**
- * Contact-form endpoint for tsigalogo.gr — runs on Cloudflare, on the site's own origin.
+ * Contact-form endpoint for tsigalogo.gr — a Worker, with the Email Service binding.
  *
- * Why it exists: the form used to POST to formsubmit.co, which in Sep 2026 put its endpoint
- * behind a Cloudflare bot challenge (HTTP 403 + `cf-mitigated: challenge`, and a preflight
- * with no CORS headers). No `fetch` can solve a JS challenge, so the form silently stopped
- * working for every visitor. This removes the third party entirely: the message goes
- * visitor -> our own Cloudflare -> the practice's inbox, so there is no external form
- * processor to declare in the privacy policy and no external service to break us again.
+ * This runs on the site's own domain (route: tsigalogo.gr/api/contact) and sends the enquiry
+ * to the practice's inbox, so there is no third-party form processor and no CORS.
  *
- * Requires, in the Pages project (dashboard -> Settings -> Functions):
- *   1. Email Routing enabled for tsigalogo.gr, with the address in TO added and VERIFIED
- *      (Cloudflare only allows sends to verified destinations -- which is also what makes
- *      this free on the Workers Free plan).
- *   2. an Email Service binding named SEND_EMAIL (that name is what `env.SEND_EMAIL` reads).
+ * History that matters: the form used to POST to formsubmit.co, which put its endpoint behind
+ * a Cloudflare bot challenge in Sep 2026 (403 + `cf-mitigated: challenge`, no CORS headers on
+ * the preflight), which no `fetch` can solve -- the form was dead for every visitor.
  *
- * If either is missing the endpoint fails loudly instead of pretending to save the enquiry:
- * the site's JavaScript turns that into "call or email instead".
+ * The identical logic also exists as a Pages Function (functions/api/contact.js). That copy is
+ * the fallback: if this Worker or its route is ever removed, the Pages Function still answers
+ * honestly (503, "call or email") instead of letting the form fail silently. Keep them in sync.
  *
- * Every reply respects the caller: JSON for the site's fetch(), a 303 back to the contact
- * section for the no-JS fallback -- nobody ever sees raw JSON in a browser.
+ * Requires:
+ *   - Email Routing enabled for tsigalogo.gr (done)
+ *   - the recipient added as a VERIFIED destination address (free on all plans)
+ *   - the SEND_EMAIL binding, declared in wrangler.toml
  */
 
 const TO = { email: "tsiga.kat@gmail.com", name: "Κατερίνα Τσίγα" };
@@ -30,18 +27,19 @@ const MAX = { name: 120, email: 160, phone: 40, service: 120, message: 2000 };
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
-    // See worker/src/index.js: this is the fallback layer, and it says so.
+    // X-Contact-Endpoint lets the health check prove WHICH layer answered: the Worker (route
+    // present) or the Pages Function (fallback). If both look identical, a lost route is
+    // invisible until a real enquiry goes missing.
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
-      "X-Contact-Endpoint": "pages-function",
+      "X-Contact-Endpoint": "worker",
     },
   });
 
 const clip = (v, n) => (v == null ? "" : String(v).trim().slice(0, n));
 
-export async function onRequestPost(context) {
-  const { request, env } = context;
+async function handleContact(request, env) {
   const wantsJson = (request.headers.get("content-type") || "").includes("application/json");
 
   const fail = (message, status) =>
@@ -76,7 +74,7 @@ export async function onRequestPost(context) {
   if (!name || !EMAIL_RE.test(email) || message.length < 10) return fail("invalid fields", 400);
 
   if (!env.SEND_EMAIL || typeof env.SEND_EMAIL.send !== "function") {
-    console.error("contact: SEND_EMAIL binding missing (see the note at the top of this file)");
+    console.error("contact: SEND_EMAIL binding missing");
     return fail("email binding not configured", 503);
   }
 
@@ -112,7 +110,11 @@ export async function onRequestPost(context) {
   return done();
 }
 
-// Anything that is not a POST (a GET from a curious visitor, a crawler, ...) is not a form.
-export async function onRequest() {
-  return json({ success: "false", message: "method not allowed" }, 405);
-}
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    if (url.pathname !== "/api/contact") return new Response("Not found", { status: 404 });
+    if (request.method !== "POST") return json({ success: "false", message: "method not allowed" }, 405);
+    return handleContact(request, env);
+  },
+};

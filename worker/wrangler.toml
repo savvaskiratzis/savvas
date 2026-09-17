@@ -1,0 +1,19 @@
+# Contact-form endpoint for tsigalogo.gr.
+#
+# Deployed separately from the site (the site is Pages static assets; this is a Worker):
+#   cd worker && CLOUDFLARE_API_TOKEN=... CLOUDFLARE_ACCOUNT_ID=... npx wrangler deploy
+#
+# The route makes tsigalogo.gr/api/contact hit this Worker instead of the Pages Function.
+# The Pages Function (functions/api/contact.js) stays deployed as the honest fallback.
+name = "tsiga-contact"
+main = "src/index.js"
+compatibility_date = "2026-09-04"
+
+# Email Service binding. Sends to a VERIFIED destination address are free on every plan,
+# which is exactly what this does (the practice's own inbox).
+[[send_email]]
+name = "SEND_EMAIL"
+
+[[routes]]
+pattern = "tsigalogo.gr/api/contact"
+zone_name = "tsigalogo.gr"

@@ -1,3 +1,7 @@
 .wrangler/
 google-ads-kit.md
 local-seo-plan.md
+
+# Worker tooling (never commit)
+worker/.wrangler/
+worker/node_modules/
