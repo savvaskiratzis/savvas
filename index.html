@@ -1117,11 +1117,15 @@
     // It used to be formsubmit.co, which put itself behind a Cloudflare bot challenge in
     // Sep 2026 (403 + cf-mitigated: challenge) and silently broke the form for every visitor.
     const FS_ENDPOINT = '/api/contact';
-    const SUBMIT_GAP_MS = 90000;              // cooldown between sends
+    // NO client-side blocking any more (owner's requirement, 18/9/2026): "I don't want to lose
+    // their messages". Every block here used to refuse a REAL message -- the 4s "too fast" check
+    // punished anyone whose browser autofills the fields (a 30s block), and a single failed
+    // attempt locked the visitor out for 60s. Abuse control belongs where it cannot drop a
+    // genuine enquiry: the honeypot below, the origin check in the endpoint, and Cloudflare's
+    // own bot/rate rules on the zone. The only remaining limit is a generous per-device quota
+    // that answers with a phone number instead of pretending to fail.
     const LIMIT_WINDOW_MS = 10 * 60 * 1000;   // 10 minutes
-    const LIMIT_MAX = 5;                      // max sends per window
-    const MIN_FILL_MS = 4000;                 // bots "submit" instantly after load
-    const tPageLoad = Date.now();
+    const LIMIT_MAX = 15;                     // max sends per window (was 5)
 
     const SERVICES = {
       children: { el: 'Παιδιά & Έφηβοι', en: 'Children & Adolescents' },
@@ -1168,13 +1172,6 @@
       if (h.length >= LIMIT_MAX) return { ok: false, waitMs: h[0] + LIMIT_WINDOW_MS - now };
       return { ok: true };
     }
-    function setBlockUntil(ms) {
-      try { localStorage.setItem('tsiga-form-block', String(Date.now() + ms)); } catch (err) {}
-    }
-    function blockedRemaining() {
-      const until = parseInt(localStorage.getItem('tsiga-form-block') || '0', 10);
-      return Math.max(0, until - Date.now());
-    }
 
     function setAlert(msgs) {
       $('alertEl').textContent = msgs.el;
@@ -1200,11 +1197,6 @@
         const busy = btn.classList.contains('lang-en') ? 'Sending…' : 'Αποστολή…';
         if (label) label.textContent = on ? busy : base;
       });
-    }
-    function waitMessage(sec) {
-      return visibleLang() === 'el'
-        ? 'Παρακαλώ περιμένετε ' + sec + ' δευτερόλεπτα πριν στείλετε ξανά.'
-        : 'Please wait ' + sec + ' seconds before sending again.';
     }
 
     // Clear a field's error as soon as the user edits it
@@ -1239,13 +1231,7 @@
         return;
       }
 
-      // ---- anti-spam 2: global cooldown between sends ----
-      const remain = blockedRemaining();
-      if (remain > 0) {
-        setAlert({ el: waitMessage(Math.ceil(remain / 1000)), en: waitMessage(Math.ceil(remain / 1000)) });
-        return;
-      }
-      // ---- anti-spam 3: submission quota per device ----
+      // ---- anti-spam 2: submission quota per device (generous, and never silent) ----
       const limit = rateLimited();
       if (!limit.ok) {
         const mins = Math.max(1, Math.ceil(limit.waitMs / 60000));
@@ -1255,19 +1241,6 @@
         setAlert({ el: msg, en: msg });
         return;
       }
-      // ---- anti-spam 4: filled & submitted too fast after page load ----
-      if (Date.now() - tPageLoad < MIN_FILL_MS) {
-        setBlockUntil(30000);
-        // NEVER fail silently. A fast human used to see nothing at all and conclude the
-        // form was broken -- which is exactly how the owner reported it. A message costs
-        // nothing and bots gain nothing from it.
-        setAlert({
-          el: 'Το μήνυμα στάλθηκε πολύ γρήγορα μετά τη φόρτωση της σελίδας. Περιμένετε λίγα δευτερόλεπτα και πατήστε ξανά «Αποστολή» — ή καλέστε στο 693 752 4966.',
-          en: 'This message was submitted too quickly after the page loaded. Please wait a few seconds and press "Send Message" again — or call +30 693 752 4966.'
-        });
-        return;
-      }
-
       // ---- read values ----
       const lang = visibleLang();
       const name = fieldValue('name').trim();
@@ -1326,7 +1299,6 @@
           } catch (err) {}
         }
         if (ok) {
-          setBlockUntil(SUBMIT_GAP_MS);
           $('contactForm').style.display = 'none';
           $('formSuccess').style.display = 'block';
           // Same reason as setAlert(): the panel replaces a tall form, so pull it into view.
@@ -1334,7 +1306,6 @@
           return;
         }
         // server rejected
-        setBlockUntil(60000);
         setSubmitting(false);
         setAlert({
           el: 'Δεν ήταν δυνατή η αποστολή του μηνύματος. Δοκιμάστε ξανά σε λίγο, ή στείλτε email στο ' + FORM_EMAIL + ' ή καλέστε στο 693 752 4966.',
@@ -1342,7 +1313,6 @@
         });
       } catch (err) {
         recordAttempt();
-        setBlockUntil(60000);
         setSubmitting(false);
         setAlert({
           el: 'Σφάλμα σύνδεσης με τη φόρμα. Δοκιμάστε ξανά, ή στείλτε email στο ' + FORM_EMAIL + ' ή καλέστε στο 693 752 4966.',
