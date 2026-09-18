@@ -1117,7 +1117,7 @@
     // their messages". Every block here used to refuse a REAL message -- the 4s "too fast" check
     // punished anyone whose browser autofills the fields (a 30s block), and a single failed
     // attempt locked the visitor out for 60s. Abuse control belongs where it cannot drop a
-    // genuine enquiry: the honeypot below, the origin check in the endpoint, and Cloudflare's
+    // genuine enquiry: the origin check in the endpoint and Cloudflare's own
     // own bot/rate rules on the zone. The only remaining limit is a generous per-device quota
     // that answers with a phone number instead of pretending to fail.
     const LIMIT_WINDOW_MS = 10 * 60 * 1000;   // 10 minutes
@@ -1139,7 +1139,7 @@
     // Fields that exist once per language have unique ids (message-el/message-en) while
     // callers still pass the field name, so resolve by data-field as well: a selector
     // list returns unique matches in document order, so single-element fields (name,
-    // email, phone, service) and the honeypot keep working exactly as before.
+    // email, phone, service) keep working exactly as before.
     function fieldValue(id) {
       const els = document.querySelectorAll(
         '#' + id +
