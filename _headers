@@ -21,6 +21,18 @@
 # Safe to cache immutably because the VERSION is in the path: a future update
 # lands on a new directory (vendor/font-awesome/6.6.0/...), never over these.
 
+# Security headers (18/9/2026) — invisible; added after the weekly check flagged them missing.
+#   HSTS: the site is already HTTPS-only (http -> 301); includeSubDomains is safe (only www, which
+#   redirects here). Without it the very first plaintext hop is interceptable.
+#   X-Frame-Options: nothing embeds this site, so framing it is never legitimate (clickjacking).
+#   Permissions-Policy: the page uses none of these browser APIs.
+#   NOT added on purpose: CSP — the site loads the Google Ads tag, and a wrong policy would silently
+#   break conversion tracking. It stays a known, accepted gap until it can be tested in a browser.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=()
+
 /css/*
   Cache-Control: public, max-age=31536000, immutable
 

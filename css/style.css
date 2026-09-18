@@ -151,8 +151,33 @@
   --text-dark: #333;
   --accent: #e94560;
   --transition: 0.3s ease;
-  --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: 'Mulish', 'Open Sans', sans-serif;
+  --font-sans: 'Open Sans', 'Open Sans Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Mulish', 'Mulish Fallback', 'Open Sans', 'Open Sans Fallback', sans-serif;
+}
+
+/* Metric-matched fallbacks (18/9/2026).
+   The webfonts are deliberately NOT preloaded (measured: 60 KB at high priority pushed LCP), so
+   they swap in after the first paint. On the fixed, bottom-anchored cookie bar that swap grew the
+   bar by 27 px and moved it upward -- Lighthouse attributed CLS 0.235 to #cookieBar alone.
+   These faces let the fallback occupy the same space, so the swap moves nothing.
+   The values come from canvas measurements of both fonts (glyph width + font bounding box, per
+   100px em); ascent/descent-override pin the line box regardless of which local font is used. */
+@font-face {
+  font-family: 'Open Sans Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica'), local('Liberation Sans'), local('DejaVu Sans');
+  size-adjust: 106.8%;
+  ascent-override: 100.2%;
+  descent-override: 27.2%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Mulish Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica'), local('Liberation Sans'), local('DejaVu Sans');
+  size-adjust: 93.9%;
+  ascent-override: 107.5%;
+  descent-override: 26.6%;
+  line-gap-override: 0%;
 }
 
 html {
