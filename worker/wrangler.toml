@@ -10,7 +10,7 @@ main = "src/index.js"
 compatibility_date = "2026-09-04"
 
 # Email Service binding. Sends to a VERIFIED destination address are free on every plan,
-# which is exactly what this does (the practice's own inbox).
+# which is exactly what this does (Katerina's own inbox).
 [[send_email]]
 name = "SEND_EMAIL"
 

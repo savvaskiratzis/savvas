@@ -2,7 +2,7 @@
  * Contact-form endpoint for tsigalogo.gr — a Worker, with the Email Service binding.
  *
  * This runs on the site's own domain (route: tsigalogo.gr/api/contact) and sends the enquiry
- * to the practice's inbox, so there is no third-party form processor and no CORS.
+ * to Katerina's inbox, so there is no third-party form processor and no CORS.
  *
  * History that matters: the form used to POST to formsubmit.co, which put its endpoint behind
  * a Cloudflare bot challenge in Sep 2026 (403 + `cf-mitigated: challenge`, no CORS headers on
@@ -110,14 +110,14 @@ async function handleContact(request, env) {
     res = await env.SEND_EMAIL.send({ ...mail, to: [TO], cc: [CC] });
     console.log("contact: sent to both inboxes", res && res.messageId);
   } catch (error) {
-    // The safety copy must never cost the practice its message. If the combined send fails (the
-    // second address not verified yet, a per-recipient rate limit, ...), retry to the practice
+    // The safety copy must never cost Katerina her message. If the combined send fails (the
+    // second address not verified yet, a per-recipient rate limit, ...), retry to Katerina's inbox
     // alone -- a lost enquiry is far worse than a missing copy.
-    console.error("contact: both-recipient send failed, retrying to the practice only",
+    console.error("contact: both-recipient send failed, retrying to Katerina only",
                   error && error.code, error && error.message);
     try {
       res = await env.SEND_EMAIL.send({ ...mail, to: [TO] });
-      console.log("contact: sent to the practice only", res && res.messageId);
+      console.log("contact: sent to Katerina only", res && res.messageId);
     } catch (retryError) {
       // .code: E_SENDER_NOT_VERIFIED, E_RATE_LIMIT_EXCEEDED, ...
       console.error("contact: send failed", retryError && retryError.code, retryError && retryError.message);

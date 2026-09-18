@@ -5,7 +5,7 @@
  * behind a Cloudflare bot challenge (HTTP 403 + `cf-mitigated: challenge`, and a preflight
  * with no CORS headers). No `fetch` can solve a JS challenge, so the form silently stopped
  * working for every visitor. This removes the third party entirely: the message goes
- * visitor -> our own Cloudflare -> the practice's inbox, so there is no external form
+ * visitor -> our own Cloudflare -> Katerina's inbox, so there is no external form
  * processor to declare in the privacy policy and no external service to break us again.
  *
  * Requires, in the Pages project (dashboard -> Settings -> Functions):
@@ -112,14 +112,14 @@ export async function onRequestPost(context) {
     res = await env.SEND_EMAIL.send({ ...mail, to: [TO], cc: [CC] });
     console.log("contact: sent to both inboxes", res && res.messageId);
   } catch (error) {
-    // The safety copy must never cost the practice its message. If the combined send fails (the
-    // second address not verified yet, a per-recipient rate limit, ...), retry to the practice
+    // The safety copy must never cost Katerina her message. If the combined send fails (the
+    // second address not verified yet, a per-recipient rate limit, ...), retry to Katerina's inbox
     // alone -- a lost enquiry is far worse than a missing copy.
-    console.error("contact: both-recipient send failed, retrying to the practice only",
+    console.error("contact: both-recipient send failed, retrying to Katerina only",
                   error && error.code, error && error.message);
     try {
       res = await env.SEND_EMAIL.send({ ...mail, to: [TO] });
-      console.log("contact: sent to the practice only", res && res.messageId);
+      console.log("contact: sent to Katerina only", res && res.messageId);
     } catch (retryError) {
       // .code: E_SENDER_NOT_VERIFIED, E_RATE_LIMIT_EXCEEDED, ...
       console.error("contact: send failed", retryError && retryError.code, retryError && retryError.message);
