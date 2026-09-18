@@ -708,10 +708,6 @@
         <!-- Contact Form -->
         <div class="contact-form fade-in">
           <form id="contactForm" action="/api/contact" method="POST" accept-charset="UTF-8" novalidate onsubmit="handleForm(event)">
-            <!-- Honeypot anti-spam (invisible to humans, bots fill it) -->
-            <input type="text" name="_honey" id="hpField" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp-field">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" id="fSubject">
 
             <div id="formAlert" class="form-alert" role="alert" style="display:none;">
@@ -1219,18 +1215,6 @@
       e.preventDefault();
       hideAlert();
 
-      // ---- anti-spam 1: honeypot (bots fill it; humans never see it) ----
-      // NOT silent any more: if a password manager or autofill fills this hidden field, a real
-      // visitor gets no feedback at all and assumes the button is dead. The server drops
-      // honeypot submissions regardless, so an honest message costs nothing.
-      if (fieldValue('hpField').trim() !== '') {
-        setAlert({
-          el: 'Δεν ήταν δυνατή η αποστολή. Δοκιμάστε ξανά, ή στείλτε email στο ' + FORM_EMAIL + ' ή καλέστε στο 693 752 4966.',
-          en: 'The message could not be sent. Please try again, or email me at ' + FORM_EMAIL + ' or call +30 693 752 4966.'
-        });
-        return;
-      }
-
       // ---- anti-spam 2: submission quota per device (generous, and never silent) ----
       const limit = rateLimited();
       if (!limit.ok) {
@@ -1287,7 +1271,7 @@
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
             name: name, email: email, phone: phoneRaw, service: serviceLabel,
-            message: message, _honey: ''
+            message: message
           })
         });
         recordAttempt();

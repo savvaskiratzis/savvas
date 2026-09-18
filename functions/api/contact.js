@@ -47,8 +47,10 @@ export async function onRequestPost(context) {
   const fail = (message, status) =>
     wantsJson ? json({ success: "false", message }, status)
               : Response.redirect(SITE + "/?formerror=1", 303);
-  const done = () =>
-    wantsJson ? json({ success: "true" })
+  // The id proves the Email Service actually accepted a message (it only exists after a
+  // successful send), which is what the health checks rely on instead of guessing.
+  const done = (id) =>
+    wantsJson ? json(id ? { success: "true", id } : { success: "true" })
               : Response.redirect(SITE + "/?sent=1", 303);
 
   // Only our own pages may use this endpoint. Trivially spoofable, but it stops drive-by
@@ -64,8 +66,10 @@ export async function onRequestPost(context) {
     return fail("bad payload", 400);
   }
 
-  // Honeypot: humans never see the field, bots fill it. Look successful and drop it.
-  if (clip(data._honey, 200) !== "") return done();
+  // NO honeypot (removed 18/9/2026). It was an autofill trap: on a phone the browser filled the
+  // hidden field, so the form told the owner "δεν ήταν δυνατή η αποστολή" and his message was
+  // never even sent. A guard that silently eats real enquiries is worse than the spam it stops;
+  // abuse control lives in the origin check, the per-device quota and Cloudflare's zone rules.
 
   const name = clip(data.name, MAX.name);
   const email = clip(data.email, MAX.email);
@@ -103,6 +107,7 @@ export async function onRequestPost(context) {
       text,
     });
     console.log("contact: sent", res && res.messageId);
+    return done(res && res.messageId);
   } catch (error) {
     // .code is set by the Email Service: E_SENDER_NOT_VERIFIED, E_RATE_LIMIT_EXCEEDED, ...
     console.error("contact: send failed", error && error.code, error && error.message);
