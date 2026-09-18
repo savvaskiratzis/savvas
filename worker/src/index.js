@@ -19,6 +19,9 @@
  */
 
 const TO = { email: "tsiga.kat@gmail.com", name: "Κατερίνα Τσίγα" };
+// Safety copy (owner's request, 18/9/2026): if one inbox filters a message, the other keeps it.
+// Cloudflare only sends to VERIFIED destinations -- which is also what makes this free.
+const CC = { email: "savvaskiratzis@gmail.com", name: "Savvas Kiratzis" };
 const FROM = { email: "forms@tsigalogo.gr", name: "Ιστοσελίδα tsigalogo.gr" };
 const SITE = "https://tsigalogo.gr";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -96,21 +99,32 @@ async function handleContact(request, env) {
     "— Στάλθηκε από τη φόρμα επικοινωνίας. Απαντήστε απευθείας σε αυτό το email.",
   ].join("\n");
 
+  const mail = {              // NOT `message`: that name is already the visitor's text
+    from: FROM,
+    replyTo: { email, name },
+    subject: "Νέο μήνυμα από το site — " + name,
+    text,
+  };
+  let res;
   try {
-    const res = await env.SEND_EMAIL.send({
-      to: [TO],
-      from: FROM,
-      replyTo: { email, name },
-      subject: "Νέο μήνυμα από το site — " + name,
-      text,
-    });
-    console.log("contact: sent", res && res.messageId);
-    return done(res && res.messageId);
+    res = await env.SEND_EMAIL.send({ ...mail, to: [TO], cc: [CC] });
+    console.log("contact: sent to both inboxes", res && res.messageId);
   } catch (error) {
-    // .code is set by the Email Service: E_SENDER_NOT_VERIFIED, E_RATE_LIMIT_EXCEEDED, ...
-    console.error("contact: send failed", error && error.code, error && error.message);
-    return fail("send failed", 502);
+    // The safety copy must never cost the practice its message. If the combined send fails (the
+    // second address not verified yet, a per-recipient rate limit, ...), retry to the practice
+    // alone -- a lost enquiry is far worse than a missing copy.
+    console.error("contact: both-recipient send failed, retrying to the practice only",
+                  error && error.code, error && error.message);
+    try {
+      res = await env.SEND_EMAIL.send({ ...mail, to: [TO] });
+      console.log("contact: sent to the practice only", res && res.messageId);
+    } catch (retryError) {
+      // .code: E_SENDER_NOT_VERIFIED, E_RATE_LIMIT_EXCEEDED, ...
+      console.error("contact: send failed", retryError && retryError.code, retryError && retryError.message);
+      return fail("send failed", 502);
+    }
   }
+  return done(res && res.messageId);
 
   return done();
 }
