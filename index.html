@@ -1253,7 +1253,13 @@
           '.form-group[data-field="' + firstInvalid + '"] textarea, ' +
           '.form-group[data-field="' + firstInvalid + '"] select'
         );
-        if (field) field.focus();
+        if (field) {
+          // Centre the offending field. A plain focus() left it just ABOVE the fold on desktop
+          // (measured: top=-148), so the visitor saw a form that appeared to do nothing --
+          // the same failure mode the alert scrollIntoView fix addressed.
+          field.focus({ preventScroll: true });
+          field.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
         return;
       }
 
