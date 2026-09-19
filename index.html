@@ -41,7 +41,7 @@
   <meta property="og:locale" content="el_GR">
   <meta property="og:locale:alternate" content="en_GB">
   <meta property="og:title" content="Κατερίνα Τσίγα - Λογοθεραπεύτρια | Λογοθεραπεία κατ' οίκον, Γλυφάδα">
-  <meta property="og:description" content="Λογοθεραπεία κατ' οίκον σε παιδιά και ενήλικες στα Νότια Προάστια της Αττικής. Από το 2012, απόφοιτος Queen Margaret University of Edinburgh.">
+  <meta property="og:description" content="Λογοθεραπεία κατ' οίκον σε παιδιά και ενήλικες στα Νότια Προάστια της Αττικής. Από το 2013, απόφοιτος Queen Margaret University of Edinburgh.">
   <meta property="og:url" content="https://tsigalogo.gr/">
   <meta property="og:image" content="https://tsigalogo.gr/images/katerina-tsiga.jpg">
   <meta property="og:image:alt" content="Κατερίνα Τσίγα - Λογοθεραπεύτρια">
@@ -61,8 +61,13 @@
        bytes, outlines untouched so rendering is identical.
        Regenerate after adding an icon, then re-run the pixel gate. -->
   <link rel="stylesheet" href="vendor/font-awesome/6.5.1/subset/fa-subset.css">
-  <link rel="stylesheet" href="css/style.css?v=3cffd1e6">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23DF6C73'>🎤</text></svg>">
+  <link rel="stylesheet" href="css/style.css?v=867204ec">
+  <!-- The welcome screen's own stylesheet: separate so this large, self-contained feature
+       can be edited without touching the 1,700-line site sheet. tools/version-assets.py
+       rewrites BOTH ?v= tokens from the files' content hashes — a stale token means
+       returning visitors keep a year-old cached copy (see _headers). -->
+  <link rel="stylesheet" href="css/welcome.css?v=562d5c1d">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%236b7363'>🎤</text></svg>">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -70,13 +75,13 @@
     "@id": "https://tsigalogo.gr/#business",
     "name": "Κατερίνα Τσίγα - Λογοθεραπεύτρια",
     "alternateName": "Κατερίνα Τσίγα - Λογοθεραπεία κατ' οίκον",
-    "description": "Λογοθεραπεία κατ' οίκον σε παιδιά και ενήλικες στα Νότια Προάστια της Αττικής. Ιδιώτης λογοθεραπεύτρια από το 2012, απόφοιτος Queen Margaret University of Edinburgh (BSc in Logopaedics), μέλος του ΣΕΛΛΕ.",
+    "description": "Λογοθεραπεία κατ' οίκον σε παιδιά και ενήλικες στα Νότια Προάστια της Αττικής. Ιδιώτης λογοθεραπεύτρια από το 2013, απόφοιτος Queen Margaret University of Edinburgh (BSc in Logopaedics), μέλος του ΣΕΛΛΕ.",
     "url": "https://tsigalogo.gr/",
     "telephone": "+306937524966",
     "email": "tsiga.kat@gmail.com",
     "image": "https://tsigalogo.gr/images/katerina-tsiga.jpg",
     "priceRange": "€€",
-    "foundingDate": "2012",
+    "foundingDate": "2013",
     "founder": { "@type": "Person", "name": "Κατερίνα Τσίγα", "jobTitle": "Λογοθεραπεύτρια" },
     "address": {
       "@type": "PostalAddress",
@@ -134,7 +139,17 @@
     <div class="container">
       <div class="logo">
         <a href="#">
-          <div class="logo-icon">ΚΤ</div>
+          <div class="logo-icon">
+            <!-- Λογότυπο από εικόνα του ιδιοκτήτη (tools/extract-logo.py): κύκλος sage με δύο
+                 συννεφάκια και κυματομορφή φωνής. Εξάγεται 50px + 2x, με 2px κομμένα μέσα στον
+                 κύκλο ώστε να μη μένει κρεμ λουρίδα στην άκρη του border-radius. -->
+            <picture>
+              <source type="image/webp" srcset="images/logo-kt-50.webp 1x, images/logo-kt-100.webp 2x">
+              <img src="images/logo-kt-50.png"
+                   srcset="images/logo-kt-50.png 1x, images/logo-kt-100.png 2x"
+                   width="50" height="50" alt="" decoding="async">
+            </picture>
+          </div>
           <div class="logo-text">
             <span class="name lang-el">Κατερίνα Τσίγα</span>
             <span class="name lang-en">Katerina Tsiga</span>
@@ -149,7 +164,23 @@
         </button>
         <ul class="nav-menu" id="navMenu">
           <li><a href="#hero" class="active" onclick="closeMenu()"><span class="lang-el">Αρχική</span><span class="lang-en">Home</span></a></li>
-          <li><a href="#about" onclick="closeMenu()"><span class="lang-el">Σχετικά</span><span class="lang-en">About</span></a></li>
+          <li class="has-sub">
+            <!-- «Σχετικά» με υπο-κουμπιά (ζητήθηκε): τα τέσσερα σημεία του «Σχετικά με Εμένα».
+                 Οι στόχοι είναι ΑΟΡΑΤΑ anchors με id και ΟΧΙ τα διπλότυπα (ΕΛ/ΕΝ) στοιχεία, γιατί
+                 το κρυμμένο αντίγραφο (display:none) δεν έχει θέση — το scroll δεν θα δούλευε στη
+                 μία από τις δύο γλώσσες. Ανοιγοκλείνει με hover/focus στο desktop, στατικό
+                 ένθετο μενού στο κινητό (βλ. CSS). -->
+            <a href="#about-intro" class="sub-parent" aria-haspopup="true">
+              <span class="lang-el">Σχετικά</span><span class="lang-en">About</span>
+              <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            </a>
+            <ul class="nav-sub">
+              <li><a href="#about-intro" onclick="closeMenu()"><span class="lang-el">Η λογοθεραπεία για μένα ξεκινά από τη σύνδεση</span><span class="lang-en">For me, speech therapy starts with connection</span></a></li>
+              <li><a href="#approach" onclick="closeMenu()"><span class="lang-el">Η δική μου προσέγγιση</span><span class="lang-en">My approach</span></a></li>
+              <li><a href="#studies" onclick="closeMenu()"><span class="lang-el">Σπουδές &amp; Επαγγελματική Εμπειρία</span><span class="lang-en">Education &amp; Professional Experience</span></a></li>
+              <li><a href="#how-i-work" onclick="closeMenu()"><span class="lang-el">Πώς δουλεύω</span><span class="lang-en">How I work</span></a></li>
+            </ul>
+          </li>
           <li><a href="#services" onclick="closeMenu()"><span class="lang-el">Υπηρεσίες</span><span class="lang-en">Services</span></a></li>
           <li><a href="#testimonials" onclick="closeMenu()"><span class="lang-el">Κριτικές</span><span class="lang-en">Reviews</span></a></li>
           <li><a href="#faq" onclick="closeMenu()"><span class="lang-el">Ερωτήσεις</span><span class="lang-en">FAQ</span></a></li>
@@ -173,46 +204,237 @@
   </header>
 
   <main>
-  <!-- ============ HERO ============ -->
-  <section class="hero" id="hero">
-    <div class="hero-content">
-      <div class="badge lang-el">Λογοθεραπεία κατ' οίκον</div>
-      <div class="badge lang-en">In-Home Speech Therapy</div>
+  <!-- ============ HERO (το «main site») ============
+       Το artwork της Κατερίνας ανοίγει πλέον ως pop-up welcome (βλ. #welcomeOverlay πιο κάτω)
+       και η εικόνα χρησιμοποιείται ΑΥΤΟΥΣΙΑ, χωρίς καμία επέμβαση στα pixels της.
+       Εδώ ζει το κανονικό hero του site, με το ίδιο ύφος/παλέτα και το <h1> που κρατά το SEO. -->
+  <section class="hero welcome" id="hero">
 
-      <!-- A single <h1> for the page: the language variants live INSIDE it, so
-           crawlers and SEO auditors never see two top-level headings. The
-           language switch stays CSS-driven like everywhere else (no JS text
-           swapping), and the rendered result is unchanged. -->
-      <h1>
-        <span class="lang-el">
-          Κατερίνα Τσίγα<br>
-          <span class="highlight">Λογοθεραπεύτρια</span>
-        </span>
-        <span class="lang-en">
-          Katerina Tsiga<br>
-          <span class="highlight">Speech Therapist</span>
-        </span>
-      </h1>
+    <!-- Everything readable lives here, in normal flow, so it can never be clipped by the
+         artwork and the type stays legible at every width. -->
+    <div class="welcome-stack">
+      <!-- Δύο στήλες: ΑΡΙΣΤΕΡΑ το καλωσόρισμα, ΔΕΞΙΑ το banner (badge + όνομα + ρήση).
+           Ο ιδιοκτήτης ζήτησε το κείμενο υποδοχής δίπλα στο banner, στην ίδια ευθεία. -->
+      <div class="hero-grid">
 
-      <p class="lang-el">
-        Εξειδικευμένες συνεδρίες λογοθεραπείας για παιδιά και ενήλικες,<br>
-        κατ' οίκον στον δικό σας χώρο. Με αγάπη, υπομονή και επιστημονική γνώση,
-        στηρίζω κάθε βήμα της επικοινωνίας σας.
-      </p>
-      <p class="lang-en">
-        Specialized speech therapy sessions for children and adults,<br>
-        in the comfort of your own home. With care, patience, and scientific knowledge,
-        I support every step of your communication journey — at home.
-      </p>
-
-      <div class="btn-group">
-        <a href="#contact" class="btn btn-primary lang-el"><i class="fas fa-calendar-alt"></i> Κλείστε Ραντεβού</a>
-        <a href="#contact" class="btn btn-primary lang-en"><i class="fas fa-calendar-alt"></i> Book an Appointment</a>
-        <a href="#services" class="btn btn-outline lang-el"><i class="fas fa-arrow-down"></i> Οι Υπηρεσίες μου</a>
-        <a href="#services" class="btn btn-outline lang-en"><i class="fas fa-arrow-down"></i> My Services</a>
+      <!-- ===== ΑΡΙΣΤΕΡΑ: το καλωσόρισμα ===== -->
+      <div class="welcome-intro lang-el">
+        <p class="w-hi">Καλώς ήρθατε!</p>
+        <p>
+          Είμαι η Κατερίνα Τσίγα και προσφέρω συνεδρίες λογοθεραπείας αποκλειστικά
+          κατ' οίκον, σε παιδιά και ενήλικες. Πιστεύω ότι ο λόγος και η έκφραση
+          αναπτύσσονται καλύτερα εκεί που νιώθουμε ελεύθεροι και ασφαλείς.
+        </p>
+        <p>
+          Μαθαίνουμε, εξελισσόμαστε και ξεκλειδώνουμε την επικοινωνία μέσα από το
+          παιχνίδι, στην ασφάλεια του σπιτιού σας. Μαζί θα βρούμε τον δικό σας
+          μοναδικό δρόμο για την έκφραση και την επικοινωνία.
+        </p>
+        <p>
+          Φέρνω τη λογοθεραπεία εκεί που εσείς ή το παιδί σας νιώθετε απόλυτα άνετα:
+          στο δικό σας περιβάλλον. Με οδηγό το παιχνίδι, το γέλιο και την προσωπική
+          σύνδεση, μεταμορφώνουμε την καθημερινότητα σε ένα όμορφο ταξίδι εξέλιξης.
+        </p>
       </div>
+
+      <div class="welcome-intro lang-en">
+        <p class="w-hi">Welcome!</p>
+        <p>
+          I am Katerina Tsiga and I offer speech therapy sessions exclusively in your
+          home, for children and adults. I believe that speech and expression develop
+          best where we feel free and safe.
+        </p>
+        <p>
+          We learn, we grow, and we unlock communication through play, in the safety of
+          your own home. Together we will find your own unique path to expression and
+          communication.
+        </p>
+        <p>
+          I bring speech therapy to where you or your child feel completely at ease:
+          your own environment. Guided by play, laughter and personal connection, we
+          turn everyday life into a beautiful journey of growth.
+        </p>
+      </div>
+
+      <!-- ===== ΔΕΞΙΑ: το banner ===== -->
+      <div class="welcome-card">
+        <p class="w-badge">
+          <span class="lang-el">Λογοθεραπεία κατ' οίκον</span>
+          <span class="lang-en">In-Home Speech Therapy</span>
+        </p>
+
+        <!-- A single <h1> for the page: the language variants live INSIDE it, so
+             crawlers and SEO auditors never see two top-level headings. Text is
+             byte-identical to the previous hero; only the inner spans changed
+             (<br> -> .w-name) so the serif name and the tracked caps sub-line can be
+             styled separately, exactly like the artwork. -->
+        <h1>
+          <span class="lang-el">
+            <span class="w-name">Κατερίνα Τσίγα</span>
+            <span class="highlight">Λογοθεραπεύτρια</span>
+          </span>
+          <span class="lang-en">
+            <span class="w-name">Katerina Tsiga</span>
+            <span class="highlight">Speech Therapist</span>
+          </span>
+        </h1>
+
+        <p class="w-divider" aria-hidden="true"><i class="fas fa-leaf"></i></p>
+
+        <p class="w-quote lang-el">Στηρίζοντας την επικοινωνία σε κάθε στάδιο της ζωής.</p>
+        <p class="w-quote lang-en">Supporting communication at every stage of life.</p>
+
+        <p class="w-lead lang-el">
+          Εξατομικευμένες συνεδρίες λογοθεραπείας για παιδιά και ενήλικες,
+          κατ' οίκον στον δικό σας χώρο. Γιατί ο λόγος αναπτύσσεται καλύτερα
+          εκεί που παίζουμε και νιώθουμε ελεύθεροι.
+        </p>
+        <p class="w-lead lang-en">
+          Personalised speech therapy sessions for children and adults,
+          in the comfort of your own home. Because language develops best
+          where we play and feel free.
+        </p>
+
+        <ul class="w-pills">
+          <li class="lang-el">Πρόληψη</li>
+          <li class="lang-el">Ενημέρωση</li>
+          <li class="lang-el">Αξιολόγηση</li>
+          <li class="lang-el">Παρέμβαση</li>
+          <li class="lang-en">Prevention</li>
+          <li class="lang-en">Information</li>
+          <li class="lang-en">Assessment</li>
+          <li class="lang-en">Intervention</li>
+        </ul>
+
+        <div class="w-cta-row">
+          <a href="#contact" class="w-cta">
+            <span class="lang-el">Κλείστε Ραντεβού</span>
+            <span class="lang-en">Book an Appointment</span>
+            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+          </a>
+          <a href="#services" class="w-cta w-cta--ghost">
+            <span class="lang-el">Οι Υπηρεσίες μου</span>
+            <span class="lang-en">My Services</span>
+            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        <ul class="w-feats">
+          <li>
+            <i class="fas fa-home" aria-hidden="true"></i>
+            <span class="lang-el">Κατ' οίκον<br>συνεδρίες</span>
+            <span class="lang-en">In-home<br>sessions</span>
+          </li>
+          <li>
+            <i class="fas fa-location-dot" aria-hidden="true"></i>
+            <span class="lang-el">Νότια<br>Προάστια</span>
+            <span class="lang-en">Southern<br>Suburbs</span>
+          </li>
+          <li>
+            <!-- Ίδιο εικονίδιο με το artwork: ΑΣΠΙΔΑ ΜΕ ΤΣΕΚ (outline). Δεν χρησιμοποιείται
+                 FA γιατί το free set δεν έχει shield-check και το fa-certificate (ροζέτα)
+                 που ήταν πριν δεν έμοιαζε καθόλου. Το SVG κληρονομεί το χρώμα (currentColor)
+                 και κλιμακώνει με το font-size, όπως τα γειτονικά εικονίδια. -->
+            <svg class="w-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.95" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true" focusable="false">
+              <path d="M12 2.6 4.6 5.4v6.2c0 4.6 3 8.5 7.4 9.8 4.4-1.3 7.4-5.2 7.4-9.8V5.4L12 2.6z"/>
+              <path d="M8.6 11.9l2.5 2.5 4.4-4.6"/>
+            </svg>
+            <span class="lang-el">Συνεργασία<br>με ΕΟΠΥΥ</span>
+            <span class="lang-en">EOPYY<br>cooperation</span>
+          </li>
+        </ul>
+      </div>
+      </div><!-- /hero-grid -->
+
+      <ul class="welcome-values">
+        <li>
+          <i class="fas fa-comments" aria-hidden="true"></i>
+          <span class="lang-el">Επικοινωνία</span><span class="lang-en">Communication</span>
+        </li>
+        <li>
+          <!-- ΧΕΙΛΗ = ΑΝΤΙΓΡΑΦΟ από τα pixel του artwork (όχι σχεδίασμα). Ο ιδιοκτήτης ζήτησε
+               «ακριβώς ίδιο με αυτό στο welcome pop up»: το glyph βγήκε από τον ροδαλό δίσκο του
+               artwork με alpha από τη μελάνη (tools/copy-lips-icon.py) — ίδιο πάχος, καμπύλη και
+               anti-aliasing. Native ανάλυση 71x40, εξάγεται 30px + 2x. -->
+          <i class="v-badge" aria-hidden="true">
+            <picture>
+              <source type="image/webp" srcset="images/icon-lips-30.webp 1x, images/icon-lips-60.webp 2x">
+              <img src="images/icon-lips-30.png"
+                   srcset="images/icon-lips-30.png 1x, images/icon-lips-60.png 2x"
+                   width="30" height="17" alt="" loading="lazy" decoding="async">
+            </picture>
+          </i>
+          <span class="lang-el">Γλώσσα</span><span class="lang-en">Language</span>
+        </li>
+        <li>
+          <i class="fas fa-book-open" aria-hidden="true"></i>
+          <span class="lang-el">Μάθηση</span><span class="lang-en">Learning</span>
+        </li>
+      </ul>
+
+      <p class="welcome-note">
+        <span class="lang-el">Η λογοθεραπεία έρχεται στον χώρο που νιώθετε άνετα.</span>
+        <span class="lang-en">Speech therapy comes to the place where you feel at ease.</span>
+      </p>
     </div>
   </section>
+
+  <!-- ============ WELCOME POP-UP ============
+       Η εικόνα της Κατερίνας ΑΥΤΟΥΣΙΑ (ίδιο αρχείο, 2528×1686 — tools/build-welcome-popup-image.py),
+       ως παράθυρο υποδοχής. Το κουμπί «Μάθετε περισσότερα» είναι ΖΩΓΡΑΦΙΣΜΕΝΟ μέσα στην εικόνα, άρα
+       δεν ξανασχεδιάζεται: πάνω του μπαίνει αόρατο hit-area με τις ΜΕΤΡΗΜΕΝΕΣ συντεταγμένες του
+       (x 41.30–58.74%, y 55.34–59.73%, κέντρο 50.02% — tools/measure-cta.py), και ολόκληρο το
+       παράθυρο είναι επίσης πατήσιμο ώστε να δουλεύει ακόμη κι αν η γεωμετρία αλλάξει.
+
+       `hidden` από προεπιλογή: το ανοίγει το JS μία φορά ανά συνεδρία. Χωρίς JavaScript — και για
+       τους crawlers — το site εμφανίζεται κανονικά, οπότε δεν κρύβεται περιεχόμενο κατά το indexing. -->
+  <div class="welcome-overlay" id="welcomeOverlay" hidden>
+    <div class="welcome-window" role="dialog" aria-modal="true" tabindex="-1"
+         aria-labelledby="welcomeLabel" aria-describedby="welcomeHint">
+      <p class="sr-only" id="welcomeLabel">
+        <span class="lang-el">Καλωσορίσατε — Κατερίνα Τσίγα, Λογοθεραπεύτρια</span>
+        <span class="lang-en">Welcome — Katerina Tsiga, Speech Therapist</span>
+      </p>
+      <p class="sr-only" id="welcomeHint">
+        <span class="lang-el">Πατήστε «Μάθετε περισσότερα» ή οπουδήποτε στην εικόνα για να μπείτε στο site.</span>
+        <span class="lang-en">Press “Learn more” or anywhere on the image to enter the site.</span>
+      </p>
+
+      <!-- Το ΑΥΘΕΝΤΙΚΟ αρχείο παραμένει byte-identical και είναι το τελευταίο (2528w) σκαλί του
+           srcset — δεν χάνεται κανένα pixel όπου χρειάζεται. Οι μικρότερες παραλλαγές υπάρχουν
+           γιατί το Lighthouse μέτρησε LCP κινητού 4,5s (όριο 2,5s): η εικόνα σερνόταν 224KB σε
+           τηλέφωνο όπου εμφανίζεται ~366px. Στα 760w το AVIF είναι 40KB — 5,6x λιγότερο.
+           Το `sizes` = το πλάτος του `.welcome-window` (94vw / 88svh*1.4994). -->
+      <picture>
+        <source type="image/avif" sizes="94vw"
+                srcset="images/katerina-welcome-760.avif 760w,
+                        images/katerina-welcome-1200.avif 1200w,
+                        images/katerina-welcome-1700.avif 1700w,
+                        images/katerina-welcome.avif 2528w">
+        <source type="image/webp" sizes="94vw"
+                srcset="images/katerina-welcome-760.webp 760w,
+                        images/katerina-welcome-1200.webp 1200w,
+                        images/katerina-welcome-1700.webp 1700w,
+                        images/katerina-welcome.webp 2528w">
+        <img class="welcome-img" src="images/katerina-welcome.jpg"
+             srcset="images/katerina-welcome-760.jpg 760w,
+                     images/katerina-welcome-1200.jpg 1200w,
+                     images/katerina-welcome-1700.jpg 1700w,
+                     images/katerina-welcome.jpg 2528w"
+             sizes="94vw"
+             alt="Καλωσορίσατε — Κατερίνα Τσίγα, Λογοθεραπεύτρια: κατ' οίκον συνεδρίες λογοθεραπείας για παιδιά και ενήλικες"
+             width="2528" height="1686" fetchpriority="high" decoding="async">
+      </picture>
+
+      <a class="welcome-enter" href="#hero"
+         aria-label="Μάθετε περισσότερα — είσοδος στο site"></a>
+      <button type="button" class="welcome-close" aria-label="Κλείσιμο">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
 
   <!-- ============ ABOUT ============ -->
   <section class="section section-dark-alt" id="about">
@@ -220,61 +442,195 @@
       <div class="section-title fade-in">
         <div class="label lang-el">Σχετικά με Εμένα</div>
         <div class="label lang-en">About Me</div>
-        <!-- Was a word-for-word repeat of the hero <h1>. The owner chose this
-             wording and it follows the other section h2s: one plain colour, no
-             rose accent, no forced <br>. The EN line reuses the site's own
-             translation from the hero badge ("In-Home Speech Therapy"). -->
-        <h2 class="lang-el">Λογοθεραπεία κατ' οίκον</h2>
-        <h2 class="lang-en">In-Home Speech Therapy</h2>
+        <!-- Ο τίτλος «Λογοθεραπεία κατ' οίκον» αφαιρέθηκε κατ' απαίτηση του ιδιοκτήτη
+             (19/9/2026): επαναλάμβανε το hero badge. Επειδή όμως έφυγε το h2, η σειρά
+             επικεφαλίδων γινόταν h1 -> h3 (παράλειψη) και το audit `heading-order` του
+             Lighthouse απέτυχε (a11y 100 -> 95). Λύση: ΟΠΤΙΚΑ ΚΡΥΦΟ h2 (`.sr-only`) — σωστή
+             σειρά, καμία οπτική αλλαγή, και το h2_count επιστρέφει στις 10, άρα ΔΕΝ χρειάζεται
+             πια η «εγκεκριμένη απόκλιση» h2_count στο tools/seo-parity.py. -->
+        <h2 class="sr-only lang-el">Σχετικά με Εμένα</h2>
+        <h2 class="sr-only lang-en">About Me</h2>
       </div>
 
       <div class="about-grid">
         <div class="about-image fade-in">
           <picture>
-            <!-- 4:3 crops of the square master, built by tools/build-portrait.py. The box is
-                 4:3 at every breakpoint (aspect-ratio in the CSS), so cropping here makes the
-                 CSS `cover` a no-op and the visible pixels identical -- fewer bytes, same photo.
-                 sizes comes from measuring the rendered box: 96vw to 991px (86.9-95.8vw),
-                 45vw to 1279px (44.8-45.3vw), then capped at 548px. -->
+            <!-- ΔΥΟ ΣΕΤ (19/9/2026):
+                 * ≥992px (δύο στήλες): πορτρέτο 550:702, ώστε το ύψος της φωτογραφίας να
+                   ταιριάζει με το κείμενο «Είμαι η…» → «…επικοινωνίας». ΜΕΤΡΗΜΕΝΟ:
+                   το κείμενο των 5 παραγράφων είναι 702px και η στήλη 550px σε ΟΛΑ τα desktop
+                   πλάτη (1280–1920), οπότε η αναλογία «κλειδώνει» και το CSS cover δεν κόβει
+                   τίποτα επιπλέον — τα pixel του αρχείου είναι αυτά που φαίνονται.
+                 * <992px (μία στήλη): το φωτογραφικό κουτί γίνεται 4:3, οπότε σερβίρεται το
+                   παλιό 4:3 σετ. Ένα πορτρέτο εκεί θα «έκοβε» το κεφάλι της με το cover.
+                 Η περικοπή έγινε από το τετράγωνο master με οριζόντιο παράθυρο x 119..981
+                 (κεντραρισμένο, ελεγμένο οπτικά ανάμεσα σε 3 υποψήφια) — κανένα stretch. -->
+            <source media="(min-width: 992px)" type="image/avif"
+                    srcset="images/katerina-tsiga-p651-550.avif 550w, images/katerina-tsiga-p651-750.avif 750w, images/katerina-tsiga-p651-1100.avif 1100w"
+                    sizes="550px">
+            <source media="(min-width: 992px)" type="image/webp"
+                    srcset="images/katerina-tsiga-p651-550.webp 550w, images/katerina-tsiga-p651-750.webp 750w, images/katerina-tsiga-p651-1100.webp 1100w"
+                    sizes="550px">
             <source type="image/avif"
-                    srcset="images/katerina-tsiga-550.avif 550w, images/katerina-tsiga-750.avif 750w, images/katerina-tsiga-1100.avif 1100w"
-                    sizes="(max-width: 991px) 96vw, (max-width: 1279px) 45vw, 548px">
+                    srcset="images/katerina-tsiga-v2-550.avif 550w, images/katerina-tsiga-v2-750.avif 750w, images/katerina-tsiga-v2-1100.avif 1100w"
+                    sizes="(max-width: 991px) 96vw, 550px">
             <source type="image/webp"
-                    srcset="images/katerina-tsiga-550.webp 550w, images/katerina-tsiga-750.webp 750w, images/katerina-tsiga-1100.webp 1100w"
-                    sizes="(max-width: 991px) 96vw, (max-width: 1279px) 45vw, 548px">
-            <img src="images/katerina-tsiga-750.jpg" alt="Κατερίνα Τσίγα — Λογοθεραπεύτρια" class="about-photo" width="1100" height="825" loading="lazy" decoding="async">
+                    srcset="images/katerina-tsiga-v2-550.webp 550w, images/katerina-tsiga-v2-750.webp 750w, images/katerina-tsiga-v2-1100.webp 1100w"
+                    sizes="(max-width: 991px) 96vw, 550px">
+            <img src="images/katerina-tsiga-p651-750.jpg" alt="Κατερίνα Τσίγα — Λογοθεραπεύτρια" class="about-photo"
+                 width="1100" height="1404" loading="lazy" decoding="async">
           </picture>
         </div>
-        <div class="about-text fade-in">
-          <p class="lang-el">
-            Είμαι η Κατερίνα Τσίγα, ιδιώτης λογοθεραπεύτρια, και δραστηριοποιούμαι από το 2012
-            με συνεδρίες κατ' οίκον σε παιδιά και ενήλικες στα Νότια Προάστια
-            της Αττικής. Με εξειδίκευση στην αξιολόγηση και αποκατάσταση
-            διαταραχών λόγου, ομιλίας και επικοινωνίας, προσφέρω υψηλού επιπέδου υπηρεσίες,
-            χωρίς να χρειαστεί να μετακινηθείτε από το σπίτι σας.
+        <div class="about-text fade-in" id="about-intro">
+          <!-- ΞΑΝΑΓΡΑΦΗ 19/9/2026 (β' έκδοση κειμένου από τον ιδιοκτήτη, αυτούσια).
+               Δομή: προσωπικό κείμενο → «Η δική μου προσέγγιση» → «Σπουδές &
+               Επαγγελματική Εμπειρία» (+ κάρτα άδειας) → «Πώς δουλεύω». -->
+          <p class="about-lead lang-el">
+            Η λογοθεραπεία για μένα ξεκινά από τη σύνδεση
           </p>
-          <p class="lang-el">
-            Είμαι απόφοιτη του Queen Margaret University of Edinburgh (BSc in Logopaedics)
-            και μέλος του Σωματείου Λογοθεραπευτών-Λογοπεδικών Ελλάδος (ΣΕΛΛΕ).
-            Με γνώμονα την εξατομικευμένη προσέγγιση και τη συνεχή επιστημονική ενημέρωση,
-            δημιουργώ ένα ζεστό και υποστηρικτικό περιβάλλον για κάθε θεραπευόμενο
-            στον οικείο χώρο του, συνεργαζόμενη στενά με την οικογένεια και άλλους ειδικούς.
-          </p>
-          <p class="lang-en">
-            I am Katerina Tsiga, a private speech therapist, practicing since 2012 with
-            in-home sessions for children and adults across the Southern Suburbs
-            of Athens. Specializing in the assessment and rehabilitation of speech,
-            language, and communication disorders, I offer high-quality services
-            without the need to leave your home.
-          </p>
-          <p class="lang-en">
-            I hold a BSc in Logopaedics from Queen Margaret University of Edinburgh and
-            I am a member of the Panhellenic Association of Logopedists – Speech Therapists (SELLE).
-            Guided by a personalized approach and continuous scientific training, I create a warm,
-            supportive environment for each client in their own space, working closely
-            with families and other specialists.
+          <p class="about-lead lang-en">
+            For me, speech therapy starts with connection
           </p>
 
+          <p class="lang-el">
+            Είμαι η Κατερίνα Τσίγα, Λογοθεραπεύτρια, και αν έπρεπε να περιγράψω τον τρόπο που
+            βλέπω τη δουλειά μου με δύο λέξεις, θα επέλεγα σύνδεση και παιχνίδι.
+          </p>
+          <p class="lang-en">
+            I am Katerina Tsiga, Speech Therapist, and if I had to describe the way I see my
+            work in two words, I would choose connection and play.
+          </p>
+
+          <p class="lang-el">
+            Πιστεύω πως η επικοινωνία ανθίζει όταν το παιδί νιώθει ασφάλεια, αποδοχή και χαρά.
+            Γι' αυτό επέλεξα να εργάζομαι κατ' οίκον, στον οικείο χώρο κάθε οικογένειας, εκεί
+            όπου το παιδί μπορεί να είναι πραγματικά ο εαυτός του.
+          </p>
+          <p class="lang-en">
+            I believe that communication blossoms when a child feels safe, accepted and happy.
+            That is why I chose to work in the home, in each family's own environment, where a
+            child can truly be themselves.
+          </p>
+
+          <p class="lang-el">
+            Δεν έρχομαι στο σπίτι με έτοιμες, «στεγνές» ασκήσεις. Έρχομαι με παιχνίδι,
+            δημιουργικότητα και δραστηριότητες που έχουν νόημα για το κάθε παιδί,
+            προσαρμοσμένες στις ανάγκες, τα ενδιαφέροντα και τον δικό του ρυθμό.
+          </p>
+          <p class="lang-en">
+            I do not come into your home with ready-made, «dry» exercises. I come with play,
+            creativity and activities that make sense for each child, adapted to their needs,
+            interests and their own pace.
+          </p>
+
+          <p class="lang-el">
+            Γιατί κάθε παιδί έχει τον δικό του τρόπο να επικοινωνεί, να μαθαίνει και να
+            εξελίσσεται.
+          </p>
+          <p class="lang-en">
+            Because every child has their own way of communicating, learning and growing.
+          </p>
+
+          <p class="lang-el">
+            Από το 2013 πραγματοποιώ κατ' οίκον συνεδρίες σε παιδιά και ενήλικες στα Νότια
+            Προάστια της Αττικής, με εξατομικευμένη αξιολόγηση και παρέμβαση σε διαταραχές
+            λόγου, ομιλίας και επικοινωνίας.
+          </p>
+          <p class="lang-en">
+            Since 2013 I have been providing in-home sessions for children and adults across the
+            Southern Suburbs of Athens, with personalised assessment and intervention for speech,
+            language and communication disorders.
+          </p>
+
+                    <!-- ΑΟΡΑΤΟ anchor: ο στόχος των υπο-κουμπιών του «Σχετικά». Δεν είναι
+               το <h3> γιατί υπάρχει σε δύο γλώσσες και το κρυμμένο αντίγραφο δεν
+               έχει θέση (δεν μπορείς να scroll-άρεις σε display:none). -->
+          <span class="anchor" id="approach" aria-hidden="true"></span>
+          <h3 class="lang-el">Η δική μου προσέγγιση</h3>
+          <h3 class="lang-en">My approach</h3>
+
+          <p class="lang-el">
+            Για μένα, η λογοθεραπεία δεν είναι μόνο οι ασκήσεις που γίνονται μέσα σε μια
+            συνεδρία.
+          </p>
+          <p class="lang-en">
+            For me, speech therapy is not only the exercises done during a session.
+          </p>
+
+          <p class="lang-el">
+            Είναι η σχέση εμπιστοσύνης που χτίζεται με τον θεραπευόμενο και την οικογένειά του,
+            η συνεργασία και οι μικρές καθημερινές κατακτήσεις που, βήμα βήμα, οδηγούν σε
+            μεγαλύτερη αυτοπεποίθηση και ανεξαρτησία.
+          </p>
+          <p class="lang-en">
+            It is the relationship of trust built with the client and their family, the
+            collaboration and the small everyday achievements that, step by step, lead to
+            greater confidence and independence.
+          </p>
+
+          <p class="lang-el">
+            Κάθε θεραπευτικό πλάνο σχεδιάζεται ξεχωριστά, με βάση τις δυνατότητες, τις ανάγκες,
+            την καθημερινότητα και τα ενδιαφέροντα του κάθε ανθρώπου.
+          </p>
+          <p class="lang-en">
+            Every therapy plan is designed individually, based on each person's abilities, needs,
+            everyday life and interests.
+          </p>
+
+          <p class="lang-el">
+            Γιατί όταν η θεραπεία προσαρμόζεται στον άνθρωπο και όχι ο άνθρωπος στη θεραπεία,
+            η διαδικασία γίνεται πιο ουσιαστική.
+          </p>
+          <p class="lang-en">
+            Because when therapy adapts to the person — and not the person to the therapy — the
+            process becomes more meaningful.
+          </p>
+
+                    <!-- ΑΟΡΑΤΟ anchor: ο στόχος των υπο-κουμπιών του «Σχετικά». Δεν είναι
+               το <h3> γιατί υπάρχει σε δύο γλώσσες και το κρυμμένο αντίγραφο δεν
+               έχει θέση (δεν μπορείς να scroll-άρεις σε display:none). -->
+          <span class="anchor" id="studies" aria-hidden="true"></span>
+          <h3 class="lang-el">Σπουδές &amp; Επαγγελματική Εμπειρία</h3>
+          <h3 class="lang-en">Education &amp; Professional Experience</h3>
+
+          <p class="lang-el">BSc in Logopaedics | Queen Margaret University – Edinburgh (United Kingdom)</p>
+          <p class="lang-en">BSc in Logopaedics | Queen Margaret University – Edinburgh (United Kingdom)</p>
+
+          <p class="lang-el">Η επαγγελματική μου πορεία περιλαμβάνει κλινική άσκηση και εμπειρία σε διαφορετικά θεραπευτικά και εκπαιδευτικά πλαίσια, μεταξύ άλλων:</p>
+          <p class="lang-en">My professional path includes clinical practice and experience in a range of therapeutic and educational settings, among others:</p>
+          <ul class="about-list lang-el">
+            <li>Ναυτικό Νοσοκομείο Αθηνών – Νευρολογική Κλινική</li>
+            <li>Εθνικό Ίδρυμα Κωφών &amp; Ειδικό Δημοτικό Σχολείο Κωφών</li>
+            <li>Αναρρωτήριο Πεντέλης</li>
+            <li>Παιδόπολη «Άγιος Ανδρέας»</li>
+            <li>Οργάνωση «Δρόμοι Ζωής»</li>
+            <li>Δημόσιο Νηπιαγωγείο &amp; Εργαστήριο Λογοθεραπείας</li>
+          </ul>
+          <ul class="about-list lang-en">
+            <li>Athens Naval Hospital – Neurology Clinic</li>
+            <li>National Foundation for the Deaf &amp; Special Primary School for the Deaf</li>
+            <li>Penteli Rehabilitation Centre</li>
+            <li>“Agios Andreas” Children's Village</li>
+            <li>“Dromoi Zois” Organisation</li>
+            <li>Public Kindergarten &amp; Speech Therapy Laboratory</li>
+          </ul>
+
+          <p class="lang-el">Παράλληλα, έχω συμμετάσχει σε επιμορφωτικές δράσεις, μεταξύ άλλων:</p>
+          <p class="lang-en">I have also taken part in training activities, among others:</p>
+          <ul class="about-list lang-el">
+            <li>«Η σημαντικότητα της αισθητηριακής ολοκλήρωσης»</li>
+            <li>Ημερίδα κοινωνικής ενημέρωσης για τη ΔΕΠΥ: «Μεγαλώνω με ΔΕΠΥ…»</li>
+          </ul>
+          <ul class="about-list lang-en">
+            <li>“The importance of sensory integration”</li>
+            <li>Public information day on ADHD: “Growing up with ADHD…”</li>
+          </ul>
+
+          <p class="lang-el">Είμαι μέλος του Σωματείου Λογοθεραπευτών – Λογοπεδικών Ελλάδος (ΣΛΛΕ).</p>
+          <p class="lang-en">I am a member of the Greek Association of Speech Therapists – Logopaedists (SLLE).</p>
+
+          <!-- Η άδεια ασκήσεως μένει ως κάρτα (ίδιο πληροφοριακό περιεχόμενο με το κείμενο του
+               ιδιοκτήτη, πιο ευανάγνωστο). -->
           <div class="about-license fade-in">
             <div class="license-icon"><i class="fas fa-certificate"></i></div>
             <div>
@@ -284,6 +640,49 @@
               <p class="lang-en license-meta">Issuing authority: Regional Unit of Southern Sector of Athens &nbsp;·&nbsp; Date: 15/03/2017</p>
             </div>
           </div>
+
+                    <!-- ΑΟΡΑΤΟ anchor: ο στόχος των υπο-κουμπιών του «Σχετικά». Δεν είναι
+               το <h3> γιατί υπάρχει σε δύο γλώσσες και το κρυμμένο αντίγραφο δεν
+               έχει θέση (δεν μπορείς να scroll-άρεις σε display:none). -->
+          <span class="anchor" id="how-i-work" aria-hidden="true"></span>
+          <h3 class="lang-el">Πώς δουλεύω</h3>
+          <h3 class="lang-en">How I work</h3>
+
+          <h4 class="lang-el">Εξατομικευμένα θεραπευτικά πλάνα</h4>
+          <h4 class="lang-en">Personalised therapy plans</h4>
+
+          <p class="lang-el">
+            Κάθε άνθρωπος είναι διαφορετικός. Γι' αυτό και κάθε θεραπευτική παρέμβαση ξεκινά
+            από τις δικές του ανάγκες.
+          </p>
+          <p class="lang-en">
+            Every person is different. That is why every therapeutic intervention starts from
+            their own needs.
+          </p>
+
+          <p class="lang-el">
+            Οι δραστηριότητες σχεδιάζονται με βάση την ηλικία, τις δυνατότητες, τα ενδιαφέροντα
+            και την καθημερινότητα του θεραπευόμενου, ώστε η θεραπεία να γίνεται κατανοητή,
+            δημιουργική και ουσιαστική.
+          </p>
+          <p class="lang-en">
+            Activities are designed around the client's age, abilities, interests and daily life,
+            so that therapy is understandable, creative and meaningful.
+          </p>
+
+          <p class="lang-el">
+            Στόχος δεν είναι απλώς να ολοκληρωθούν κάποιες ασκήσεις.
+          </p>
+          <p class="lang-en">
+            The goal is not simply to complete some exercises.
+          </p>
+
+          <p class="lang-el">
+            Στόχος είναι η επικοινωνία να γίνει μέρος της καθημερινής ζωής.
+          </p>
+          <p class="lang-en">
+            The goal is for communication to become part of everyday life.
+          </p>
 
           <div class="about-highlights">
             <div class="highlight-item">
@@ -382,11 +781,11 @@
           <h3 class="lang-en">Dyslexia & Learning Difficulties</h3>
           <p class="lang-el">
             Υποστήριξη παιδιών με δυσλεξία, δυσγραφία, δυσαριθμησία και άλλες 
-            μαθησιακές δυσκολίες μέσω εξειδικευμένων εκπαιδευτικών παρεμβάσεων.
+            μαθησιακές δυσκολίες μέσω εξατομικευμένων εκπαιδευτικών παρεμβάσεων.
           </p>
           <p class="lang-en">
             Support for children with dyslexia, dysgraphia, dyscalculia, and other 
-            learning difficulties through specialized educational interventions.
+            learning difficulties through personalised educational interventions.
           </p>
         </div>
 
@@ -822,12 +1221,12 @@
             <span class="lang-en">Katerina Tsiga - Speech Therapist</span>
           </div>
           <p class="lang-el">
-            Εξειδικευμένες συνεδρίες λογοθεραπείας κατ' οίκον για παιδιά και ενήλικες,
+            Εξατομικευμένες συνεδρίες λογοθεραπείας κατ' οίκον για παιδιά και ενήλικες,
             στα Νότια Προάστια της Αττικής.
             Με αγάπη, υπομονή και επιστημονική κατάρτιση.
           </p>
           <p class="lang-en">
-            Specialized in-home speech therapy sessions for children and adults
+            Personalised in-home speech therapy sessions for children and adults
             across the Southern Suburbs of Attica.
             With care, patience, and scientific expertise.
           </p>
@@ -979,6 +1378,22 @@
       document.getElementById('navMenu').classList.remove('open');
       menuOpenY = null;
     }
+
+    // ---- Υπο-κουμπιά του «Σχετικά»: το anchor δεν πρέπει να «πηδήξει» ----
+    // Τα 4 anchors (#about-intro/#approach/#studies/#how-i-work) ζουν ΜΕΣΑ σε .fade-in στοιχεία.
+    // Όσο εκείνα δεν έχουν την κλάση `visible`, φοράνε `transform: translateY(30px)` — οπότε ο
+    // στόχος είναι 30px πιο κάτω, και μόλις ενεργοποιηθεί το fade-in ανεβαίνει απότομα:
+    // μετρημένο, το #approach προσγειωνόταν 18px ΚΑΤΩ από το sticky header (κομμένο).
+    // Λύση: ενεργοποιούμε το fade-in της ενότητας ΠΡΙΝ φύγει το default action του link, και
+    // κλείνουμε τη μετάβαση για να μη συνεχίσει να κινείται το κουτί όσο διαρκεί το scroll.
+    document.querySelectorAll('.nav-sub a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelectorAll('#about .fade-in').forEach(el => {
+          el.style.transition = 'none';
+          el.classList.add('visible');
+        });
+      });
+    });
 
     // Opened the menu, didn't pick anything, kept scrolling -> close it.
     // The 24px threshold keeps a stray elastic/tap scroll from shutting it the
@@ -1320,6 +1735,100 @@
         gtag('event', 'conversion', { 'send_to': 'AW-872409204/8NTJCIjWhvcCEPTQ_58D' });
       }
     });
+  </script>
+
+  <script>
+    /* ---- WELCOME POP-UP (η εικόνα της Κατερίνας, αυτούσια) ----
+       Ανοίγει μία φορά ανά συνεδρία. Χωρίς JS το markup μένει `hidden` και το site
+       εμφανίζεται κανονικά — άρα κανένα περιεχόμενο δεν κρύβεται από crawlers.
+
+       ΟΛΟ το παράθυρο είναι πατήσιμο (το ζωγραφισμένο κουμπί της εικόνας καλύπτεται από
+       το .welcome-enter, αλλά ένα κλικ οπουδήποτε αλλού οδηγεί επίσης μέσα στο site).
+       Το πάτημα δεν «κλείνει απλώς» το pop-up: πάει στο #hero, δηλ. στην αρχή του site.
+
+       ---- ΓΙΑΤΙ ΔΕΝ ΕΜΦΑΝΙΖΕΤΑΙ ΣΕ ΚΙΝΗΣΗ ΑΠΟ GOOGLE ADS (απόφαση ιδιοκτήτη, 19/9/2026) ----
+       Το overlay καλύπτει 100% της οθόνης του κινητού. Η Google τιμωρεί στις mobile κατατάξεις
+       τα «intrusive interstitials» — περιεχόμενο κρυμμένο αμέσως μετά το κλικ από αναζήτηση — και
+       στο Ads ένα εμπόδιο πριν το περιεχόμενο ρίχνει το ποσοστό μετατροπών. Ο επισκέπτης που
+       ΠΛΗΡΩΝΕΤΑΙ για να δει τη σελίδα πάει κατευθείαν στο περιεχόμενο· όλοι οι υπόλοιποι
+       (απευθείας, σύνδεσμοι, κάρτες, επιστροφές) βλέπουν κανονικά το pop-up.
+       Ανιχνεύονται μόνο σαφή σήματα ΠΛΗΡΩΜΕΝΗΣ κίνησης: gclid/gbraid/wbraid/dclid (Google click
+       IDs) ή utm_medium=cpc/ppc/paid/display, ή utm_source με «ads/adwords». Η οργανική
+       αναζήτηση ΔΕΝ εξαιρείται· αν θέλεις να εξαιρεθεί κι αυτή, πρόσθεσε /google|bing/ στον
+       έλεγχο referrer — είναι μία γραμμή, εδώ. */
+    (function () {
+      var overlay = document.getElementById('welcomeOverlay');
+      if (!overlay) return;
+
+      // Κίνηση από Google Ads -> κατευθείαν στο περιεχόμενο (βλ. σχόλιο πάνω).
+      // Σκόπιμα ΣΤΕΝΟ: μόνο σαφή σήματα πληρωμένης κίνησης, όχι κάθε «google» στο referrer.
+      var q = window.location.search;
+      var isPaidGoogle = /[?&](gclid|gbraid|wbraid|dclid)=/i.test(q)
+        || /[?&]utm_medium=(cpc|ppc|paid|cpm|display|ads)/i.test(q)
+        || /[?&]utm_source=[^&]*(ads|adwords)/i.test(q);
+      if (isPaidGoogle) return;
+
+      var KEY = 'tsiga-welcome-seen';
+      try { if (sessionStorage.getItem(KEY) === '1') return; } catch (e) {}
+
+      var window_ = overlay.querySelector('.welcome-window');
+      var enter = overlay.querySelector('.welcome-enter');
+      var closeBtn = overlay.querySelector('.welcome-close');
+      var lastFocus = document.activeElement;
+      var closed = false;
+
+      function remember() { try { sessionStorage.setItem(KEY, '1'); } catch (e) {} }
+
+      function close(goInto) {
+        if (closed) return;
+        closed = true;
+        remember();
+        overlay.classList.add('closing');
+        var finish = function () {
+          overlay.hidden = true;
+          overlay.classList.remove('closing');
+          document.documentElement.classList.remove('welcome-open');
+          if (lastFocus && lastFocus.focus) lastFocus.focus();
+          if (goInto) {
+            var hero = document.getElementById('hero');
+            if (hero) {
+              // Το site «μπαίνει» από την αρχή· χωρίς animation αν ο χρήστης το έχει κόψει.
+              var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              if (hero.scrollIntoView) hero.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+            }
+          }
+        };
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduce) finish(); else window.setTimeout(finish, 200);
+      }
+
+      overlay.hidden = false;
+      document.documentElement.classList.add('welcome-open');
+
+      // κάθε κλικ μέσα στο overlay: το «Μάθετε περισσότερα» και το × κλείνουν, όπως και ένα κλικ στο φόντο
+      overlay.addEventListener('click', function (e) {
+        if (closeBtn && closeBtn.contains(e.target)) { close(false); return; }
+        close(true);
+      });
+      // το πληκτρολόγιο πρέπει να δουλεύει: Escape κλείνει, Tab μένει μέσα στο παράθυρο
+      overlay.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { e.preventDefault(); close(false); return; }
+        if (e.key !== 'Tab') return;
+        var focusables = [enter, closeBtn].filter(Boolean);
+        if (!focusables.length) return;
+        var first = focusables[0], last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      });
+      // ο έλεγχος ταυτότητας γίνεται στο link/κουμπί, οπότε ο browser δεν «κλείνει» μόνος του τίποτα
+      if (enter) enter.addEventListener('click', function (e) { e.preventDefault(); close(true); });
+      if (closeBtn) closeBtn.addEventListener('click', function (e) { e.preventDefault(); close(false); });
+      // Focus στο ΙΔΙΟ το παράθυρο, όχι στο .welcome-enter: το link είναι αόρατο πάνω στο
+      // ζωγραφισμένο κουμπί, και ένα focus ring εκεί ζωγραφίζει ένα δαχτυλίδι γύρω από το
+      // κουμπί της εικόνας (φάνηκε στο screenshot του κινητού). Με `tabindex="-1"` στο
+      // παράθυρο, το Escape και το Tab δουλεύουν και δεν ζωγραφίζεται τίποτα.
+      if (window_.focus) { try { window_.focus({ preventScroll: true }); } catch (e) { window_.focus(); } }
+    })();
   </script>
 
 </body>

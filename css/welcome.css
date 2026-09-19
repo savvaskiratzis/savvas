@@ -1,0 +1,615 @@
+/* ===========================================================================
+   WELCOME POP-UP + HERO (19/9/2026)
+   ===========================================================================
+
+   Ο ΚΑΝΟΝΑΣ (διόρθωση ύστερα από τον ιδιοκτήτη): η εικόνα της Κατερίνας
+   χρησιμοποιείται ΑΥΤΟΥΣΙΑ. Δεν σβήνουμε κείμενα, δεν ξανασχεδιάζουμε, δεν
+   αλλάζουμε διαστάσεις. Το «Μάθετε περισσότερα» είναι ΖΩΓΡΑΦΙΣΜΕΝΟ μέσα στην
+   εικόνα, γι' αυτό δεν φτιάχνουμε δεύτερο κουμπί από πάνω: μπαίνει ένα ΑΟΡΑΤΟ
+   hit-area με τις μετρημένες συντεταγμένες του ζωγραφισμένου κουμπιού.
+
+   Οι συντεταγμένες βγαίνουν από τα pixels (tools/measure-cta.py), όχι με μάτι:
+     κουμπί  x 41.30%–58.74%   y 55.34%–59.73%   κέντρο (50.02%, 57.535%)
+   Στοιχείο-κλειδί: το .welcome-window έχει ΑΚΡΙΒΩΣ το ίδιο κουτί με την εικόνα
+   (ίδιο aspect-ratio, μηδέν padding), άρα τα ποσοστά πέφτουν πάνω στα pixels.
+
+   Γιατί χρησιμοποιείται η ίδια η εικόνα ως fallback και όχι μόνο τα AVIF/WebP:
+   τα παράγωγα είναι ΙΔΙΑΣ ανάλυσης, χωρίς resize (PSNR 45.7–45.8 dB — βλ.
+   tools/build-welcome-popup-image.py). Το πρωτότυπο JPEG (2528×1686, 1.9 MB)
+   είναι πάντα το <img src>, οπότε κανείς δεν βλέπει «άλλη» εικόνα από αυτή που
+   έστειλε η Κατερίνα. Αν θέλει κανείς να φύγουν τα παράγωγα: διαγράφει τις δύο
+   γραμμές <source> στο index.html.
+   =========================================================================== */
+
+/* ---- display serif: Literata (self-hosted, variable 400-700) ----------------
+   ΟΧΙ η προφανής επιλογή, Playfair Display: δεν έχει καθόλου ελληνικό subset
+   (μόνο latin/cyrillic/vietnamese), άρα δεν μπορεί να γράψει «Κατερίνα Τσίγα».
+   Ελέγχθηκε στο Google Fonts API ποιες γραμματοσειρές κουβαλούν `/* greek *​/`. */
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/literata-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/literata-latin-sub.woff2') format('woff2');
+  unicode-range: U+0021-007E, U+00A0, U+00A7, U+00A9, U+00AB, U+00B0-00B1, U+00B6-00B7, U+00BB, U+00D7, U+00F7;
+}
+
+@font-face {
+  font-family: 'Literata';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/literata-italic-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+
+@font-face {
+  font-family: 'Literata';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/literata-italic-latin-sub.woff2') format('woff2');
+  unicode-range: U+0021-007E, U+00A0, U+00A7, U+00A9, U+00AB, U+00B0-00B1, U+00B6-00B7, U+00BB, U+00D7, U+00F7;
+}
+
+/* Measured in a real browser (tools/measure-display-font.py, which aborts when the webfont
+   did not load — its first version silently measured the fallback against itself). */
+@font-face {
+  font-family: 'Literata Fallback';
+  src: local('Georgia'), local('Times New Roman'), local('Liberation Serif'), local('DejaVu Serif');
+  size-adjust: 115.7%;
+  ascent-override: 129.6%;
+  descent-override: 0%;
+  line-gap-override: 0%;
+  font-display: swap;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===========================================================================
+   1. ΤΟ POP-UP
+   =========================================================================== */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  /* ΚΑΤΩ από το cookie bar (1100) επίτηδες: η συγκατάθεση πρέπει να παραμένει
+     πατήσιμη όσο το welcome είναι ανοιχτό (νομικά το ζητάει). */
+  z-index: 1090;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Ο χώρος κάτω ΔΕΝ είναι αισθητική επιλογή: το cookie bar είναι fixed και ~180-250px ψηλό,
+     και χωρίς αυτό το απόθεμα έκοβε τη γραμμή με τα 4 εικονίδια στο κάτω μέρος της εικόνας. */
+  padding: 14px 14px clamp(150px, 21svh, 210px);
+  background: rgba(59, 58, 51, 0.62);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  opacity: 1;
+  transition: opacity 200ms ease;
+  cursor: pointer;
+}
+
+.welcome-overlay[hidden] {
+  display: none;
+}
+
+.welcome-overlay.closing {
+  opacity: 0;
+}
+
+/* Το κουτί του παραθύρου = ΑΚΡΙΒΩΣ το κουτί της εικόνας: έτσι τα ποσοστά του
+   hit-area αντιστοιχούν σε pixels της εικόνας σε κάθε μέγεθος οθόνης. */
+.welcome-window {
+  position: relative;
+  line-height: 0;
+  width: min(94vw, calc(88svh * 1.4994));
+  aspect-ratio: 2528 / 1686;
+  /* Χωρίς border-radius/overflow-hidden: κανένα pixel της εικόνας δεν κόβεται. */
+  box-shadow: 0 26px 70px rgba(40, 32, 24, 0.42);
+  cursor: pointer;
+}
+
+.welcome-window:focus {
+  outline: none;                 /* το ίδιο το παράθυρο δέχεται focus, όχι το ζωγραφισμένο κουμπί */
+}
+
+.welcome-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Το ΖΩΓΡΑΦΙΣΜΕΝΟ κουμπί, πατημένο. Αόρατο, κεντραρισμένο στο μετρημένο κέντρο
+   του (50.02%, 57.535%) — και με ελάχιστο 44×44px, ώστε σε μικρές οθόνες (όπου το
+   ζωγραφισμένο κουμπί γίνεται ~11px ψηλό) το δάχτυλο να έχει σωστό στόχο. */
+.welcome-enter {
+  position: absolute;
+  left: 50.02%;
+  top: 57.535%;
+  width: max(17.44%, 44px);
+  height: max(4.39%, 44px);
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.welcome-enter:focus-visible {
+  outline: 3px solid #fffdf9;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(107, 115, 99, 0.55);
+}
+
+.welcome-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 253, 249, 0.88);
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(40, 32, 24, 0.28);
+  transition: background var(--transition), transform var(--transition);
+}
+
+.welcome-close:hover,
+.welcome-close:focus-visible {
+  background: #fff;
+  transform: scale(1.06);
+}
+
+@media (max-width: 480px) {
+  .welcome-overlay { padding: 8px; }
+  .welcome-close { top: 6px; right: 6px; width: 36px; height: 36px; font-size: 21px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-overlay { transition: none; }
+  .welcome-close { transition: none; }
+  .welcome-close:hover { transform: none; }
+}
+
+/* ===========================================================================
+   2. ΤΟ HERO (το «main site» που βλέπει ο επισκέπτης μόλις κλείσει το pop-up)
+   =========================================================================== */
+.hero.welcome {
+  /* ΜΕΤΡΗΜΕΝΟ (tools/inspect-welcome.py): το sticky header είναι 84px αλλά το info bar
+     από πάνω προσθέτει 46px → το περιεχόμενο ξεκινά στο y=130 (στο κινητό 182, όπου το
+     info bar σπάει σε δύο σειρές). Ένα λάθος 50px έκοβε την τελευταία γραμμή στο 1000px. */
+  --header-h: 130px;
+  /* Το pop-up στέλνει τον επισκέπτη στο #hero· χωρίς αυτό, το badge και το πάνω μέρος της
+     κάρτας έμεναν ΠΙΣΩ από το sticky header (84px). */
+  scroll-margin-top: 92px;
+  position: relative;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.hero.welcome::before {
+  content: none;                 /* το παλιό blurred SVG blob έφυγε */
+}
+
+/* Απαλή υδατογραφική ατμόσφαιρα με τα ΧΡΩΜΑΤΑ της εικόνας (καθαρό CSS, καμία εικόνα):
+   κρατά το ύφος του artwork και στα υπόλοιπα sections, χωρίς βάρος. */
+.hero.welcome::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 46% at 10% 26%, rgba(182, 154, 133, 0.16), transparent 68%),
+    radial-gradient(44% 38% at 90% 18%, rgba(250, 229, 216, 0.62), transparent 70%),
+    radial-gradient(72% 52% at 50% 108%, rgba(107, 115, 99, 0.13), transparent 72%);
+}
+
+.welcome-stack {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: calc(100svh - var(--header-h));
+  justify-content: center;
+  gap: clamp(12px, 1.6vh, 20px);
+  padding: clamp(24px, 4vh, 56px) 18px;
+}
+
+/* ---------- δύο στήλες: καλωσόρισμα αριστερά, banner δεξιά ---------- */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 580px);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+  width: 100%;
+  max-width: 1180px;
+}
+
+.welcome-intro {
+  text-align: left;
+}
+
+.welcome-intro p {
+  font-size: clamp(13.5px, 1.3vw, 15.5px);
+  line-height: 1.72;
+  color: var(--ink-muted);
+  margin: 0 0 1em;
+  max-width: 48ch;
+}
+
+/* Ο χαιρετισμός με την «χεράτη» πλάγια γραφή, στο χρώμα της τερρακότας — το ύφος της
+   χειρόγραφης σημείωσης του artwork, όχι ένα ακόμη bold heading. */
+.welcome-intro .w-hi {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(26px, 2.9vw, 38px);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--terracotta);
+  margin: 0 0 0.55em;
+  max-width: none;
+}
+
+/* ---------- η κάρτα (banner) ---------- */
+.welcome-card {
+  width: 100%;
+  text-align: center;
+  padding: clamp(24px, 3.4vh, 44px) clamp(22px, 3vw, 48px);
+  border-radius: 30px;
+  background: rgba(255, 253, 249, 0.9);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 18px 50px var(--shadow-warm);
+}
+
+.w-badge {
+  font-size: clamp(10.5px, 1.1vw, 12.5px);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  margin: 0 0 clamp(10px, 1.4vh, 18px);
+}
+
+.welcome-card h1 {
+  font-family: var(--font-display);
+  font-size: clamp(29px, 4.4vw, 50px);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.welcome-card h1 .w-name {
+  display: block;
+}
+
+.welcome-card h1 .highlight {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(11px, 1.35vw, 15px);
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sage);
+  /* Το κενό ΔΕΝ μπορεί να είναι σε vh: ο καταλήγων μεγαλώνει μαζί με το όνομα
+     (clamp(29px,4.4vw,50px)), άρα με 18.9px περιθώριο το κενό μελανιού ήταν 4px στα 900px και
+     0px στα 1400px (ενωμένες ζώνες). Το περιθώριο ακολουθεί το ΟΝΟΜΑ: μετρήθηκε ότι ο
+     καταλήγων βγαίνει ~0.375× το μέγεθος του ονόματος έξω από το line box (1.06), άρα
+     περιθώριο ≈ 0.375×όνομα + 10px κενό. Το 1.65vw + 10px το εκφράζει αφού το όνομα είναι
+     4.4vw· τα όρια 21/29px καλύπτουν τα άκρα (29px και 50px όνομα). */
+  margin-top: clamp(21px, calc(1.65vw + 10px), 29px);
+  padding-left: 0.3em;           /* οπτικό κεντράρισμα: το tracking προσθέτει χώρο δεξιά */
+}
+
+.w-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(64%, 300px);
+  margin: clamp(14px, 2.2vh, 26px) auto clamp(12px, 1.8vh, 22px);
+  color: var(--sage);
+  font-size: 14px;
+}
+
+.w-divider::before,
+.w-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sage-line);
+}
+
+.w-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(17px, 1.9vw, 23px);
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin: 0 auto clamp(12px, 1.8vh, 20px);
+  max-width: 30ch;
+}
+
+.w-lead {
+  font-size: clamp(13.5px, 1.35vw, 16px);
+  line-height: 1.65;
+  color: var(--ink-muted);
+  margin: 0 auto clamp(12px, 1.8vh, 20px);
+  max-width: 46ch;
+}
+
+.w-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 10px;
+  list-style: none;
+  margin: 0 0 clamp(16px, 2.4vh, 28px);
+  padding: 0;
+  font-size: clamp(12px, 1.25vw, 15px);
+  color: var(--ink-muted);
+}
+
+.w-pills li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.w-pills li + li::before {
+  content: '';
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--branch);
+}
+
+.w-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.w-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: var(--sage);
+  color: #fff;
+  font-size: clamp(14px, 1.5vw, 17px);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(107, 115, 99, 0.34);
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.w-cta:hover,
+.w-cta:focus-visible {
+  background: var(--sage-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(107, 115, 99, 0.42);
+}
+
+.w-cta--ghost {
+  background: transparent;
+  color: var(--sage-dark);
+  border: 2px solid var(--sage-line);
+  box-shadow: none;
+}
+
+.w-cta--ghost:hover,
+.w-cta--ghost:focus-visible {
+  background: rgba(107, 115, 99, 0.08);
+  border-color: var(--sage);
+  color: var(--sage-dark);
+  box-shadow: none;
+}
+
+.w-cta i {
+  font-size: 0.9em;
+  transition: transform var(--transition);
+}
+
+.w-cta:hover i {
+  transform: translateX(4px);
+}
+
+.w-feats {
+  display: flex;
+  justify-content: center;
+  gap: clamp(14px, 3vw, 36px);
+  list-style: none;
+  margin: clamp(20px, 3vh, 32px) 0 0;
+  padding: clamp(14px, 2vh, 22px) 0 0;
+  border-top: 1px solid var(--sage-line);
+  width: 100%;
+}
+
+.w-feats li {
+  flex: 1;
+  font-size: clamp(11.5px, 1.15vw, 13.5px);
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+.w-feats i {
+  display: block;
+  font-size: clamp(18px, 2vw, 24px);
+  color: var(--sage);
+  margin: 0 auto 8px;
+}
+
+/* Το SVG της ασπίδας/lucide-στυλ εικονίδιο: ίδιο οπτικό βάρος με τα FA γειτονικά.
+   Τα FA glyphs δεν γεμίζουν όλο το em box, γι' αυτό το ύψος είναι λίγο μεγαλύτερο από το
+   font-size και το stroke λίγο πιο χοντρό από το artwork (1.7 -> 1.85), ώστε να μη «χάνεται»
+   δίπλα στα συμπαγή εικονίδια. */
+.w-feats .w-shield {
+  display: block;
+  width: clamp(19px, 2.1vw, 25px);
+  height: auto;
+  margin: 0 auto 8px;
+  color: var(--sage);
+}
+
+.welcome-values {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 5vw, 64px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.welcome-values li {
+  font-size: clamp(11.5px, 1.2vw, 13.5px);
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.welcome-values i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(40px, 4vw, 52px);
+  height: clamp(40px, 4vw, 52px);
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background: var(--blush);
+  color: var(--sage-dark);
+  font-size: clamp(16px, 1.8vw, 21px);
+}
+
+/* Το εικονίδιο των χειλιών είναι ΑΝΤΙΓΡΑΦΟ από το artwork (όχι σχεδιασμένο SVG): το <i> κρατά
+   τον κύκλο-μπαλώμα και το κεντράρισμα — είναι <i> μέσα στο .welcome-values, άρα παίρνει ήδη το
+   styling πάνω — η εικόνα δίνει μόνο το μέγεθος (30px, ίδιο οπτικό βάρος με τα FA γειτονικά). */
+.welcome-values .v-badge img {
+  display: block;
+  width: 30px;
+  height: auto;
+}
+
+.welcome-note {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(12.5px, 1.35vw, 16px);
+  line-height: 1.5;
+  color: var(--ink-muted);
+  margin: 0;
+  text-align: center;
+  max-width: 34ch;
+}
+
+@media (max-width: 899px) {
+  .hero.welcome {
+    --header-h: 182px;
+  }
+
+  /* μία στήλη: πρώτα το banner (ταυτότητα), μετά το κείμενο υποδοχής — στη σειρά του DOM το
+     κείμενο είναι πρώτο, οπότε χρειάζεται ρητή αντιστροφή */
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .welcome-card { order: 1; }
+  .welcome-intro { order: 2; }
+
+  .welcome-intro .w-hi {
+    font-size: 27px;
+    text-align: center;
+  }
+
+  .welcome-intro p {
+    font-size: 14px;
+    text-align: left;
+    max-width: none;
+  }
+
+  .welcome-stack {
+    min-height: 0;
+    padding: 22px 14px 30px;
+    gap: 14px;
+  }
+
+  .welcome-card {
+    width: 100%;
+    padding: 24px 18px 22px;
+    border-radius: 24px;
+    background: rgba(255, 253, 249, 0.95);
+  }
+
+  .welcome-card h1 { white-space: normal; }
+
+  /* τέσσερα pills σε μία σειρά: στα 13px με 10px κενά η «Παρέμβαση» έφευγε μόνη της */
+  .w-pills {
+    font-size: 12px;
+    gap: 6px 7px;
+    margin-bottom: 18px;
+  }
+
+  .w-pills li { gap: 7px; }
+
+  .w-cta { padding: 13px 22px; }
+
+  .welcome-values { gap: 6px; width: 100%; }
+  .welcome-values li { flex: 1; }
+}
+
+/* κοντές οθόνες desktop (το συνηθισμένο 1280×800): σφίξε τη σύνθεση ώστε το CTA να
+   μένει πάνω από το fold ακόμη κι αν το τελευταίο στοιχείο δεν χωράει */
+@media (min-width: 900px) and (max-height: 860px) {
+  .welcome-stack { padding: 16px 18px; gap: 10px; }
+  .welcome-card { padding: 20px 34px; }
+  .w-badge { margin-bottom: 8px; }
+  .w-divider { margin: 11px auto 9px; }
+  .w-quote { margin-bottom: 9px; }
+  .w-lead { margin-bottom: 9px; }
+  .w-pills { margin-bottom: 13px; }
+  .w-feats { margin-top: 14px; padding-top: 11px; }
+  .welcome-values i { width: 38px; height: 38px; font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-cta, .w-cta i { transition: none; }
+  .w-cta:hover { transform: none; }
+}

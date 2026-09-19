@@ -140,19 +140,56 @@
   box-sizing: border-box;
 }
 
+/* ---------------------------------------------------------------------------
+   THEME (19/9/2026) — cream & sage, derived from Katerina's own welcome artwork.
+   Every value below is SAMPLED FROM THE IMAGE, not invented:
+   tools/palette-contrast.py reads the artwork's pixels and prints these plus the WCAG
+   ratios. The canvas's dominant colour is #fdf4ec (11.7% of all pixels); the button in
+   her illustration is #757c6d.
+
+   Two of her colours are darkened by exactly one step, for accessibility:
+     * CTA fill #757c6d -> #6b7363, because white on #757c6d is 4.32:1 (only AA-large).
+       #6b7363 gives 4.93:1 = WCAG AA for a normal-size label.
+     * terracotta #c98a71 -> #a35f45, because #c98a71 as TEXT is 2.63:1 and FAILS AA.
+       The pale #c98a71 stays available as --terracotta-soft, for fills only.
+   The legacy variable names (--dark*, --text-light, --primary) are KEPT and re-pointed,
+   so the ~90 existing var() references keep working: --dark* are now the light surfaces
+   and --text-light is now the ink. Do not "clean up" the names without checking them.
+   --------------------------------------------------------------------------- */
 :root {
-  --primary: #DF6C73;
-  --primary-dark: #c25a60;
-  --dark: #1a1a2e;
-  --dark-soft: #16213e;
-  --dark-light: #0f3460;
-  --text-light: #ffffff;
-  --text-muted: rgba(255,255,255,0.7);
-  --text-dark: #333;
-  --accent: #e94560;
+  /* surfaces */
+  --paper: #fdf4ec;
+  --paper-2: #faede3;
+  --paper-3: #f6e9df;
+  --card: #fffdf9;
+  /* ink */
+  --ink: #3b3a33;
+  --ink-soft: #4a4b43;
+  --ink-muted: #5f5f56;
+  /* accents, straight from the illustration */
+  --sage: #6b7363;
+  --sage-dark: #5f6656;
+  --sage-line: rgba(107, 115, 99, 0.22);
+  --terracotta: #a35f45;
+  --terracotta-soft: #c98a71;
+  --blush: #f3ddd5;
+  --sun: #fae5d8;
+  --branch: #b69a85;
+  --shadow-warm: rgba(122, 104, 86, 0.13);
+  /* legacy aliases (see the note above) */
+  --primary: #6b7363;
+  --primary-dark: #5f6656;
+  --dark: #fdf4ec;
+  --dark-soft: #faede3;
+  --dark-light: #f6e9df;
+  --text-light: #3b3a33;
+  --text-muted: #5f5f56;
+  --text-dark: #3b3a33;
+  --accent: #a35f45;
   --transition: 0.3s ease;
   --font-sans: 'Open Sans', 'Open Sans Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: 'Mulish', 'Mulish Fallback', 'Open Sans', 'Open Sans Fallback', sans-serif;
+  --font-display: 'Literata', 'Literata Fallback', Georgia, 'Times New Roman', serif;
 }
 
 /* Metric-matched fallbacks (18/9/2026).
@@ -169,6 +206,7 @@
   ascent-override: 100.2%;
   descent-override: 27.2%;
   line-gap-override: 0%;
+  font-display: swap;
 }
 
 @font-face {
@@ -178,6 +216,7 @@
   ascent-override: 107.5%;
   descent-override: 26.6%;
   line-gap-override: 0%;
+  font-display: swap;
 }
 
 html {
@@ -224,9 +263,9 @@ img {
 }
 
 .lang-toggle button {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.6);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(107,115,99,0.3);
   padding: 4px 5px;
   border-radius: 6px;
   cursor: pointer;
@@ -241,26 +280,26 @@ img {
   height: 18px;
   display: block;
   border-radius: 3px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  box-shadow: 0 1px 4px rgba(122,104,86,0.16);
 }
 
 .lang-toggle button:hover {
   border-color: var(--primary);
-  background: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.9);
 }
 
 .lang-toggle button.active {
-  background: rgba(223,108,115,0.22);
+  background: rgba(107,115,99,0.22);
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(223,108,115,0.35);
+  box-shadow: 0 0 0 2px rgba(107,115,99,0.55);
 }
 
 /* ---------- Top Bar ---------- */
 .top-bar {
-  background: rgba(0,0,0,0.4);
+  background: rgba(253,244,236,0.75);
   padding: 10px 0;
   font-size: 13px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(107,115,99,0.16);
 }
 
 .top-bar .container {
@@ -308,14 +347,14 @@ header {
   position: sticky;
   top: 0;
   z-index: 999;
-  background: rgba(26, 26, 46, 0.95);
+  background: rgba(253,244,236,0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(107,115,99,0.16);
   transition: background var(--transition);
 }
 
 header.scrolled {
-  background: rgba(26, 26, 46, 0.98);
+  background: rgba(253,244,236,0.98);
 }
 
 header .container {
@@ -368,7 +407,14 @@ header .container {
   font-size: 24px;
   font-weight: 700;
   color: white;
+  /* Το badge έχει πλέον εικόνα (λογότυπο ιδιοκτήτη) αντί για τα αρχικά «ΚΤ»: το overflow
+     κρατά την εικόνα μέσα στον κύκλο ώστε να μη φαίνονται οι κρεμ γωνίες του τετραγώνου. */
+  overflow: hidden;
 }
+
+.logo-icon img,
+.logo-icon picture { display: block; }
+.logo-icon img { width: 50px; height: 50px; border-radius: 50%; }
 
 /* Navigation */
 nav {
@@ -395,7 +441,7 @@ nav {
 .nav-menu li a:hover,
 .nav-menu li a.active {
   color: var(--text-light);
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.55);
 }
 
 .nav-menu li a::after {
@@ -414,6 +460,71 @@ nav {
 .nav-menu li a.active::after {
   width: 40%;
 }
+
+/* ---- «Σχετικά» με υπο-κουμπιά (ζητήθηκε από τον ιδιοκτήτη) ----
+   Desktop: ανοίγει με hover/focus-within — το focus-within κρατά το πληκτρολόγιο λειτουργικό
+   χωρίς JS. Τα 4 σημεία του «Σχετικά με Εμένα» είναι τα υπο-κουμπιά. */
+.nav-menu > li.has-sub { position: relative; }
+/* ΠΡΟΣΟΧΗ στο πλάτος: το nav είναι δεξιά-αγκυρωμένο, οπότε κάθε pixel που προσθέτει το chevron
+   στο πλάτος του «Σχετικά» σπρώχνει ΑΡΙΣΤΕΡΑ το «Σχετικά» και το «Αρχική» (μετρημένο: +17px
+   πλάτος -> 17px μετατόπιση, τα άλλα τέσσερα ακίνητα). Γι' αυτό το chevron είναι absolute: δεν
+   μετέχει στο πλάτος, το κουμπί μένει 85px όπως στην production, και το βελάκι κάθεται μέσα στο
+   δεξί padding (16px) — 0px διαφορά στη διάταξη. Το `display` μένει `inline` ως είχε. */
+.nav-menu .sub-parent { position: relative; }
+.nav-menu li.has-sub > a i {
+  position: absolute;
+  right: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  opacity: .55;
+  transition: transform var(--transition);
+}
+.nav-menu li.has-sub:hover > a i,
+.nav-menu li.has-sub:focus-within > a i { transform: translateY(-50%) rotate(180deg); }
+
+.nav-sub {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translate(-50%, -6px);
+  min-width: 240px;
+  max-width: 330px;
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  background: var(--card);
+  border: 1px solid var(--sage-line);
+  border-radius: 14px;
+  box-shadow: 0 16px 34px var(--shadow-warm);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .22s ease, transform .22s ease, visibility .22s;
+  z-index: 60;
+}
+
+.nav-menu li.has-sub:hover .nav-sub,
+.nav-menu li.has-sub:focus-within .nav-sub {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.nav-sub li a {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink-soft);
+  white-space: normal;
+}
+
+.nav-sub li a:hover,
+.nav-sub li a:focus-visible { background: var(--blush); color: var(--sage-dark); }
+/* Η υπογράμμιση ::after των nav links δεν ταιριάζει σε αναπτυσσόμενη λίστα. */
+.nav-sub li a::after { content: none; }
 
 /* Mobile menu toggle */
 .menu-toggle {
@@ -441,7 +552,7 @@ nav {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><path fill="rgba(223,108,115,0.03)" d="M0,0L48,37.3C96,74.7,192,149.3,288,186.7C384,224,480,224,576,213.3C672,202.7,768,181.3,864,197.3C960,213.3,1056,266.7,1152,261.3C1248,256,1344,192,1392,160L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"/></svg>');
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900"><path fill="rgba(107,115,99,0.03)" d="M0,0L48,37.3C96,74.7,192,149.3,288,186.7C384,224,480,224,576,213.3C672,202.7,768,181.3,864,197.3C960,213.3,1056,266.7,1152,261.3C1248,256,1344,192,1392,160L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"/></svg>');
   background-size: cover;
   background-position: center;
   opacity: 0.5;
@@ -457,7 +568,7 @@ nav {
 
 .hero-content .badge {
   display: inline-block;
-  background: rgba(223,108,115,0.15);
+  background: rgba(107,115,99,0.15);
   color: var(--primary);
   padding: 6px 20px;
   border-radius: 50px;
@@ -466,7 +577,7 @@ nav {
   letter-spacing: 1px;
   margin-bottom: 24px;
   text-transform: uppercase;
-  border: 1px solid rgba(223,108,115,0.2);
+  border: 1px solid rgba(107,115,99,0.2);
 }
 
 .hero-content h1 {
@@ -519,13 +630,13 @@ nav {
 .btn-primary:hover {
   background: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(223,108,115,0.3);
+  box-shadow: 0 8px 25px rgba(107,115,99,0.5);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--text-light);
-  border: 2px solid rgba(255,255,255,0.2);
+  border: 2px solid rgba(107,115,99,0.3);
 }
 
 .btn-outline:hover {
@@ -589,12 +700,18 @@ nav {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  aspect-ratio: 4/3;
+  /* 550:604 = ΜΕΤΡΗΜΕΝΟ (tools/measure-about.py): στήλη 550px, εισαγωγικό κείμενο («Η λογοθεραπεία
+     για μένα ξεκινά από τη σύνδεση.» → «…λόγου, ομιλίας και επικοινωνίας.») 604px, σταθερό σε
+     1280–1920. Η φωτογραφία «κλείνει» ακριβώς με αυτό το κείμενο — χωρίς stretch (η περικοπή
+     γίνεται μία φορά στο αρχείο, βλ. build-about-portrait.py). ΑΛΛΑΞΕ 19/9 (β' έκδοση κειμένου:
+     702 → 604) μαζί με το όνομα των assets, γιατί το /images/* είναι immutable. */
+  aspect-ratio: 550 / 651;
   background: linear-gradient(135deg, var(--dark-light), var(--dark-soft));
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(107, 115, 99, 0.16);
+  box-shadow: 0 16px 40px var(--shadow-warm);
 }
 
 .about-image .about-photo {
@@ -619,16 +736,99 @@ nav {
 }
 
 .about-text h3 {
-  font-family: var(--font-heading);
+  /* Ζητήθηκε από τον ιδιοκτήτη: οι τρεις υπο-ενότητες («Η δική μου προσέγγιση», «Σπουδές &
+     Επαγγελματική Εμπειρία», «Πώς δουλεύω») στην ΙΔΙΑ γραμματοσειρά με τη γραμμή-εισαγωγή
+     (Literata italic, sage) — απλώς μεγαλύτερες, ώστε να κρατούν ιεραρχία πάνω από τα 23px
+     της εισαγωγής. */
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--sage-dark);
   font-size: 28px;
   margin-bottom: 20px;
 }
+
+/* Στόχοι των υπο-κουμπιών του «Σχετικά»: αόρατα, μηδενικού ύψους, με scroll-margin-top ώστε ο
+   τίτλος να μην κρύβεται πίσω από το sticky header (το #hero χρησιμοποιεί 92px — κρατάμε το
+   ίδιο ύψος αναφοράς και λίγο αέρα). */
+.about-text .anchor {
+  display: block;
+  height: 0;
+  scroll-margin-top: 96px;
+}
+
+#about-intro { scroll-margin-top: 96px; }
 
 .about-text p {
   color: var(--text-muted);
   font-size: 16px;
   line-height: 1.9;
   margin-bottom: 16px;
+}
+
+/* Η εναρκτήρια φράση του «Σχετικά με Εμένα» («Η λογοθεραπεία για μένα ξεκινά από τη σύνδεση.»):
+   μεγαλύτερη, στο display serif, σε sage. ΔΕΝ γίνεται heading επίτηδες — έτσι δεν αλλάζει το
+   h2/h3 outline ούτε το h2_count που ελέγχει το tools/seo-parity.py. */
+.about-text .about-lead {
+  font-family: var(--font-display);
+  font-style: italic;
+  /* Bold όπως οι τρεις h3 (ζητήθηκε: «θέλω bold και το Η λογοθεραπεία… όπως είναι και τα άλλα»).
+     Το βάρος 500 ταιριάζει ΑΚΡΙΒΩΣ με το βάρος των h3 — αν ζητηθεί πιο βαρύ, αλλάζει εδώ ΚΑΙ
+     στο .about-text h3 μαζί, αλλιώς θα ξεχωρίζει το ένα. */
+  font-weight: 500;
+  /* ΙΔΙΟ ΜΕΓΕΘΟΣ με τα τρία h3 (ζητήθηκε — ο ιδιοκτήτης εντόπισε σωστά ότι ήταν μικρότερη).
+     Επίπτωση: στα 28px η γραμμή σπάει σε 2 σειρές, άρα το εισαγωγικό μπλοκ ψηλώνει και η
+     φωτογραφία ΞΑΝΑΜΕΤΡΙΕΤΑΙ (tools/measure-about.py + build-about-portrait.py). */
+  font-size: 28px;
+  line-height: 1.4;
+  color: var(--sage-dark);
+  margin-bottom: 22px;
+  /* Στα 28px η γραμμή σπάει σε δύο σειρές, και χωρίς αυτό η δεύτερη έχει ΜΙΑ λέξη («σύνδεση»).
+     Το balance μοιράζει το σπάσιμο. Δεν αλλάζει τον αριθμό των σειρών (2), άρα ούτε το ύψος
+     του μπλοκ — γι' αυτό η φωτογραφία (550:651) μένει σωστή. Degradάρει αθόρυβα σε παλιούς
+     browsers (μένει το απλό σπάσιμο). */
+  text-wrap: balance;
+}
+
+/* Υπο-επίπεδο μέσα στο «Πώς δουλεύω» (π.χ. «Εξατομικευμένα θεραπευτικά πλάνα») */
+.about-text h4 {
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--sage-dark);
+  margin: 26px 0 12px;
+}
+
+/* Οι δύο υπο-ενότητες του «Σχετικά με Εμένα» (Σπουδές / Μέθοδοι) — χρειάζονται ανάσα από
+   πάνω, αλλιώς κολλάνε στην προηγούμενη παράγραφο. */
+.about-text h3:not(:first-child) {
+  margin-top: 38px;
+}
+
+.about-list {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+}
+
+.about-list li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+.about-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0.65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sage);
 }
 
 .about-highlights {
@@ -643,9 +843,9 @@ nav {
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.45);
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(107,115,99,0.16);
 }
 
 .highlight-item .icon {
@@ -666,8 +866,8 @@ nav {
 }
 
 .service-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(107,115,99,0.18);
   border-radius: 16px;
   padding: 40px 30px;
   text-align: center;
@@ -676,16 +876,16 @@ nav {
 
 .service-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(223,108,115,0.3);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  background: rgba(255,255,255,0.05);
+  border-color: rgba(107,115,99,0.3);
+  box-shadow: 0 20px 40px rgba(122,104,86,0.14);
+  background: rgba(255,255,255,0.55);
 }
 
 .service-card .icon-wrap {
   width: 70px;
   height: 70px;
   margin: 0 auto 24px;
-  background: rgba(223,108,115,0.1);
+  background: rgba(107,115,99,0.1);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -722,8 +922,8 @@ nav {
 }
 
 .testimonial-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(107,115,99,0.18);
   border-radius: 16px;
   padding: 32px 28px;
   text-align: left;
@@ -734,9 +934,9 @@ nav {
 
 .testimonial-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(223,108,115,0.3);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  background: rgba(255,255,255,0.05);
+  border-color: rgba(107,115,99,0.3);
+  box-shadow: 0 20px 40px rgba(122,104,86,0.14);
+  background: rgba(255,255,255,0.55);
 }
 
 .testimonial-card .stars {
@@ -772,7 +972,7 @@ nav {
   display: flex;
   align-items: center;
   gap: 14px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(107,115,99,0.18);
   padding-top: 20px;
   margin-top: auto;
 }
@@ -782,7 +982,7 @@ nav {
   height: 46px;
   min-width: 46px;
   border-radius: 50%;
-  background: rgba(223,108,115,0.15);
+  background: rgba(107,115,99,0.15);
   color: var(--primary);
   display: flex;
   align-items: center;
@@ -880,16 +1080,16 @@ nav {
 }
 
 .faq-item {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(107,115,99,0.18);
   border-radius: 14px;
   padding: 26px 26px;
   transition: all var(--transition);
 }
 
 .faq-item:hover {
-  border-color: rgba(223,108,115,0.3);
-  background: rgba(255,255,255,0.05);
+  border-color: rgba(107,115,99,0.3);
+  background: rgba(255,255,255,0.55);
 }
 
 .faq-item h3 {
@@ -913,8 +1113,8 @@ nav {
   gap: 14px;
   margin-top: 26px;
   padding: 16px 18px;
-  background: rgba(223,108,115,0.07);
-  border: 1px solid rgba(223,108,115,0.25);
+  background: rgba(107,115,99,0.07);
+  border: 1px solid rgba(107,115,99,0.25);
   border-left: 3px solid var(--primary);
   border-radius: 10px;
 }
@@ -965,7 +1165,7 @@ nav {
   width: 50px;
   height: 50px;
   min-width: 50px;
-  background: rgba(223,108,115,0.1);
+  background: rgba(107,115,99,0.1);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -992,8 +1192,8 @@ nav {
 }
 
 .contact-form {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(107,115,99,0.18);
   border-radius: 16px;
   padding: 40px;
 }
@@ -1015,8 +1215,8 @@ nav {
 .form-group select {
   width: 100%;
   padding: 14px 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(107,115,99,0.22);
   border-radius: 10px;
   color: var(--text-light);
   font-family: var(--font-sans);
@@ -1028,7 +1228,7 @@ nav {
 .form-group input:focus,
 .form-group textarea:focus {
   border-color: var(--primary);
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.65);
 }
 
 .form-group textarea {
@@ -1038,7 +1238,7 @@ nav {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: rgba(255,255,255,0.3);
+  color: rgba(95,95,86,0.55);
 }
 
 /* Native dropdown must stay readable on the dark theme */
@@ -1063,8 +1263,8 @@ nav {
 .form-group.invalid input,
 .form-group.invalid textarea,
 .form-group.invalid select {
-  border-color: rgba(255, 110, 120, 0.75);
-  background: rgba(255, 110, 120, 0.06);
+  border-color: rgba(163,95,69,0.75);
+  background: rgba(163,95,69,0.06);
 }
 
 .form-group.invalid .field-error {
@@ -1073,8 +1273,8 @@ nav {
 
 /* General alert (rate limit / network errors) */
 .form-alert {
-  background: rgba(255, 110, 120, 0.08);
-  border: 1px solid rgba(255, 110, 120, 0.35);
+  background: rgba(163,95,69,0.08);
+  border: 1px solid rgba(163,95,69,0.35);
   color: #ffd9dc;
   border-radius: 10px;
   padding: 13px 16px;
@@ -1149,8 +1349,8 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(107,115,99,0.16);
+  border-bottom: 1px solid rgba(107,115,99,0.16);
 }
 
 .map-container iframe {
@@ -1173,9 +1373,9 @@ nav {
 
 /* ---------- Footer ---------- */
 footer {
-  background: rgba(0,0,0,0.3);
+  background: rgba(253,244,236,0.75);
   padding: 40px 0;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(107,115,99,0.16);
 }
 
 .footer-grid {
@@ -1225,7 +1425,7 @@ footer {
 .footer-bottom {
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(107,115,99,0.16);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1245,7 +1445,7 @@ footer {
 .sign-off {
   margin: 48px 0 0;
   padding-top: 28px;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(107,115,99,0.18);
   font-family: var(--font-heading);
   font-size: 17px;
   color: var(--text-muted);
@@ -1266,11 +1466,11 @@ footer {
   right: 0;
   bottom: 0;
   z-index: 1100;
-  background: rgba(26,26,46,0.97);
+  background: rgba(253,244,236,0.97);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(223,108,115,0.35);
-  box-shadow: 0 -12px 34px rgba(0,0,0,0.4);
+  border-top: 1px solid rgba(107,115,99,0.35);
+  box-shadow: 0 -12px 34px rgba(122,104,86,0.18);
   color: var(--text-muted);
   font-size: 13.5px;
 }
@@ -1280,28 +1480,33 @@ footer {
 }
 
 .cookie-inner {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 16px 20px;
+  /* Slimmer than before (19/9/2026): at 16px/13.5px the bar stood 207px tall and covered the
+     bottom of the new welcome screen on the very first visit. Tighter type + letting the copy
+     column grow (it used to be pinned at 460px and wrapped into 5 lines) brings it down
+     without touching a word of the legal text. */
+  padding: 13px 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
+  gap: 14px;
   align-items: flex-start;
   justify-content: space-between;
+  font-size: 12.5px;
 }
 
 .cookie-copy {
-  flex: 1 1 460px;
-  min-width: 240px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .cookie-title {
   display: flex;
   align-items: center;
   gap: 9px;
-  margin: 0 0 7px;
+  margin: 0 0 5px;
   font-family: var(--font-heading);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-light);
 }
@@ -1311,14 +1516,25 @@ footer {
 }
 
 .cookie-copy p {
-  margin: 0 0 8px;
-  line-height: 1.55;
+  margin: 0 0 6px;
+  line-height: 1.5;
+}
+
+/* Ο σύνδεσμος της πολιτικής απορρήτου μέσα στο cookie bar (και στα details).
+   ΓΙΑΤΙ: το sage #6b7363 πάνω στο φόντο του bar #f9f1e9 δίνει 4.41:1 — οριακή αποτυχία του
+   WCAG AA (θέλει 4.5:1) και το έπιασε το Lighthouse στο desktop (a11y 97). Με --sage-dark
+   #5f6656 -> 5.33:1 ✓. ΠΡΟΣΟΧΗ: το sage πάνω στο κανονικό χαρτί #fdf4ec δίνει 4.54:1, δηλαδή
+   ΜΟΛΙΣ περνάει — η παλέτα είναι στο όριο για μικρά γράμματα, οπότε κάθε νέο φόντο θέλει
+   μέτρηση, όχι εκτίμηση. */
+.cookie-copy a,
+.cookie-details a {
+  color: var(--sage-dark);
 }
 
 .cookie-details {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(107,115,99,0.2);
 }
 
 .cookie-details ul {
@@ -1356,27 +1572,32 @@ footer {
   transition: all var(--transition);
 }
 
-/* Dark label on the rose fill: white on --primary is only 3.2:1, which fails
-   WCAG AA for 14px text (the site's .submit-btn has the same latent issue but
-   escapes automated checks because it sits inside a .fade-in wrapper). */
+/* ΛΕΥΚΟ κείμενο στο sage --primary (4.85:1) — ΑΛΛΑΞΕ 19/9/2026.
+   ΙΣΤΟΡΙΚΟ: εδώ έλεγε «dark label on the rose fill» με υπολογισμούς 5.3:1/6.6:1. Σωστά ΟΤΑΝ το
+   --primary ήταν ροζ. Το retint σε sage (#6b7363) έκανε το σκούρο κείμενο 2.32:1 (FAIL) — το
+   έπιασε το Lighthouse. ΔΙΔΑΓΜΑ: όταν αλλάζει παλέτα, ΚΑΘΕ σχόλιο με νούμερο αντίθεσης είναι
+   ύποπτο και ξαναϋπολογίζεται. Και: το ίδιο λάθος υπήρχε σε ΑΛΛΑ δύο σημεία που ο αυτόματος
+   έλεγχος ΔΕΝ βλέπει (ένα μάλιστα το έλεγε κιόλας το σχόλιο) — διορθώθηκαν κι αυτά. */
 .ck-accept {
   background: var(--primary);
-  color: var(--dark);
+  color: #fffdf9;                        /* 4.85:1 στο --primary */
 }
 
 .ck-accept:hover {
-  background: #e8848a;   /* lighter rose: dark label stays at 6.6:1 */
+  /* ΣΚΟΥΡΑΙΝΕΙ αντί να ανοίγει: το παλιό #7d8574 με λευκό κείμενο δίνει 3.77:1 (FAIL).
+     Με --sage-dark: 5.87:1. */
+  background: var(--sage-dark);
 }
 
 .ck-reject {
   background: transparent;
   color: var(--text-light);
-  border-color: rgba(255,255,255,0.4);
+  border-color: rgba(107,115,99,0.45);
 }
 
 .ck-reject:hover {
   border-color: var(--text-light);
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.6);
 }
 
 .ck-more {
@@ -1419,17 +1640,17 @@ footer {
   align-items: center;
   gap: 8px;
   background: var(--primary);
-  color: var(--dark);
+  color: #fffdf9;                        /* 4.85:1 (με var(--text-dark) ήταν 2.32:1) */
 }
 
 .map-load-btn:hover {
-  background: #e8848a;
+  background: var(--sage-dark);          /* λευκό κείμενο 5.87:1 (το #7d8574 έδινε 3.77) */
 }
 
 @media (max-width: 767px) {
   .cookie-inner {
-    padding: 14px 16px;
-    gap: 12px;
+    padding: 12px 14px;
+    gap: 10px;
   }
 
   .cookie-copy {
@@ -1437,7 +1658,15 @@ footer {
   }
 
   .cookie-copy p {
-    font-size: 13px;
+    /* 12px, not 13: on a phone this bar is the difference between the welcome screen's
+       "Μάθετε περισσότερα" button being above or below the fold on the first visit. */
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .cookie-title {
+    font-size: 14px;
+    margin-bottom: 4px;
   }
 
   .cookie-actions {
@@ -1446,7 +1675,8 @@ footer {
 
   .ck-btn {
     flex: 1 1 0;
-    padding: 12px 10px;
+    padding: 11px 10px;
+    font-size: 13px;
   }
 
   .ck-more {
@@ -1481,11 +1711,11 @@ footer {
     bottom: 0;
     z-index: 1090;   /* below the consent banner (1100) */
     padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
-    background: rgba(26,26,46,0.97);
+    background: rgba(253,244,236,0.97);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(223,108,115,0.35);
-    box-shadow: 0 -12px 34px rgba(0,0,0,0.4);
+    border-top: 1px solid rgba(107,115,99,0.35);
+    box-shadow: 0 -12px 34px rgba(122,104,86,0.18);
   }
 
   body.has-consent .call-btn {
@@ -1497,7 +1727,8 @@ footer {
     padding: 14px 16px;
     border-radius: 10px;
     background: var(--primary);
-    color: var(--dark);              /* 5.3:1 on --primary */
+    color: #fffdf9;                       /* 4.85:1 — ήταν var(--text-dark) = 2.32:1 μετά το retint.
+                                             Το Lighthouse ΔΕΝ το έπιασε (media query + has-consent). */
     font-family: var(--font-sans);
     font-size: 15px;
     font-weight: 700;
@@ -1507,7 +1738,7 @@ footer {
 
   body.has-consent .call-btn:hover,
   body.has-consent .call-btn:active {
-    background: #e8848a;
+    background: var(--sage-dark);         /* λευκό κείμενο 5.87:1 */
   }
 
   /* The bar covers the bottom of the viewport, so give the footer room to scroll
@@ -1540,12 +1771,40 @@ footer {
     background: var(--dark);
     flex-direction: column;
     padding: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(107,115,99,0.16);
+    /* Ασφάλεια: με το ένθετο «Σχετικά» το μενού ψήλωσε — σε κοντές οθόνες να κυλάει αντί να
+       κόβεται κάτω από το viewport. */
+    max-height: calc(100svh - 120px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .nav-menu.open {
     display: flex;
   }
+
+  /* Στο κινητό δεν υπάρχει hover: το «Σχετικά» γίνεται ομαδοποιημένος τίτλος με την ένθετη
+     λίστα ΠΑΝΤΑ ορατή (ένα dropdown μέσα σε dropdown θα ήταν άχρηστο στο touch). */
+  .nav-menu > li.has-sub { position: static; }
+  .nav-menu .sub-parent i { display: none; }
+  .nav-sub {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    min-width: 0;
+    max-width: none;
+    padding: 0 0 4px 12px;
+    margin: 2px 0 6px;
+    background: transparent;
+    border: none;
+    border-left: 2px solid var(--sage-line);
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .nav-menu li.has-sub:hover .nav-sub,
+  .nav-menu li.has-sub:focus-within .nav-sub { transform: none; }
+  .nav-sub li a { padding: 7px 10px; font-size: 14px; }
 
   .menu-toggle {
     display: block;
@@ -1582,6 +1841,9 @@ footer {
   .about-image {
     order: -1;
     min-height: 250px;
+    /* Μία στήλη: το κουτί γίνεται 4:3 και σερβίρεται το 4:3 σετ (το πορτρέτο εδώ θα έκοβε
+       το κεφάλι με το cover). */
+    aspect-ratio: 4 / 3;
   }
 }
 

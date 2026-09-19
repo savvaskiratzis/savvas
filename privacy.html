@@ -8,8 +8,8 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://tsigalogo.gr/privacy">
   <link rel="stylesheet" href="vendor/font-awesome/6.5.1/subset/fa-subset.css">
-  <link rel="stylesheet" href="css/style.css?v=3cffd1e6">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23DF6C73'>🎤</text></svg>">
+  <link rel="stylesheet" href="css/style.css?v=867204ec">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%236b7363'>🎤</text></svg>">
   <!-- Page-scoped typography only: the shared stylesheet is written for the landing
        page, and touching it would change its content hash (see the deploy notes). -->
   <style>
@@ -41,7 +41,17 @@
     <div class="container">
       <div class="logo">
         <a href="/">
-          <div class="logo-icon">ΚΤ</div>
+          <div class="logo-icon">
+            <!-- Λογότυπο από εικόνα του ιδιοκτήτη (tools/extract-logo.py): κύκλος sage με δύο
+                 συννεφάκια και κυματομορφή φωνής. Εξάγεται 50px + 2x, με 2px κομμένα μέσα στον
+                 κύκλο ώστε να μη μένει κρεμ λουρίδα στην άκρη του border-radius. -->
+            <picture>
+              <source type="image/webp" srcset="images/logo-kt-50.webp 1x, images/logo-kt-100.webp 2x">
+              <img src="images/logo-kt-50.png"
+                   srcset="images/logo-kt-50.png 1x, images/logo-kt-100.png 2x"
+                   width="50" height="50" alt="" decoding="async">
+            </picture>
+          </div>
           <div class="logo-text">
             <span class="name lang-el">Κατερίνα Τσίγα</span>
             <span class="name lang-en">Katerina Tsiga</span>

@@ -57,9 +57,25 @@ export async function onRequestPost(context) {
               : Response.redirect(SITE + "/?sent=1", 303);
 
   // Only our own pages may use this endpoint. Trivially spoofable, but it stops drive-by
-  // abuse from random scripts that find the URL. (The honeypot below catches the rest.)
+  // abuse from random scripts that find the URL. (Appeal abuse control is really the zone
+  // rules; see the note below about the missing rate limit.)
+  //
+  // ΔΥΟ ΔΙΟΡΘΩΣΕΙΣ ΑΣΦΑΛΕΙΑΣ (19/9/2026, από έλεγχο ασφάλειας):
+  //  1. Η απόρριψη ΔΕΝ περνά από το `fail()`: εκείνο, στη μη-JSON διαδρομή, κάνει πάντα
+  //     Response.redirect(303) και ΑΓΝΟΕΙ το status — δηλαδή ένα ξένο origin έπαιρνε redirect
+  //     αντί 403 (αποδείχθηκε με αίτημα text/plain: 303, ενώ με application/json: 403). Η
+  //     αποστολή μπλοκαριζόταν, αλλά ο κωδικός έλεγε ψέματα σε κάθε monitoring.
+  //  2. Ο έλεγχος ήταν `startsWith(SITE)`: το `Origin: https://tsigalogo.gr.evil.com` περνούσε.
+  //     Τώρα γίνεται κανονικοποίηση με URL και σύγκριση ORIGIN — ακριβής αντιστοίχιση.
+  const ownOrigin = (u) => {
+    if (!u) return false;
+    try { return new URL(u).origin === SITE; } catch (e) { return false; }
+  };
   const origin = request.headers.get("origin") || request.headers.get("referer") || "";
-  if (!origin.startsWith(SITE)) return fail("forbidden", 403);
+  if (!ownOrigin(origin)) {
+    return wantsJson ? json({ success: "false", message: "forbidden" }, 403)
+                     : new Response("forbidden", { status: 403 });
+  }
 
   let data;
   try {

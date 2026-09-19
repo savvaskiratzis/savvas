@@ -1,5 +1,5 @@
 /* Font Awesome 6.5.1 — SUBSET of the vendored, byte-identical upstream file.
-   Kept: 2 @font-face, 10 machinery and 29 icon rules — the 29 icons this site uses (137 <i> elements)
+   Kept: 2 @font-face, 10 machinery and 30 icon rules — the 31 icons this site uses (100 <i> elements)
    out of 1873 icon rules / 10 faces. Regenerate with
    tools/build-fontawesome-subset.py after adding icons, then re-run the pixel gate. */
 /*!
@@ -31,6 +31,7 @@
 .fa-user-tie:before{content:"\f508"}
 .fa-certificate:before{content:"\f0a3"}
 .fa-shield-alt:before,.fa-shield-halved:before{content:"\f3ed"}
+.fa-leaf:before{content:"\f06c"}
 .fa-phone-alt:before,.fa-phone-flip:before{content:"\f879"}
 .fa-child:before{content:"\f1ae"}
 .fa-envelope:before{content:"\f0e0"}
@@ -38,12 +39,12 @@
 .fa-home-alt:before,.fa-home-lg-alt:before,.fa-home:before,.fa-house:before{content:"\f015"}
 .fa-location-dot:before,.fa-map-marker-alt:before{content:"\f3c5"}
 .fa-arrow-down:before{content:"\f063"}
+.fa-chevron-down:before{content:"\f078"}
 .fa-baby:before{content:"\f77c"}
 .fa-quote-left-alt:before,.fa-quote-left:before{content:"\f10d"}
 .fa-cookie-bite:before{content:"\f564"}
 .fa-book-open:before{content:"\f518"}
 .fa-paper-plane:before{content:"\f1d8"}
-.fa-print:before{content:"\f02f"}
 .fa-google:before{content:"\f1a0"}
 .fa-facebook-f:before{content:"\f39e"}
 .fa-instagram:before{content:"\f16d"}
