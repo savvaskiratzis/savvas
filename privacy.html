@@ -9,7 +9,14 @@
   <link rel="canonical" href="https://tsigalogo.gr/privacy">
   <link rel="stylesheet" href="vendor/font-awesome/6.5.1/subset/fa-subset.css">
   <link rel="stylesheet" href="css/style.css?v=867204ec">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%236b7363'>🎤</text></svg>">
+  <!-- Favicon: raster αρχεία στο root με URL — ΟΧΙ data: URI (βλ. index.html για το γιατί·
+       η Google δεν κατεβάζει data: URIs ούτε υποστηρίζει SVG στο SERP). -->
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <!-- Page-scoped typography only: the shared stylesheet is written for the landing
        page, and touching it would change its content hash (see the deploy notes). -->
   <style>

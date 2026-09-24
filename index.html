@@ -67,7 +67,20 @@
        rewrites BOTH ?v= tokens from the files' content hashes — a stale token means
        returning visitors keep a year-old cached copy (see _headers). -->
   <link rel="stylesheet" href="css/welcome.css?v=562d5c1d">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%236b7363'>🎤</text></svg>">
+  <!-- Favicon: raster αρχεία στο root με URL — ΟΧΙ data: URI. Η Google δεν κατεβάζει ποτέ
+       data: URIs, και το SVG δεν είναι υποστηριζόμενη μορφή για το SERP, οπότε το παλιό
+       inline SVG+emoji 🎤 άφηνε την προεπιλεγμένη υδρόγειο δίπλα στο domain στο Google
+       (επιβεβαιώθηκε 24/9/2026: το favicon service γύριζε byte-ίσο placeholder με
+       ανύπαρκτο domain). Πηγή: images/katerina-tsiga.jpg, ΧΩΡΙΣ crop/retouch —
+       regenerate: python3 tools/build-favicons.py · έλεγχος: tools/verify-favicons.sh
+       Τα 48/96px δηλώνονται χωριστά επειδή η Google συνιστά favicon > 48px.
+       Μην ξαναβάλεις data: URI — το check-invariants.sh §Β6 μπλοκάρει το promote. -->
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
