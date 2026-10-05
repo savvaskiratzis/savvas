@@ -155,12 +155,16 @@
           <div class="logo-icon">
             <!-- Λογότυπο από εικόνα του ιδιοκτήτη (tools/extract-logo.py): κύκλος sage με δύο
                  συννεφάκια και κυματομορφή φωνής. Εξάγεται 50px + 2x, με 2px κομμένα μέσα στον
-                 κύκλο ώστε να μη μένει κρεμ λουρίδα στην άκρη του border-radius. -->
+                 κύκλο ώστε να μη μένει κρεμ λουρίδα στην άκρη του border-radius.
+                 alt με ΚΕΙΜΕΝΟ (όχι alt=""): το Bing Webmaster Tools σηματοδοτεί κάθε κενό alt
+                 ως «Alt attribute for images is missing» στο URL Inspection (5/10/2026 — μόνο
+                 αυτή η εικόνα βρέθηκε, γιατί είναι η μόνη χωρίς alt ΚΑΙ χωρίς aria-hidden).
+                 Το κείμενο είναι ΑΥΤΟΥΣΙΟ: ίδιο string με τη φωτογραφία της ενότητας «Σχετικά». -->
             <picture>
               <source type="image/webp" srcset="images/logo-kt-50.webp 1x, images/logo-kt-100.webp 2x">
               <img src="images/logo-kt-50.png"
                    srcset="images/logo-kt-50.png 1x, images/logo-kt-100.png 2x"
-                   width="50" height="50" alt="" decoding="async">
+                   width="50" height="50" alt="Κατερίνα Τσίγα — Λογοθεραπεύτρια" decoding="async">
             </picture>
           </div>
           <div class="logo-text">
